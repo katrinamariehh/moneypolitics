@@ -44,13 +44,13 @@ class Committee(Base):
 	Active = Column(Integer(1))
 
 class Individuals(Base):
+	# creating an individual object to be added to the database
 	__tablename__ = "Individual"
 
 	Cycle = Column(String(4))
 	FECTransID = Column(String(19)) # 7 chars before 2012
 	ContribID = Column(String(12))
 	Contrib = Column(String(50)) # this field was 34 chars before 2012
-	# this is going to be problematic; there's a comma in the middle and it's delimited by pipes, so it'll be like ',|Hall-Hutzley, Katrina|,'
 	RecipID = Column(String(9))
 	Orgname = Column(String(50)) # 40
 	UltOrg = Column(String(50)) # 40
@@ -71,3 +71,16 @@ class Individuals(Base):
 	Occupation = Column(String(38)) # called Occ_EF
 	Employer = Column(String(38))# called Emp_EF
 	Source = Column(String(5))
+
+class PAC(Base):
+	__tablename__ = "PAC"
+	# creating a PAC object to be added to the database
+
+	Cycle = Column(String(4))
+	FECRecNo = Column(String(19))
+	PACID = Column(String(9))
+	CID = Column(String(9))
+	Amount = Column(Float)
+	Date = Column(Date) # DATES!
+	RealCode
+

@@ -1,0 +1,1 @@
+# the Contrib filed on the Indiv table is going to be problematic; there's a comma in the middle and it's delimited by pipes, so it'll be like ',|Hall-Hutzley, Katrina|,'--this will matter in the seed file when I'm loading my rows into my database
