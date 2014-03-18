@@ -22,7 +22,7 @@ class Candidates(Base):
     CycleCand = Column(String(1))
     CRPICO = Column(String(1))
     RecipCode = Column(String(2))
-    NoPacs = Column(String(1))
+    # NoPacs = Column(String(1))
 
 class Committee(Base):
 	# creating a committee object to be added to the database
@@ -40,7 +40,7 @@ class Committee(Base):
 	PrimCode = Column(String(5))
 	Source = Column(String(5))
 	Sensitive = Column(String(1))
-	Foreign = Column(Bit())# how do I do a 'bit' field? i think it's something I have to import
+	Foreign = Column(Bit) # how do I do a 'bit' field? i think it's something I have to import
 	Active = Column(Integer(1))
 
 class Individuals(Base):
@@ -77,10 +77,118 @@ class PAC(Base):
 	# creating a PAC object to be added to the database
 
 	Cycle = Column(String(4))
-	FECRecNo = Column(String(19))
+	FECRecNo = Column(String(19)) # 7 chars before 2012
 	PACID = Column(String(9))
 	CID = Column(String(9))
-	Amount = Column(Float)
+	Amount = Column(Float) # previoulsy an integer
 	Date = Column(Date) # DATES!
-	RealCode
+	RealCode = Column(String(5))
+	Type = Column(String(3))
+	DI = Column(String(1))
+	FECCandID = Column(String(9))
 
+class PAC_other(Base):
+	__tablename__ = "PAC Other"
+	# creating a PAC-other object to be added to the database
+
+	Cycle = Column(String(4))
+	FECRecNo = Column(String(19)) # 7 chars before 2012
+	Filerid = Column(String(9))
+	DonorCmte = Column(String(50)) # 40
+	ContribLendTrans = Column(String(50)) # 40
+	City = Column(String(30)) # 40
+	State = Column(String(2))
+	ZIP = Column(String(5))
+	FECOccEmp = Column(String(38)) # 35
+	Primcode = Column(String(5))
+	Date = Column(Date)
+	Amount = Column(Float) # previously Number(Double)
+	RecipID = Column(String(9))
+	Party = Column(String(1))
+	Otherid = Column(String(9))
+	RecipCode = Column(Srtring(2))
+	RecipPrimcode = Column(String(5))
+	Amend = Column(String(1))
+	Report = Column(String(3))
+	PG = Column(String(1))
+	Microfilm = Column(String(11))
+	Type = Column(String(3))
+	RealCode = Column(String(5))
+	Source = Column(String(5))
+
+class Legislator(Base):
+	# from legislators-current.csv or legislators-historic.csv
+	__tablename__ = "Legislator"
+
+	# creating a member object to be added to the database
+
+	# I probably need to give these all lengths?
+
+	last_name = Column(String)
+	first_name = Column(String)
+	birthday = Column(Date)
+	gender = Column(String(1))
+	position_type = Column(String(3))
+	state = Column(String(2))
+	party = Column(String)
+	# url = Column(String)
+	# address = Column(String)
+	# phone = Column(String)
+	# contact_form = Column(String)
+	# rss_url = Column(String)
+	# twitter = Column(String)
+	# facebook = Column(String)
+	# facebook_id = Column(String)
+	# youtube = Column(String)
+	# youtube_id = Column(String)
+	bioguide_id = Column(String)
+	thomas_id = Column(String)
+	opensecrets_id = Column(String)
+	lis_id = Column(String)
+	# cspan_id = Column(String)
+	govtrack_id = Column(String)
+	# votesmart_id = Column(String)
+	# ballotpedia_id = Column(String)
+	# washington_post_id = Column(String)
+	# icpsr_id = Column(String)
+	# wikipedia_id = Column(String)
+
+class Member_Legacy(Base):
+	# creating an object for each member's past service periods
+	__tablename__ = "Legacy"
+
+	role_type = Column(String)
+	startdate = Column(Date)
+	enddate = Column(Date)
+	party = Column(String)
+	state = Column(String(2))
+	district = Column(Integer)
+
+class Sponsor(Base):
+	# creating an object sponsor table - creates a relationship between Legislators and Bills
+	__tablename__ = "LegislatorBillSponsor"
+
+	thomas_id = Column(String)
+	is_primary = Column(Bit)
+	bill_id = Column(String)
+
+class Subjects():
+	# creating a record in the Subjects table to track the subjects of various bills
+	__tablename__ = "BillSubjects"
+
+	bill_id = Column(String)
+	bill_subjects = Column(String)
+
+class Bill(Base):
+	# creating an object in the Bill table
+	__tablename__ = "Bill"
+
+	bill_id = Column(String)
+	bill_title = Column(String)
+
+class Vote(Base):
+	__tablename__ = "LegislatorBillVote"
+
+	thomas_id = Column(String)
+	bill_id = Column(String)
+	vote_value = Column(String) # enum?
