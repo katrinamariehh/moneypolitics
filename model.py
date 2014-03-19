@@ -7,9 +7,9 @@ Base.query = session.query_property()
 
 #class declarations
 
-class Candidates(Base):
+class Candidate(Base):
     # creating a candidate object to be added to the database
-    __tablename__ = "Candidate"
+    __tablename__ = "Candidates"
 
     Cycle = Column(String(4))
     FECCandID = Column(String(9))
@@ -26,7 +26,7 @@ class Candidates(Base):
 
 class Committee(Base):
 	# creating a committee object to be added to the database
-	__tablename__ = "Committee"
+	__tablename__ = "Committees"
 
 	Cycle = Column(String(4))
 	CmteID = Column(String(9))
@@ -43,9 +43,9 @@ class Committee(Base):
 	Foreign = Column(Bit) # how do I do a 'bit' field? i think it's something I have to import
 	Active = Column(Integer(1))
 
-class Individuals(Base):
+class Individual(Base):
 	# creating an individual object to be added to the database
-	__tablename__ = "Individual"
+	__tablename__ = "Individuals"
 
 	Cycle = Column(String(4))
 	FECTransID = Column(String(19)) # 7 chars before 2012
@@ -73,7 +73,7 @@ class Individuals(Base):
 	Source = Column(String(5))
 
 class PAC(Base):
-	__tablename__ = "PAC"
+	__tablename__ = "PACs"
 	# creating a PAC object to be added to the database
 
 	Cycle = Column(String(4))
@@ -183,7 +183,7 @@ class Bill(Base):
 	# creating an object in the Bill table
 	__tablename__ = "Bill"
 
-	bill_id = Column(String)
+	bill_id = Column(String
 	bill_title = Column(String)
 
 class Vote(Base):
