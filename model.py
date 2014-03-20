@@ -1,25 +1,37 @@
-# import stuff
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy import Column, Integer, String, DATETIME
+from sqlalchemy.orm import sessionmaker, scoped_session, relationship, backref
+from operator import itemgetter
+
 
 # create engine
 
-Base = declarative_base() # copied this from Ratings exercise
+engine = create_engine("sqlite:///moneypolitics.db", echo=False)
+session = scoped_session(sessionmaker(bind=engine,
+                                      autocommit = False,
+                                      autoflush = False))
+
+Base = declarative_base()
 Base.query = session.query_property()
 
 #class declarations
 
+# data from OpenSecrets
 class Candidate(Base):
     # creating a candidate object to be added to the database
     __tablename__ = "Candidates"
 
+    id = Column(Integer, primary_key = True)
     Cycle = Column(String(4))
     FECCandID = Column(String(9))
     CID = Column(String(9))
     FirstLastP = Column(String(50))
     Party = Column(String(1))
-    DistIdRunFor = Column(String(4))
-    DistIDCurr = Column(String(4))
-    CurrCand = Column(String(1))
-    CycleCand = Column(String(1))
+    # DistIdRunFor = Column(String(4))
+    # DistIDCurr = Column(String(4))
+    # CurrCand = Column(String(1))
+    # CycleCand = Column(String(1))
     CRPICO = Column(String(1))
     RecipCode = Column(String(2))
     # NoPacs = Column(String(1))
@@ -28,25 +40,27 @@ class Committee(Base):
 	# creating a committee object to be added to the database
 	__tablename__ = "Committees"
 
+	id = Column(Integer, primary_key = True)
 	Cycle = Column(String(4))
 	CmteID = Column(String(9))
 	PACShort = Column(String(50))
-	Affiliate = Column(String(50))
-	Ultorg = Column(String(50))
+	Affiliate = Column(String(50), nullable = True)
+	# Ultorg = Column(String(50))
 	RecipID =  Column(String(9))
 	RecipCode = Column(String(2))
 	FECCandID = Column(String(9))
 	Party = Column(String(1))
 	PrimCode = Column(String(5))
 	Source = Column(String(5))
-	Sensitive = Column(String(1))
-	Foreign = Column(Bit) # how do I do a 'bit' field? i think it's something I have to import
+	# Sensitive = Column(String(1))
+	# Foreign = Column(Integer) # how do I do a 'bit' field? i think it's something I have to import
 	Active = Column(Integer(1))
 
 class Individual(Base):
 	# creating an individual object to be added to the database
 	__tablename__ = "Individuals"
-
+    
+	id = Column(Integer, primary_key = True)
 	Cycle = Column(String(4))
 	FECTransID = Column(String(19)) # 7 chars before 2012
 	ContribID = Column(String(12))
@@ -55,7 +69,7 @@ class Individual(Base):
 	Orgname = Column(String(50)) # 40
 	UltOrg = Column(String(50)) # 40
 	RealCode = Column(String(5))
-	Date = Column(Date) # date objects OH GOD DO I HAVE TO DO DATETIME STUFF AGAIN?
+	Date = Column(String) # date objects OH GOD DO I HAVE TO DO DATETIME STUFF AGAIN?
 	Amount = Column(Integer) # not sure how this will work? integer w/out length?
 	Street = Column(String(40))
 	City = Column(String(30)) # 18
@@ -75,13 +89,14 @@ class Individual(Base):
 class PAC(Base):
 	__tablename__ = "PACs"
 	# creating a PAC object to be added to the database
-
+	
+	id = Column(Integer, primary_key = True)
 	Cycle = Column(String(4))
 	FECRecNo = Column(String(19)) # 7 chars before 2012
 	PACID = Column(String(9))
 	CID = Column(String(9))
-	Amount = Column(Float) # previoulsy an integer
-	Date = Column(Date) # DATES!
+	Amount = Column(Integer) # previoulsy an integer
+	Date = Column(DATETIME) # DATES!
 	RealCode = Column(String(5))
 	Type = Column(String(3))
 	DI = Column(String(1))
@@ -91,6 +106,7 @@ class PAC_other(Base):
 	__tablename__ = "PAC Other"
 	# creating a PAC-other object to be added to the database
 
+	id = Column(Integer, primary_key = True)
 	Cycle = Column(String(4))
 	FECRecNo = Column(String(19)) # 7 chars before 2012
 	Filerid = Column(String(9))
@@ -101,12 +117,12 @@ class PAC_other(Base):
 	ZIP = Column(String(5))
 	FECOccEmp = Column(String(38)) # 35
 	Primcode = Column(String(5))
-	Date = Column(Date)
-	Amount = Column(Float) # previously Number(Double)
+	Date = Column(DATETIME)
+	Amount = Column(Integer) # previously Number(Double)
 	RecipID = Column(String(9))
 	Party = Column(String(1))
 	Otherid = Column(String(9))
-	RecipCode = Column(Srtring(2))
+	RecipCode = Column(String(2))
 	RecipPrimcode = Column(String(5))
 	Amend = Column(String(1))
 	Report = Column(String(3))
@@ -123,10 +139,11 @@ class Legislator(Base):
 	# creating a member object to be added to the database
 
 	# I probably need to give these all lengths?
-
+	
+	id = Column(Integer, primary_key = True)
 	last_name = Column(String)
 	first_name = Column(String)
-	birthday = Column(Date)
+	birthday = Column(DATETIME)
 	gender = Column(String(1))
 	position_type = Column(String(3))
 	state = Column(String(2))
@@ -157,9 +174,10 @@ class Member_Legacy(Base):
 	# creating an object for each member's past service periods
 	__tablename__ = "Legacy"
 
+	id = Column(Integer, primary_key = True)
 	role_type = Column(String)
-	startdate = Column(Date)
-	enddate = Column(Date)
+	startdate = Column(DATETIME)
+	enddate = Column(DATETIME)
 	party = Column(String)
 	state = Column(String(2))
 	district = Column(Integer)
@@ -168,27 +186,53 @@ class Sponsor(Base):
 	# creating an object sponsor table - creates a relationship between Legislators and Bills
 	__tablename__ = "LegislatorBillSponsor"
 
-	thomas_id = Column(String)
-	is_primary = Column(Bit)
+	id = Column(Integer, primary_key = True)
 	bill_id = Column(String)
+	thomas_id = Column(String)
+	is_primary = Column(String)
+
 
 class Subjects():
-	# creating a record in the Subjects table to track the subjects of various bills
+	# creating a record in the Subjects table to track the subjects of various bills, will have many entries for the same bill
 	__tablename__ = "BillSubjects"
 
+	id = Column(Integer, primary_key = True)
 	bill_id = Column(String)
-	bill_subjects = Column(String)
+	bill_subject = Column(String)
 
 class Bill(Base):
 	# creating an object in the Bill table
 	__tablename__ = "Bill"
 
-	bill_id = Column(String
+	id = Column(Integer, primary_key = True)
+	bill_id = Column(String)
 	bill_title = Column(String)
+	bill_popular_title = Column(String)
+	bill_short_title = Column(String)
+	bill_subject = Column(String)
 
-class Vote(Base):
+class LegislatorBillVote(Base):
 	__tablename__ = "LegislatorBillVote"
 
+	id = Column(Integer, primary_key = True)
+	vote_id = Column(String)
 	thomas_id = Column(String)
 	bill_id = Column(String)
 	vote_value = Column(String) # enum?
+
+class Vote(Base):
+	__tablename__ = "Votes"
+
+	id = Column(Integer, primary_key = True)
+	vote_id = Column(String)
+	vote_category = Column(String)
+	vote_result = Column(String)
+
+
+
+def main():
+    # """In case we need this for something"""
+    pass
+
+if __name__ == "__main__":
+    main()
