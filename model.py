@@ -96,7 +96,7 @@ class PAC(Base):
 	PACID = Column(String(9))
 	CID = Column(String(9))
 	Amount = Column(Integer) # previoulsy an integer
-	Date = Column(DATETIME) # DATES!
+	Date = Column(String) # DATES!
 	RealCode = Column(String(5))
 	Type = Column(String(3))
 	DI = Column(String(1))
@@ -116,21 +116,21 @@ class PAC_other(Base):
 	State = Column(String(2))
 	ZIP = Column(String(5))
 	FECOccEmp = Column(String(38)) # 35
-	Primcode = Column(String(5))
-	Date = Column(DATETIME)
+	PrimCode = Column(String(5))
+	Date = Column(String)
 	Amount = Column(Integer) # previously Number(Double)
 	RecipID = Column(String(9))
 	Party = Column(String(1))
 	Otherid = Column(String(9))
 	RecipCode = Column(String(2))
-	RecipPrimcode = Column(String(5))
-	Amend = Column(String(1))
-	Report = Column(String(3))
-	PG = Column(String(1))
-	Microfilm = Column(String(11))
-	Type = Column(String(3))
+	RecipPrimCode = Column(String(5))
+	# Amend = Column(String(1))
+	# Report = Column(String(3))
+	# PG = Column(String(1))
+	# Microfilm = Column(String(11))
+	# Type = Column(String(3))
 	RealCode = Column(String(5))
-	Source = Column(String(5))
+	# Source = Column(String(5))
 
 class Legislator(Base):
 	# from legislators-current.csv or legislators-historic.csv
@@ -182,24 +182,6 @@ class Member_Legacy(Base):
 	state = Column(String(2))
 	district = Column(Integer)
 
-class Sponsor(Base):
-	# creating an object sponsor table - creates a relationship between Legislators and Bills
-	__tablename__ = "LegislatorBillSponsor"
-
-	id = Column(Integer, primary_key = True)
-	bill_id = Column(String)
-	thomas_id = Column(String)
-	is_primary = Column(String)
-
-
-class Subjects():
-	# creating a record in the Subjects table to track the subjects of various bills, will have many entries for the same bill
-	__tablename__ = "BillSubjects"
-
-	id = Column(Integer, primary_key = True)
-	bill_id = Column(String)
-	bill_subject = Column(String)
-
 class Bill(Base):
 	# creating an object in the Bill table
 	__tablename__ = "Bill"
@@ -210,6 +192,26 @@ class Bill(Base):
 	bill_popular_title = Column(String)
 	bill_short_title = Column(String)
 	bill_subject = Column(String)
+	bill_sponsor = Column(String)
+
+class Sponsor(Base):
+	# creating an object sponsor table - creates a relationship between Legislators and Bills
+	__tablename__ = "LegislatorBillSponsor"
+
+	id = Column(Integer, primary_key = True)
+	bill_id = Column(String)
+	thomas_id = Column(String)
+
+
+
+class Subjects(Base):
+	# creating a record in the Subjects table to track the subjects of various bills, will have many entries for the same bill
+	__tablename__ = "BillSubjects"
+
+	id = Column(Integer, primary_key = True)
+	bill_id = Column(String)
+	bill_subject = Column(String)
+
 
 class LegislatorBillVote(Base):
 	__tablename__ = "LegislatorBillVote"

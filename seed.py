@@ -14,7 +14,7 @@ import json
 import os
 import path_feed
 
-
+# need a function to parse MM/DD/YYYY into a datetime object
 
 # def load_CampaignFin_cands(session):
 #     with open('data/CampaignFin/CampaignFin14/cands14.txt') as f:
@@ -65,49 +65,50 @@ import path_feed
 # 				break
 	
 
-def loadCampaignFin_indiv(session):
-	with open('test.txt') as f:
-		reader = csv.reader(f, delimiter = ',', quotechar = '|')
-		for row in reader:
-		# setting row info from file as an object to add to the database
-			indiv_Cycle, indiv_FECTransID, indiv_ContribID, indiv_Contrib, indiv_RecipID, indiv_Orgname, indiv_UltOrg, indiv_RealCode, indiv_Date, indiv_Amount, indiv_Street, indiv_City, indiv_State, indiv_ZIP, indiv_RecipCode, indiv_Type, indiv_CmteID, indiv_OtherID, indiv_Gender, indiv_Microfilm, indiv_Occupation, indiv_Employer, indiv_Source = row
+# def loadCampaignFin_indiv(session):
+# 	with open('data/CampaignFin/CampaignFin14/indivs14.txt') as f:
+# 		reader = csv.reader(f, delimiter = ',', quotechar = '|')
+# 		for row in reader:
+# 		# setting row info from file as an object to add to the database
+# 			indiv_Cycle, indiv_FECTransID, indiv_ContribID, indiv_Contrib, indiv_RecipID, indiv_Orgname, indiv_UltOrg, indiv_RealCode, indiv_Date, indiv_Amount, indiv_Street, indiv_City, indiv_State, indiv_ZIP, indiv_RecipCode, indiv_Type, indiv_CmteID, indiv_OtherID, indiv_Gender, indiv_Microfilm, indiv_Occupation, indiv_Employer, indiv_Source = row
 
-			# indiv_Cycle, indiv_FECTransID, indiv_ContribID, indiv_Contrib, indiv_RecipID, indiv_Orgname, indiv_UltOrg, indiv_RealCode, indiv_Date, indiv_Amount, indiv_Street, indiv_City, indiv_State, indiv_ZIP, indiv_RecipCode, indiv_Type, indiv_CmteID, indiv_OtherID, indiv_Gender, indiv_FecOccEmp, indiv_Microfilm, indiv_Occupation, indiv_Employer, indiv_Source fields before 2012
+# 			# indiv_Cycle, indiv_FECTransID, indiv_ContribID, indiv_Contrib, indiv_RecipID, indiv_Orgname, indiv_UltOrg, indiv_RealCode, indiv_Date, indiv_Amount, indiv_Street, indiv_City, indiv_State, indiv_ZIP, indiv_RecipCode, indiv_Type, indiv_CmteID, indiv_OtherID, indiv_Gender, indiv_FecOccEmp, indiv_Microfilm, indiv_Occupation, indiv_Employer, indiv_Source fields before 2012
 
-			indiv = model.Individual(Cycle=indiv_Cycle, 
-									 FECTransID=indiv_FECTransID, 
-									 ContribID=indiv_ContribID, 
-									 Contrib=indiv_Contrib, 
-									 RecipID=indiv_RecipID, 
-									 Orgname=indiv_Orgname, 
-									 UltOrg=indiv_UltOrg, 
-									 RealCode=indiv_RealCode, 
-									 Date=indiv_Date, 
-									 Amount=indiv_Amount, 
-									 Street=indiv_Street, 
-									 City=indiv_City, 
-									 State=indiv_State, 
-									 ZIP=indiv_ZIP, 
-									 RecipCode=indiv_RecipCode, 
-									 Type=indiv_Type, 
-									 CmteID=indiv_CmteID, 
-									 OtherID=indiv_OtherID, 
-									 Gender=indiv_Gender,
-									 Microfilm=indiv_Microfilm, 
-									 Occupation=indiv_Occupation, 
-									 Employer=indiv_Employer, 
-									 Source=indiv_Source)
-			session.add(indiv)
-	session.commit()
+# 			indiv = model.Individual(Cycle=indiv_Cycle, 
+# 									 FECTransID=indiv_FECTransID, 
+# 									 ContribID=indiv_ContribID, 
+# 									 Contrib=indiv_Contrib, 
+# 									 RecipID=indiv_RecipID, 
+# 									 Orgname=indiv_Orgname, 
+# 									 UltOrg=indiv_UltOrg, 
+# 									 RealCode=indiv_RealCode, 
+# 									 Date=indiv_Date, 
+# 									 Amount=indiv_Amount, 
+# 									 Street=indiv_Street, 
+# 									 City=indiv_City, 
+# 									 State=indiv_State, 
+# 									 ZIP=indiv_ZIP, 
+# 									 RecipCode=indiv_RecipCode, 
+# 									 Type=indiv_Type, 
+# 									 CmteID=indiv_CmteID, 
+# 									 OtherID=indiv_OtherID, 
+# 									 Gender=indiv_Gender,
+# 									 Microfilm=indiv_Microfilm, 
+# 									 Occupation=indiv_Occupation, 
+# 									 Employer=indiv_Employer, 
+# 									 Source=indiv_Source)
+# 			session.add(indiv)
+# 			print indiv_ContribID
+# 	session.commit()
 
 # def loadCampaignFin_PAC(session):
-# 	with open('data/CampaignFin/CampaignFin[YY]/pacs[YY].txt') as f:
+# 	with open('data/CampaignFin/CampaignFin14/pacs14.txt') as f:
 # 		reader = csv.reader(f, delimiter = ',', quotechar = '|')
 # 		for row in reader:
 # 		# setting row info from file as an object to add to the database
 # 			PAC_Cycle, PAC_FECRecNo, PAC_PACID, PAC_CID, PAC_Amount, PAC_Date,PAC_RealCode, PAC_Type, PAC_DI, PAC_FECCandID = row
 # 			PAC = model.PAC(Cycle=PAC_Cycle, 
-# 							FECRecNO=PAC_FECRecNo, 
+# 							FECRecNo=PAC_FECRecNo, 
 # 							PACID=PAC_PACID, 
 # 							CID=PAC_CID, 
 # 							Amount=PAC_Amount, 
@@ -120,11 +121,11 @@ def loadCampaignFin_indiv(session):
 # 	session.commit()
 
 # def loadCampaignFin_PAC_other(session):
-# 	with open('data/CampaginFin/CampaignFin[YY]/pac_other[YY].txt')
+# 	with open('data/CampaignFin/CampaignFin14/pac_other14.txt') as f:
 # 		reader = csv.reader(f, delimiter = ',', quotechar = '|')
 # 		for row in reader:
 # 		# setting row info from file as an object to add to the database
-# 			PAC_other_Cycle, PAC_other_FECRecNo, PAC_other_Filerid, PAC_other_ContribLendTrans, PAC_other_City, PAC_other_State, PAC_other_ZIP, PAC_other_FECOccEmp, PAC_other_Primcode, PAC_other_Date, PAC_other_Amount, PAC_other_RecipID, PAC_other_Party, PAC_other_Otherid, PAC_other_RecipCode, PAC_other_RecipPrimcode, PAC_other_Amend, PAC_other_Report, PAC_other_PG, PAC_other_Microfilm, PAC_other_Type, PAC_other_RealCode, PAC_other_Source = row
+# 			PAC_other_Cycle, PAC_other_FECRecNo, PAC_other_Filerid, PAC_DonorCmte, PAC_other_ContribLendTrans, PAC_other_City, PAC_other_State, PAC_other_ZIP, PAC_other_FECOccEmp, PAC_other_Primcode, PAC_other_Date, PAC_other_Amount, PAC_other_RecipID, PAC_other_Party, PAC_other_Otherid, PAC_other_RecipCode, PAC_other_RecipPrimcode, PAC_other_Amend, PAC_other_Report, PAC_other_PG, PAC_other_Microfilm, PAC_other_Type, PAC_other_RealCode, PAC_other_Source = row
 # 			PAC_other = model.PAC_other(Cycle=PAC_other_Cycle, 
 # 										FECRecNo=PAC_other_FECRecNo, 
 # 										Filerid=PAC_other_Filerid, 
@@ -140,41 +141,22 @@ def loadCampaignFin_indiv(session):
 # 										Party=PAC_other_Party, 
 # 										Otherid=PAC_other_Otherid, 
 # 										RecipCode=PAC_other_RecipCode,
-# 										PrimCode=PAC_other_RecipPrimcode,
+# 										RecipPrimCode=PAC_other_RecipPrimcode,
 # 										# Amend=PAC_other_Amend, 
 # 										# Report=PAC_other_Report, 
 # 										# PG=PAC_other_PG, 
 # 										# Microfilm=PAC_other_Microfilm, 
 # 										# Type=PAC_other_Type, 
-# 										RealCode=PAC_other_RealCode,
+# 										RealCode=PAC_other_RealCode)
 # 										# Source=PAC_other_Source)
 # 			session.add(PAC_other)
 # 	session.commit()
-# # to load a json file and dump it to a dictionary, use json.load()
+# to load a json file and dump it to a dictionary, use json.load()
 
 # def load_bills(session):
 # 	# function to create bill objects to database
-# 	b = open([congress]/[bills]/[hr or s]/[hr or s][number])
+# 	b = open('data/congress/113/bills/hr/hr100/data.json')
 # 	bill_dict = json.load(b)
-
-# 	# sponsor data needs to go into a different table (sponsors)--can I create records in different tables in the same function?
-# 	sponsor = bill_dict['sponsor]']['thomas_id']
-# 	cosponsors_list = bill_dict['cosponsors']
-# 	cosponsors_ids = [sponsor]
-# 	for cosponsor in cosponsor_list:
-# 		cosponsors.append(cosponsor['thomas_id'])
-# 	cosponsors = cosponsor_ids
-# 	for cosponsor in cosponsors:
-# 		if cosponsor.index(cosponsor) = 0:
-# 			is_primary = True
-# 		else:
-# 			is_primary = False
-# 		Sponsor = model.Sponsor(bill_id=bill_id,
-# 								thomas_id=cosponsor
-# 								is_primary=is_primary)
-# 		session.add(Sponsor)
-
-
 
 # 	# this info needs to go on the bill table
 # 	bill_id = bill_dict['bill_id']
@@ -185,10 +167,10 @@ def loadCampaignFin_indiv(session):
 # 	bill_popular_title = bill_dict['popular_title']
 # 	bill_short_title = bill_dict['short_title']
 	
-# 	# this info needs to go into a subjects table with the bill id
+
 # 	top_subject = bill_dict['subjects_top_term']
-# 	subjects = bill_dict['subjects']
-	
+# 	sponsor = bill_dict['sponsor']['thomas_id']
+
 # 	Bill = model.Bill(bill_id=bill_id,
 # 					  bill_title=bill_title,
 # 					  bill_popular_title=bill_popular_title,
@@ -197,23 +179,36 @@ def loadCampaignFin_indiv(session):
 # 					  )
 # 	session.add(Bill)
 
+# 	# sponsor data needs to go into a different table (sponsors)--can I create records in different tables in the same function?
+
+# 	cosponsor_list = bill_dict['cosponsors']
+# 	cosponsor_ids = [sponsor]
+# 	for cosponsor in cosponsor_list:
+# 		cosponsor_ids.append(cosponsor['thomas_id'])
+# 	cosponsors = cosponsor_ids
+# 	for cosponsor in cosponsors:
+# 		Sponsor = model.Sponsor(bill_id=bill_id,
+# 								thomas_id=cosponsor)
+# 		session.add(Sponsor)
+
+# 	subjects = bill_dict['subjects']
 # 	for subject in subjects:
-# 		Subjects = model.Subject(bill_id=bill_id,
-# 								 subject=subject)
+# 		Subject = model.Subjects(bill_id=bill_id,
+# 								bill_subject=subject)
 # 		session.add(Subject)
 # 	session.commit()
 
 
 # def load_votes(session):
 # 	# votes are essentially a way to connect legislators to bills
-# 	v = open([congress]/[votes]/[year]/[h or s]/[h or s][number])
+# 	v = open('data/congress/113/votes/2013/h100/data.json')
 # 	vote_dict = json.load(v)
 
 # 	# creating the bill_id
 # 	vote_bill = vote_dict['bill']['type']
 # 	vote_bill_number = vote_dict['number']
 # 	vote_bill_congress = vote_dict['congress']
-# 	vote_bill_id = vote_bill + vote_bill_number + vote_bill_congress
+# 	vote_bill_id = str(vote_bill) + str(vote_bill_number) + '-' + str(vote_bill_congress)
 # 	# will need to reference bill id and vote category
 # 	# I probably only care about one category of vote
 
@@ -243,7 +238,11 @@ def loadCampaignFin_indiv(session):
 def main(session):
 	# load_CampaignFin_cands(session)
 	# load_CampaignFin_cmtes(session)
-	loadCampaignFin_indiv(session)
+	# loadCampaignFin_indiv(session)
+	# loadCampaignFin_PAC(session)
+	# loadCampaignFin_PAC_other(session)
+	# load_bills(session)
+	# load_votes(session)
 
 if __name__ == "__main__":
     main(model.session)
