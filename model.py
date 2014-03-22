@@ -170,14 +170,15 @@ class Legislator(Base):
 	# icpsr_id = Column(String)
 	# wikipedia_id = Column(String)
 
-class Member_Legacy(Base):
+class LegislatorLegacy(Base):
 	# creating an object for each member's past service periods
-	__tablename__ = "Legacy"
+	__tablename__ = "LegislatorLegacy"
 
 	id = Column(Integer, primary_key = True)
-	role_type = Column(String)
-	startdate = Column(DATETIME)
-	enddate = Column(DATETIME)
+	govtrack_id = Column(Integer)
+	chamber = Column(String)
+	startdate = Column(String)
+	enddate = Column(String)
 	party = Column(String)
 	state = Column(String(2))
 	district = Column(Integer)
@@ -220,7 +221,7 @@ class LegislatorBillVote(Base):
 	vote_id = Column(String)
 	thomas_id = Column(String)
 	bill_id = Column(String)
-	vote_value = Column(Enum(probably a string with a comma separated list)) # enum?
+	# vote_value = Column(Enum(probably a string with a comma separated list)) # enum?
 
 class Vote(Base):
 	__tablename__ = "Votes"

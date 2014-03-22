@@ -238,12 +238,12 @@ from bs4 import BeautifulSoup
 
 # TODO need a function to read in current legislators
 
-def load_legislators(Session):
-
+def load_legislators(session):
+	pass
 
 # TODO closing the files after I read them?
 
-def load_legislator_legacy(Session):
+def load_legislator_legacy(session):
 	# open the file
 	r = open('data/people_data/people_legacy.txt')
 	# cast the file to a BeautifulSoup object
@@ -252,7 +252,7 @@ def load_legislator_legacy(Session):
 	people = soup.findAll('person')
 	people_dict = {}
 	for person in people:
-		id = person.attrs.get('id')
+		govtrack_id = person.attrs.get('id')
 		people_dict[str(id)] = {}
 		# locate all of the roles for each person
 		roles = person.findAll('role')
@@ -260,10 +260,27 @@ def load_legislator_legacy(Session):
 		for role in roles:
 			startdate = str(role.attrs.get('startdate'))
 			enddate = str(role.attrs.get('enddate'))
-			people_dict[str(id)][(startdate, enddate)]['chamber'] = role.attrs.get('type')
-			people_dict[str(id)][(startdate, enddate)]['party'] = role.attrs.get('party')
-			people_dict[str(id)][(startdate, enddate)]['state'] = role.attrs.get('state')
-			people_dict[str(id)][(startdate, enddate)]['district'] = role.attrs.get('district')
+			chamber = role.attrs.get('type')
+			party = role.attrs.get('party')
+			state = role.attrs.get('state')
+			district = role.attrs.get('district')
+			LegislatorLegacy = model.LegislatorLegacy(govtrack_id=govtrack_id,
+												chamber=chamber,
+												startdate=startdate,
+												enddate=enddate,
+												party=party,
+												state=state,
+												district=district)
+			session.add(LegislatorLegacy)
+
+	session.commit()
+			# startdate = str(role.attrs.get('startdate'))
+			# enddate = str(role.attrs.get('enddate'))
+			# people_dict[str(id)][(startdate, enddate)]['chamber'] = role.attrs.get('type')
+			# people_dict[str(id)][(startdate, enddate)]['party'] = role.attrs.get('party')
+			# people_dict[str(id)][(startdate, enddate)]['state'] = role.attrs.get('state')
+			# people_dict[str(id)][(startdate, enddate)]['district'] = role.attrs.get('district')
+
 
 
 
@@ -276,6 +293,7 @@ def main(session):
 	# loadCampaignFin_PAC_other(session)
 	# load_bills(session)
 	# load_votes(session)
+	load_legislator_legacy(session)
 
 if __name__ == "__main__":
     main(model.session)
