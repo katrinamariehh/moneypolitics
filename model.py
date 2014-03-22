@@ -220,7 +220,7 @@ class LegislatorBillVote(Base):
 	vote_id = Column(String)
 	thomas_id = Column(String)
 	bill_id = Column(String)
-	vote_value = Column(String) # enum?
+	vote_value = Column(Enum(probably a string with a comma separated list)) # enum?
 
 class Vote(Base):
 	__tablename__ = "Votes"

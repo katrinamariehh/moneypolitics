@@ -13,6 +13,7 @@ import datetime
 import json
 import os
 import path_feed
+from bs4 import BeautifulSoup
 
 # need a function to parse MM/DD/YYYY into a datetime object
 
@@ -234,6 +235,38 @@ import path_feed
 # 			session.add(LegislatorBillVote)
 
 # 	session.commit()
+
+# TODO need a function to read in current legislators
+
+def load_legislators(Session):
+
+
+# TODO closing the files after I read them?
+
+def load_legislator_legacy(Session):
+	# open the file
+	r = open('data/people_data/people_legacy.txt')
+	# cast the file to a BeautifulSoup object
+	soup = BeautifulSoup(r)
+	# locate all of the people in the file
+	people = soup.findAll('person')
+	people_dict = {}
+	for person in people:
+		id = person.attrs.get('id')
+		people_dict[str(id)] = {}
+		# locate all of the roles for each person
+		roles = person.findAll('role')
+		# parse the attributes of each role
+		for role in roles:
+			startdate = str(role.attrs.get('startdate'))
+			enddate = str(role.attrs.get('enddate'))
+			people_dict[str(id)][(startdate, enddate)]['chamber'] = role.attrs.get('type')
+			people_dict[str(id)][(startdate, enddate)]['party'] = role.attrs.get('party')
+			people_dict[str(id)][(startdate, enddate)]['state'] = role.attrs.get('state')
+			people_dict[str(id)][(startdate, enddate)]['district'] = role.attrs.get('district')
+
+
+
 
 def main(session):
 	# load_CampaignFin_cands(session)
