@@ -7,6 +7,8 @@ import os
 import path_feed
 from bs4 import BeautifulSoup
 
+# TODO put in some kind of controller for the process--if each table load is going to be time-consuming, I want to be able to control the process of I need to drop and rebuild tables individually
+
 
 def convert_datetime(date):
 	# conver MM/DD/YYYY into a datetime object
@@ -46,7 +48,7 @@ def load_CampaignFin_cmtes(session):
 			for row in reader:
 			# setting row info from file as an object to add to the database
 				cmte_Cycle, cmte_CmteID, cmte_PACShort, cmte_Affiliate, cmte_Ultorg, cmte_RecipID, cmte_RecipCode, cmte_FECCandID, cmte_Party, cmte_PrimCode, cmte_Source, cmte_Sensitive, cmte_Foreign, cmte_Active = row
-				# if I want to use Ultorg I have to fix the unicode thing (run seed and inlude Ultorg and you'll see the error)
+				# TODO if I want to use Ultorg I have to fix the unicode thing (run seed and inlude Ultorg and you'll see the error)
 				# cmte_Ultorg = unicode(cmte_Ultorg)
 				try:
 					cmte = model.Committee(Cycle=cmte_Cycle,
@@ -259,7 +261,7 @@ def load_votes(session):
 
 
 def load_legislators(session):
-	# UNICODE will need to cast some name-related fields to unicode
+	# TODO UNICODE will need to cast some name-related fields to unicode
 	# i.e. lastname = unicode(lastname)
 	file_paths = ['data/people_data/legislators-current.csv', 'data/people_data/legislators-historic.csv']
 	for path in file_paths:
@@ -272,7 +274,7 @@ def load_legislators(session):
 				# assign field values for each row
 				last_name,first_name,birthday,gender,position_type,state,party,url,address,phone,contact_form,rss_url,twitter,facebook,facebook_id,youtube,youtube_id,bioguide_id,thomas_id,opensecrets_id,lis_id,cspan_id,govtrack_id,votesmart_id,ballotpedia_id,washington_post_id,icpsr_id,wikipedia_id = row
 				
-				# reformat data as needed
+				# TODO reformat data as needed
 				# lastname = unicode(lastname)
 				# birthday = datetime.datetime.strptime(birthday, "%Y-%m-%d") # this should totally work but it doesn't; currently have it as a string in the database instead of a datetime object
 				
@@ -298,7 +300,7 @@ def load_legislators(session):
 def load_legislator_legacy(session):
 	# open the file
 	r = open('data/people_data/people_legacy.txt')
-	# cast the file to a BeautifulSoup object
+	# cast the file to a BeautifulSoup object--it's xml
 	soup = BeautifulSoup(r)
 	# locate all of the people in the file
 	people = soup.findAll('person')
