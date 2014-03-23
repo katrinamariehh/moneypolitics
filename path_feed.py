@@ -56,11 +56,10 @@ def create_congress_list(path):
 	# create a path list for the congressional records
 	path_list = []
 	contents = os.listdir(path)
-	# skip the follwoing nodes (I don't care about these bills, vote paths will
-	# be included as well
+	# skip the follwoing nodes--they are less important bills, links to text files, etc.
 	nodes_to_skip = ['hconres', 'hjres', 'hres', 'sconres', 'sjres', 'sres']
 	for node in contents:
-		if node[0] == '.' or node in nodes_to_skip or node[-4:] == '.xml':
+		if node[0] == '.' or node in nodes_to_skip or node[-4:] == '.xml' or node[0:4] == 'text':
 			continue
 		fullpath = path+'/'+node
 		if os.path.isdir(fullpath):
