@@ -1,12 +1,4 @@
 
-# with CSV reader, pipes may be quote characters--try this tomorrow reading in one CampaignFin14 file
-
-# you can map a zip to a dictionary--use this for passing in headers
-
-# xmltodict to parse the xml data in the people_legacy file to a dictionary to send into the database--I should be able to easily read dictionaries into the database, right?
-
-# I think i need to just throw all of the votes and bills into a the database and start dealing with it
-
 import model
 import csv
 import datetime
@@ -15,7 +7,11 @@ import os
 import path_feed
 from bs4 import BeautifulSoup
 
-# need a function to parse MM/DD/YYYY into a datetime object
+
+def convert_datetime(date):
+	# conver MM/DD/YYYY into a datetime object
+	datetime.datetime.strptime(date, "%m-%d-%Y")
+
 
 # def load_CampaignFin_cands(session):
 #     with open('data/CampaignFin/CampaignFin14/cands14.txt') as f:
@@ -83,7 +79,7 @@ from bs4 import BeautifulSoup
 # 									 Orgname=indiv_Orgname, 
 # 									 UltOrg=indiv_UltOrg, 
 # 									 RealCode=indiv_RealCode, 
-# 									 Date=indiv_Date, 
+# 									 Date=convert_datetime(indiv_Date), 
 # 									 Amount=indiv_Amount, 
 # 									 Street=indiv_Street, 
 # 									 City=indiv_City, 
@@ -113,7 +109,7 @@ from bs4 import BeautifulSoup
 # 							PACID=PAC_PACID, 
 # 							CID=PAC_CID, 
 # 							Amount=PAC_Amount, 
-# 							Date=PAC_Date, 
+# 							Date=convert_datetime(PAC_Date), 
 # 							RealCode=PAC_RealCode, 
 # 							Type=PAC_Type, 
 # 							DI=PAC_DI, 
@@ -136,7 +132,7 @@ from bs4 import BeautifulSoup
 # 										ZIP=PAC_other_ZIP, 
 # 										FECOccEmp=PAC_other_FECOccEmp,
 # 										PrimCode=PAC_other_Primcode, 
-# 										Date=PAC_other_Date, 
+# 										Date=convert_datetime(PAC_other_Date), 
 # 										Amount=PAC_other_Amount, 
 # 										RecipID=PAC_other_RecipID, 
 # 										Party=PAC_other_Party, 
@@ -154,92 +150,127 @@ from bs4 import BeautifulSoup
 # 	session.commit()
 # to load a json file and dump it to a dictionary, use json.load()
 
-# def load_bills(session):
-# 	# function to create bill objects to database
-# 	b = open('data/congress/113/bills/hr/hr100/data.json')
-# 	bill_dict = json.load(b)
+def load_bills(session):
+	# function to create bill objects to database
+	b = open('data/congress/113/bills/hr/hr100/data.json')
+	bill_dict = json.load(b)
 
-# 	# this info needs to go on the bill table
-# 	bill_id = bill_dict['bill_id']
-# 	bill_title = bill_dict['titles'][0]['title']
-# 	# bill_type = bill_dict['bill_type']
-# 	# bill_congress = bill_dict['congress']
-# 	# bill_number = bill_dict['number']
-# 	bill_popular_title = bill_dict['popular_title']
-# 	bill_short_title = bill_dict['short_title']
+	# this info needs to go on the bill table
+	bill_id = bill_dict['bill_id']
+	bill_title = bill_dict['titles'][0]['title']
+	# bill_type = bill_dict['bill_type']
+	# bill_congress = bill_dict['congress']
+	# bill_number = bill_dict['number']
+	bill_popular_title = bill_dict['popular_title']
+	bill_short_title = bill_dict['short_title']
 	
 
-# 	top_subject = bill_dict['subjects_top_term']
-# 	sponsor = bill_dict['sponsor']['thomas_id']
+	top_subject = bill_dict['subjects_top_term']
+	sponsor = bill_dict['sponsor']['thomas_id']
 
-# 	Bill = model.Bill(bill_id=bill_id,
-# 					  bill_title=bill_title,
-# 					  bill_popular_title=bill_popular_title,
-# 					  bill_short_title=bill_short_title,
-# 					  bill_subject=top_subject
-# 					  )
-# 	session.add(Bill)
+	Bill = model.Bill(bill_id=bill_id,
+					  bill_title=bill_title,
+					  bill_popular_title=bill_popular_title,
+					  bill_short_title=bill_short_title,
+					  bill_subject=top_subject
+					  )
+	session.add(Bill)
 
-# 	# sponsor data needs to go into a different table (sponsors)--can I create records in different tables in the same function?
+	# sponsor data needs to go into a different table (sponsors)--can I create records in different tables in the same function?
 
-# 	cosponsor_list = bill_dict['cosponsors']
-# 	cosponsor_ids = [sponsor]
-# 	for cosponsor in cosponsor_list:
-# 		cosponsor_ids.append(cosponsor['thomas_id'])
-# 	cosponsors = cosponsor_ids
-# 	for cosponsor in cosponsors:
-# 		Sponsor = model.Sponsor(bill_id=bill_id,
-# 								thomas_id=cosponsor)
-# 		session.add(Sponsor)
+	cosponsor_list = bill_dict['cosponsors']
+	cosponsor_ids = [sponsor]
+	for cosponsor in cosponsor_list:
+		cosponsor_ids.append(cosponsor['thomas_id'])
+	cosponsors = cosponsor_ids
+	for cosponsor in cosponsors:
+		Sponsor = model.Sponsor(bill_id=bill_id,
+								thomas_id=cosponsor)
+		session.add(Sponsor)
 
-# 	subjects = bill_dict['subjects']
-# 	for subject in subjects:
-# 		Subject = model.Subjects(bill_id=bill_id,
-# 								bill_subject=subject)
-# 		session.add(Subject)
-# 	session.commit()
+	subjects = bill_dict['subjects']
+	for subject in subjects:
+		Subject = model.Subjects(bill_id=bill_id,
+								bill_subject=subject)
+		session.add(Subject)
+	session.commit()
 
 
-# def load_votes(session):
-# 	# votes are essentially a way to connect legislators to bills
-# 	v = open('data/congress/113/votes/2013/h100/data.json')
-# 	vote_dict = json.load(v)
+def load_votes(session):
+	# votes are essentially a way to connect legislators to bills
 
-# 	# creating the bill_id
-# 	vote_bill = vote_dict['bill']['type']
-# 	vote_bill_number = vote_dict['number']
-# 	vote_bill_congress = vote_dict['congress']
-# 	vote_bill_id = str(vote_bill) + str(vote_bill_number) + '-' + str(vote_bill_congress)
-# 	# will need to reference bill id and vote category
-# 	# I probably only care about one category of vote
+	# read each file included in the list created by path_feed into the database
+	for vote in cpaths['votes']:
+		# open the file
+		v = open(vote)
+		vote_dict = json.load(v)
+		# probably need to include the date here somewhere?
+		# creating the bill_id
+		vote_bill = vote_dict['bill']['type']
+		vote_bill_number = vote_dict['number']
+		vote_bill_congress = vote_dict['congress']
+		vote_bill_id = str(vote_bill) + str(vote_bill_number) + '-' + str(vote_bill_congress)
+		# will need to reference bill id and vote category
+		# I probably only care about one category of vote
 
-# 	vote_id = vote_dict['vote_id']
-# 	vote_category = vote_dict['category']
-# 	vote_result = vote_dict['result']
-# 	Vote = model.Vote(vote_id=vote_id,
-# 					  vote_category=vote_category,
-# 					  vote_result=vote_result)
-# 	session.add(Vote)
+		vote_id = vote_dict['vote_id']
+		vote_category = vote_dict['category']
+		vote_result = vote_dict['result']
+		Vote = model.Vote(vote_id=vote_id,
+						  vote_category=vote_category,
+						  vote_result=vote_result)
+		session.add(Vote)
 
-# 	vote_types = vote_dict['votes'].keys() # a dictionary where the keys are 'Yea', 'Nay', 'Present', 'Not Voting' (but not all votes are the same in this respect--some have 'Aye' and 'No')
-# 	for vote_type in vote_types:
-# 		legislator_ids = [] # how can I use the iterator name in the variable name? I don't think this is correct.
-# 		voters = vote_dict['votes'][vote_type]
-# 		for voter in voters:
-# 			legislator_ids.append(voter['id'])
-# 		for legislator in legislator_ids:
-# 			LegislatorBillVote = model.LegislatorBillVote(vote_id=vote_id,
-# 							  				thomas_id=legislator,
-# 											bill_id=vote_bill_id,
-# 											vote_value=vote_type)
-# 			session.add(LegislatorBillVote)
+		vote_types = vote_dict['votes'].keys() # a dictionary where the keys are 'Yea', 'Nay', 'Present', 'Not Voting' (but not all votes are the same in this respect--some have 'Aye' and 'No')
+		for vote_type in vote_types:
+			legislator_ids = []
+			voters = vote_dict['votes'][vote_type]
+			for voter in voters:
+				legislator_ids.append(voter['id'])
+			for legislator in legislator_ids:
+				LegislatorBillVote = model.LegislatorBillVote(vote_id=vote_id,
+								  				thomas_id=legislator,
+												bill_id=vote_bill_id,
+												vote_value=vote_type)
+				session.add(LegislatorBillVote)
 
-# 	session.commit()
+	session.commit()
 
-# TODO need a function to read in current legislators
 
 def load_legislators(session):
-	pass
+	# UNICODE will need to cast some name-related fields to unicode
+	# i.e. lastname = unicode(lastname)
+	file_paths = ['data/people_data/legislators-current.csv', 'data/people_data/legislators-historic.csv']
+	for path in file_paths:
+		with open(path) as f:
+			# open the legislators-currnet file to read in id info for current legislators
+
+			reader = csv.reader(f, delimiter = ',')
+			
+			for row in reader:
+				# assign field values for each row
+				last_name,first_name,birthday,gender,position_type,state,party,url,address,phone,contact_form,rss_url,twitter,facebook,facebook_id,youtube,youtube_id,bioguide_id,thomas_id,opensecrets_id,lis_id,cspan_id,govtrack_id,votesmart_id,ballotpedia_id,washington_post_id,icpsr_id,wikipedia_id = row
+				
+				# reformat data as needed
+				# lastname = unicode(lastname)
+				# birthday = datetime.datetime.strptime(birthday, "%Y-%m-%d") # this should totally work but it doesn't; currently have it as a string in the database instead of a datetime object
+				
+				# assign the row values to class attributes in the model
+				Legislator = model.Legislator(last_name=last_name,
+											  first_name=first_name,
+											  birthday=birthday,
+											  gender=gender,
+											  position_type=position_type,
+											  state=state,
+											  party=party,
+											  bioguide_id=bioguide_id,
+											  thomas_id=thomas_id,
+											  opensecrets_id=opensecrets_id,
+											  lis_id=lis_id,
+											  govtrack_id=govtrack_id)
+				session.add(Legislator)
+
+	session.commit()
 
 # TODO closing the files after I read them?
 
@@ -258,20 +289,21 @@ def load_legislator_legacy(session):
 		roles = person.findAll('role')
 		# parse the attributes of each role
 		for role in roles:
-			startdate = str(role.attrs.get('startdate'))
-			enddate = str(role.attrs.get('enddate'))
-			chamber = role.attrs.get('type')
-			party = role.attrs.get('party')
-			state = role.attrs.get('state')
-			district = role.attrs.get('district')
-			LegislatorLegacy = model.LegislatorLegacy(govtrack_id=govtrack_id,
-												chamber=chamber,
-												startdate=startdate,
-												enddate=enddate,
-												party=party,
-												state=state,
-												district=district)
-			session.add(LegislatorLegacy)
+			startdate = datetime.datetime.strptime(role.attrs.get('startdate'), "%Y-%m-%d")
+			enddate = datetime.datetime.strptime(role.attrs.get('enddate'), "%Y-%m-%d")
+			if startdate > datetime.datetime(1955, 12, 13):
+				chamber = role.attrs.get('type')
+				party = role.attrs.get('party')
+				state = role.attrs.get('state')
+				district = role.attrs.get('district')
+				LegislatorLegacy = model.LegislatorLegacy(govtrack_id=govtrack_id,
+													chamber=chamber,
+													startdate=startdate,
+													enddate=enddate,
+													party=party,
+													state=state,
+													district=district)
+				session.add(LegislatorLegacy)
 
 	session.commit()
 			# startdate = str(role.attrs.get('startdate'))
@@ -293,7 +325,9 @@ def main(session):
 	# loadCampaignFin_PAC_other(session)
 	# load_bills(session)
 	# load_votes(session)
-	load_legislator_legacy(session)
+	# load_legislator_legacy(session)
+	# load_legislators(session)
+
 
 if __name__ == "__main__":
     main(model.session)

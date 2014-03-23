@@ -19,36 +19,36 @@ def create_finance_list(path):
 	return path_list
 
 # an empty dictionary to add the Campaign Finance paths to based on type
-paths = {}
+fpaths = {}
 
 def parse_finance_list(list):
 # divide the path_list into lists based on the type
 # each type gets fed into a different function in the seed script
 
 # define the different empty lists to append the path strings to
-	paths['cands'] = []
-	paths['cmtes'] = []
-	paths['indivs'] = []
-	paths['pac_other'] = []
-	paths['pacs'] = []
+	fpaths['cands'] = []
+	fpaths['cmtes'] = []
+	fpaths['indivs'] = []
+	fpaths['pac_other'] = []
+	fpaths['pacs'] = []
 
 	for path in list:
 		# add candidate file paths to the candidate list
 		if 'cands' in path:
-			paths['cands'].append(path)
+			fpaths['cands'].append(path)
 		# add committee file paths to the committee list
 		if 'cmtes' in path:
-			paths['cmtes'].append(path)
+			fpaths['cmtes'].append(path)
 		# add individual file paths to the individual list
 		if 'indivs' in path:
-			paths['indivs'].append(path)
+			fpaths['indivs'].append(path)
 		# add the pac file paths to the pac list
 		if 'pac_' in path:
-			paths['pac_other'].append(path)
+			fpaths['pac_other'].append(path)
 		# ad the pacs_other file paths to the pacs_other list
 		if 'pacs' in path:
-			paths['pacs'].append(path)
-	return paths
+			fpaths['pacs'].append(path)
+	return fpaths
 
 
 
@@ -87,3 +87,20 @@ def parse_congress_list(list):
 			cpaths['bills'].append(path)
 
 	return cpaths
+
+def main():
+
+	CampaignFin_list = create_finance_list('data/CampaignFin')
+	CampaignFin_paths = parse_finance_list(CampaignFin_list)
+
+	congress_list = create_congress_list('data/congress')
+	congress_paths = parse_congress_list(congress_list)
+
+if __name__ == "__main__":
+	main()
+
+
+
+
+
+

@@ -69,7 +69,7 @@ class Individual(Base):
 	Orgname = Column(String(50)) # 40
 	UltOrg = Column(String(50)) # 40
 	RealCode = Column(String(5))
-	Date = Column(String) # date objects OH GOD DO I HAVE TO DO DATETIME STUFF AGAIN?
+	Date = Column(DATETIME) # date objects OH GOD DO I HAVE TO DO DATETIME STUFF AGAIN?
 	Amount = Column(Integer) # not sure how this will work? integer w/out length?
 	Street = Column(String(40))
 	City = Column(String(30)) # 18
@@ -117,7 +117,7 @@ class PAC_other(Base):
 	ZIP = Column(String(5))
 	FECOccEmp = Column(String(38)) # 35
 	PrimCode = Column(String(5))
-	Date = Column(String)
+	Date = Column(DATETIME)
 	Amount = Column(Integer) # previously Number(Double)
 	RecipID = Column(String(9))
 	Party = Column(String(1))
@@ -143,7 +143,7 @@ class Legislator(Base):
 	id = Column(Integer, primary_key = True)
 	last_name = Column(String)
 	first_name = Column(String)
-	birthday = Column(DATETIME)
+	birthday = Column(String)
 	gender = Column(String(1))
 	position_type = Column(String(3))
 	state = Column(String(2))
@@ -177,8 +177,8 @@ class LegislatorLegacy(Base):
 	id = Column(Integer, primary_key = True)
 	govtrack_id = Column(Integer)
 	chamber = Column(String)
-	startdate = Column(String)
-	enddate = Column(String)
+	startdate = Column(DATETIME)
+	enddate = Column(DATETIME)
 	party = Column(String)
 	state = Column(String(2))
 	district = Column(Integer)
