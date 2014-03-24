@@ -259,11 +259,18 @@ def load_votes(session):
 				for voter in voters:
 					legislator_ids.append(voter['id'])
 				for legislator in legislator_ids:
-					LegislatorBillVote = model.LegislatorBillVote(vote_id=vote_id,
-									  				thomas_id=legislator,
-													bill_id=vote_bill_id,
-													vote_value=vote_type)
-					session.add(LegislatorBillVote)
+					if vote_id[0] == 'h':
+						LegislatorBillVote = model.HouseVote(vote_id=vote_id,
+										  				thomas_id=legislator,
+														bill_id=vote_bill_id,
+														vote_value=vote_type)
+						session.add(LegislatorBillVote)
+					if vote_id[0] == 's':
+						LegislatorBillVote = model.SenateVote(vote_id=vote_id,
+										  				thomas_id=legislator,
+														bill_id=vote_bill_id,
+														vote_value=vote_type)
+						session.add(LegislatorBillVote)
 
 		session.commit()
 

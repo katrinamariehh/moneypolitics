@@ -214,14 +214,23 @@ class Subjects(Base):
 	bill_subject = Column(String)
 
 
-class LegislatorBillVote(Base):
-	__tablename__ = "LegislatorBillVote"
+class HouseVote(Base):
+	__tablename__ = "LegislatorBillHouseVote"
 
 	id = Column(Integer, primary_key = True)
 	vote_id = Column(String)
 	thomas_id = Column(String)
 	bill_id = Column(String)
-	vote_value = Column(String) #(Enum(probably a string with a comma separated list)) # enum?
+	vote_value = Column(String) #Column(ENUM('Aye', 'No', 'Yea', 'Nay', 'Present', 'Not Voting'))
+
+class SenateVote(Base):
+	__tablename__ = "LegislatorBillSenateVote"
+
+	id = Column(Integer, primary_key = True)
+	vote_id = Column(String)
+	thomas_id = Column(String)
+	bill_id = Column(String)
+	vote_value = Column(String) #Column(ENUM('Aye', 'No', 'Yea', 'Nay', 'Present', 'Not Voting'))
 
 class Vote(Base):
 	__tablename__ = "Votes"
@@ -230,9 +239,8 @@ class Vote(Base):
 	vote_id = Column(String)
 	bill_id = Column(String)
 	date = Column(DATETIME)
-	vote_category = Column(String)#Column(ENUM('Aye', 'No', 'Yea', 'Nay', 'Present', 'Not Voting'))
+	vote_category = Column(String)
 	vote_result = Column(String)
-
 
 
 def main():
