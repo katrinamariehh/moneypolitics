@@ -221,21 +221,22 @@ class LegislatorBillVote(Base):
 	vote_id = Column(String)
 	thomas_id = Column(String)
 	bill_id = Column(String)
-	# vote_value = Column(Enum(probably a string with a comma separated list)) # enum?
+	vote_value = Column(String) #(Enum(probably a string with a comma separated list)) # enum?
 
 class Vote(Base):
 	__tablename__ = "Votes"
 
 	id = Column(Integer, primary_key = True)
 	vote_id = Column(String)
-	vote_category = Column(String)
+	bill_id = Column(String)
+	date = Column(DATETIME)
+	vote_category = Column(String)#Column(ENUM('Aye', 'No', 'Yea', 'Nay', 'Present', 'Not Voting'))
 	vote_result = Column(String)
 
 
 
 def main():
-    # """In case we need this for something"""
-    pass
+    Base.metadata.create_all(engine)
 
 if __name__ == "__main__":
     main()
