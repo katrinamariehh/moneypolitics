@@ -84,70 +84,73 @@ def loadCampaignFin_indiv(session):
 		# open each file in the list
 		with open(path) as f:
 			reader = csv.reader(f, delimiter = ',', quotechar = '|')
-			
+			counter = 0
 			# if statement to deal with removal of FECOccEmp field in before 2012
 			if path[-6:-4] == 12 or path[-5:-4] == 14:
 
 				for row in reader:
-
+					counter += 1
+					if counter < 1000:
 				# setting row info from file as an object to add to the database
-					Cycle, FECTransID, ContribID, Contrib, RecipID, Orgname, UltOrg, RealCode, Date, Amount, Street, City, State, ZIP, RecipCode, Type, CmteID, OtherID, Gender, Microfilm, Occupation, Employer, Source = row
+						Cycle, FECTransID, ContribID, Contrib, RecipID, Orgname, UltOrg, RealCode, Date, Amount, Street, City, State, ZIP, RecipCode, Type, CmteID, OtherID, Gender, Microfilm, Occupation, Employer, Source = row
 
 
-					indiv = model.Individual(cycle=Cycle, 
-											 fec_trans_id=FECTransID, 
-											 contrib_id=ContribID, 
-											 contrib=Contrib, 
-											 recip_id=RecipID, 
-											 org_name=Orgname, 
-											 ult_org=UltOrg, 
-											 real_code=RealCode, 
-											 # date=Date, 
-											 amount=Amount, 
-											 # street=Street, 
-											 # city=City, 
-											 # state=State, 
-											 zip_code=ZIP, 
-											 recip_code=RecipCode, 
-											 type=Type, 
-											 cmte_id=CmteID, 
-											 other_id=OtherID, 
-											 # gender=Gender,
-											 # microfilm=Microfilm, 
-											 occupation=Occupation, 
-											 employer=Employer, 
-											 source=Source)
-					session.add(indiv)
+						indiv = model.Individual(cycle=Cycle, 
+												 fec_trans_id=FECTransID, 
+												 contrib_id=ContribID, 
+												 contrib=Contrib, 
+												 recip_id=RecipID, 
+												 org_name=Orgname, 
+												 ult_org=UltOrg, 
+												 real_code=RealCode, 
+												 # date=Date, 
+												 amount=Amount, 
+												 # street=Street, 
+												 # city=City, 
+												 # state=State, 
+												 zip_code=ZIP, 
+												 recip_code=RecipCode, 
+												 type=Type, 
+												 cmte_id=CmteID, 
+												 other_id=OtherID, 
+												 # gender=Gender,
+												 # microfilm=Microfilm, 
+												 occupation=Occupation, 
+												 employer=Employer, 
+												 source=Source)
+						session.add(indiv)
 
 			else:
 				for row in reader:
-					Cycle, FECTransID, ContribID, Contrib, RecipID, Orgname, UltOrg, RealCode, Date, Amount, Street, City, State, ZIP, RecipCode, Type, CmteID, OtherID, Gender, FecOccEmp, Microfilm, Occupation, Employer, Source = row
+					counter += 1
+					if counter < 1000:
+						Cycle, FECTransID, ContribID, Contrib, RecipID, Orgname, UltOrg, RealCode, Date, Amount, Street, City, State, ZIP, RecipCode, Type, CmteID, OtherID, Gender, FecOccEmp, Microfilm, Occupation, Employer, Source = row
 
 
-					indiv = model.Individual(cycle=Cycle, 
-											 fec_trans_id=FECTransID, 
-											 contrib_id=ContribID, 
-											 contrib=Contrib, 
-											 recip_id=RecipID, 
-											 org_name=Orgname, 
-											 ult_org=UltOrg, 
-											 real_code=RealCode, 
-											 # date=Date, 
-											 amount=Amount, 
-											 # street=Street, 
-											 # city=City, 
-											 # state=State, 
-											 zip_code=ZIP, 
-											 recip_code=RecipCode, 
-											 type=Type, 
-											 cmte_id=CmteID, 
-											 other_id=OtherID, 
-											 # gender=Gender,
-											 # microfilm=Microfilm, 
-											 occupation=Occupation, 
-											 employer=Employer, 
-											 source=Source)
-					session.add(indiv)
+						indiv = model.Individual(cycle=Cycle, 
+												 fec_trans_id=FECTransID, 
+												 contrib_id=ContribID, 
+												 contrib=Contrib, 
+												 recip_id=RecipID, 
+												 org_name=Orgname, 
+												 ult_org=UltOrg, 
+												 real_code=RealCode, 
+												 # date=Date, 
+												 amount=Amount, 
+												 # street=Street, 
+												 # city=City, 
+												 # state=State, 
+												 zip_code=ZIP, 
+												 recip_code=RecipCode, 
+												 type=Type, 
+												 cmte_id=CmteID, 
+												 other_id=OtherID, 
+												 # gender=Gender,
+												 # microfilm=Microfilm, 
+												 occupation=Occupation, 
+												 employer=Employer, 
+												 source=Source)
+						session.add(indiv)
 		session.commit()
 
 def loadCampaignFin_PAC(session):
@@ -218,7 +221,7 @@ def loadCampaignFin_PAC_other(session):
 											# report=Report, 
 											# pg=PG, 
 											# microfilm=Microfilm, 
-											# type=Type, 
+											transaction_type=Type, 
 											real_code=RealCode)
 											# source=Source)
 				session.add(PAC_other)
@@ -331,13 +334,13 @@ def load_votes(session):
 				for legislator in legislator_ids:
 					if vote_id[0] == 'h':
 						LegislatorBillVote = model.HouseVote(vote_id=vote_id,
-										  				lis_id=legislator,
+										  				thomas_id=legislator,
 														bill_id=vote_bill_id,
 														vote_value=vote_type)
 						session.add(LegislatorBillVote)
 					if vote_id[0] == 's':
 						LegislatorBillVote = model.SenateVote(vote_id=vote_id,
-										  				thomas_id=legislator,
+										  				lis_id=legislator,
 														bill_id=vote_bill_id,
 														vote_value=vote_type)
 						session.add(LegislatorBillVote)
@@ -348,8 +351,8 @@ def load_votes(session):
 def load_legislators(session):
 	# TODO UNICODE will need to cast some name-related fields to unicode
 	# i.e. lastname = unicode(lastname)
-	# file_paths = ['data/people_data/legislators-current.csv', 'data/people_data/legislators-historic.csv']
-	file_paths = ['data/people_data/legislators-current.csv'] #TEST
+	file_paths = ['data/people_data/legislators-current.csv', 'data/people_data/legislators-historic.csv']
+	# file_paths = ['data/people_data/legislators-historic.csv'] #TEST
 	for path in file_paths:
 		
 		with open(path) as f:
@@ -365,7 +368,10 @@ def load_legislators(session):
 				last_name,first_name,birthday,gender,position_type,state,party,url,address,phone,contact_form,rss_url,twitter,facebook,facebook_id,youtube,youtube_id,bioguide_id,thomas_id,opensecrets_id,lis_id,cspan_id,govtrack_id,votesmart_id,ballotpedia_id,washington_post_id,icpsr_id,wikipedia_id = row
 				
 
-				birthday = datetime.datetime.strptime(birthday, "%Y-%m-%d") # this should totally work but it doesn't; currently have it as a string in the database instead of a datetime object
+				if birthday !='':
+					birthday = datetime.datetime.strptime(birthday, "%Y-%m-%d") # this should totally work but it doesn't; currently have it as a string in the database instead of a datetime object
+				else:
+					birthday = None
 				
 				# assign the row values to class attributes in the model
 				Legislator = model.Legislator(last_name=last_name,
@@ -441,7 +447,7 @@ def main(session):
 	# load_bills(session)
 	# load_votes(session)
 	# load_legislators(session)
-	# load_legislator_legacy(session)
+	load_legislator_legacy(session)
 
 
 if __name__ == "__main__":

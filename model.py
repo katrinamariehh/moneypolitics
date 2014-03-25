@@ -134,7 +134,7 @@ class PAC_other(Base):
 	# report = Column(String(3))
 	# pg = Column(String(1))
 	# microfilm = Column(String(11))
-	# type = Column(String(3))
+	transaction_type = Column(String(3))
 	real_code = Column(String(5))
 	# source = Column(String(5))
 
@@ -150,7 +150,7 @@ class Legislator(Base):
 	id = Column(Integer, primary_key = True)
 	last_name = Column(String)
 	first_name = Column(String)
-	birthday = Column(DateTime())
+	birthday = Column(DateTime(), nullable = True)
 	gender = Column(String(1))
 	position_type = Column(String(3))
 	state = Column(String(2))
@@ -176,7 +176,7 @@ class Legislator(Base):
 	# washington_post_id = Column(String)
 	# icpsr_id = Column(String)
 	# wikipedia_id = Column(String)
-	senate_votes = relationship('SenateVote')
+	# senate_votes = relationship('SenateVote')
 
 class Bill(Base):
 	# creating an object in the Bill table
@@ -222,11 +222,11 @@ class SenateVote(Base):
 
 	id = Column(Integer, primary_key = True)
 	vote_id = Column(String)
-	lis_id = Column(String, ForeignKey('legislator.lis_id'))
+	lis_id = Column(String) #(String, ForeignKey('legislator.lis_id'))
 	bill_id = Column(String)
 	vote_value = Column(String) #Column(ENUM('Aye', 'No', 'Yea', 'Nay', 'Present', 'Not Voting'))
 
-	legislator = relationship("Legislator", backref=backref('legislator', order_by=id))
+	# legislator = relationship("Legislator", backref=backref('legislator', order_by=id))
 
 class Vote(Base):
 	__tablename__ = "votes"
@@ -254,7 +254,6 @@ class LegislatorLegacy(Base):
 
 
 def main():
-    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
 if __name__ == "__main__":
