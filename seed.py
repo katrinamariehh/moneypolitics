@@ -25,17 +25,17 @@ def load_CampaignFin_cands(session):
 	        
 	        for row in reader:
 	        # setting row info from file as an object to go into the database
-	            cand_Cycle, cand_FECCandID, cand_CID, cand_FirstLastP, cand_Party, cand_DistIDRunFor, cand_DistIDCurr, cand_CurrCand, cand_CycleCand, cand_CRPICO, cand_RecipCode, cand_NoPacs = row
-	            cand = model.Candidate(Cycle=cand_Cycle,
-	            					   FECCandID=cand_FECCandID,
-	            					   CID=cand_CID,
-	            					   FirstLastP=cand_FirstLastP,
-	            					   Party=cand_Party,
-	            					   # DistIdRunFor=cand_DistIdRunFor,
-	            					   # CurrCand=cand_CurrCand,
-	            					   # CycleCand=cand_CycleCand,
-	            					   CRPICO=cand_CRPICO,
-	            					   RecipCode=cand_RecipCode)
+	            Cycle, FECCandID, CID, FirstLastP, Party, DistIDRunFor, DistIDCurr, CurrCand, CycleCand, CRPICO, RecipCode, NoPacs = row
+	            cand = model.Candidate(cycle=Cycle,
+	            					   fec_cand_id=FECCandID,
+	            					   cid=CID,
+	            					   first_last_p=FirstLastP,
+	            					   party=Party,
+	            					   # dist_id_run_for=DistIdRunFor,
+	            					   # curr_cand=CurrCand,
+	            					   # cycle_cand=CycleCand,
+	            					   crpico=CRPICO,
+	            					   recip_code=RecipCode)
 	            session.add(cand)
     session.commit()
 
@@ -50,24 +50,24 @@ def load_CampaignFin_cmtes(session):
 			reader = csv.reader(f, delimiter = ',', quotechar = '|')
 			for row in reader:
 			# setting row info from file as an object to add to the database
-				cmte_Cycle, cmte_CmteID, cmte_PACShort, cmte_Affiliate, cmte_Ultorg, cmte_RecipID, cmte_RecipCode, cmte_FECCandID, cmte_Party, cmte_PrimCode, cmte_Source, cmte_Sensitive, cmte_Foreign, cmte_Active = row
+				Cycle, CmteID, PACShort, Affiliate, Ultorg, RecipID, RecipCode, FECCandID, Party, PrimCode, Source, Sensitive, Foreign, Active = row
 				# TODO if I want to use Ultorg I have to fix the unicode thing (run seed and inlude Ultorg and you'll see the error)
-				# cmte_Ultorg = unicode(cmte_Ultorg)
+				# Ultorg = unicode(Ultorg)
 				try:
-					cmte = model.Committee(Cycle=cmte_Cycle,
-										   CmteID=cmte_CmteID,
-										   PACShort=cmte_PACShort,
-										   Affiliate=cmte_Affiliate,
-										   # Ultorg=cmte_Ultorg,
-										   RecipID=cmte_RecipID,
-										   RecipCode=cmte_RecipCode,
-										   FECCandID=cmte_FECCandID,
-										   Party=cmte_Party,
-										   PrimCode=cmte_PrimCode,
-										   Source=cmte_Source,
-										   # Sensitive=cmte_Sensitive,
-										   # Foreign=cmte_Foreign,
-										   Active=cmte_Active)
+					cmte = model.Committee(cycle=Cycle,
+										   cmte_id=CmteID,
+										   pac_short=PACShort,
+										   affiliate=Affiliate,
+										   # ult_org=Ultorg,
+										   recip_id=RecipID,
+										   recip_code=RecipCode,
+										   fec_cand_id=FECCandID,
+										   party=Party,
+										   prim_code=PrimCode,
+										   source=Source,
+										   # sensitive=Sensitive,
+										   # foreign=Foreign,
+										   active=Active)
 					session.add(cmte)
 					session.commit()
 				except:
@@ -91,62 +91,62 @@ def loadCampaignFin_indiv(session):
 				for row in reader:
 
 				# setting row info from file as an object to add to the database
-					indiv_Cycle, indiv_FECTransID, indiv_ContribID, indiv_Contrib, indiv_RecipID, indiv_Orgname, indiv_UltOrg, indiv_RealCode, indiv_Date, indiv_Amount, indiv_Street, indiv_City, indiv_State, indiv_ZIP, indiv_RecipCode, indiv_Type, indiv_CmteID, indiv_OtherID, indiv_Gender, indiv_Microfilm, indiv_Occupation, indiv_Employer, indiv_Source = row
+					Cycle, FECTransID, ContribID, Contrib, RecipID, Orgname, UltOrg, RealCode, Date, Amount, Street, City, State, ZIP, RecipCode, Type, CmteID, OtherID, Gender, Microfilm, Occupation, Employer, Source = row
 
 
-					indiv = model.Individual(Cycle=indiv_Cycle, 
-											 FECTransID=indiv_FECTransID, 
-											 ContribID=indiv_ContribID, 
-											 Contrib=indiv_Contrib, 
-											 RecipID=indiv_RecipID, 
-											 Orgname=indiv_Orgname, 
-											 UltOrg=indiv_UltOrg, 
-											 RealCode=indiv_RealCode, 
-											 # Date=indiv_Date, 
-											 Amount=indiv_Amount, 
-											 Street=indiv_Street, 
-											 City=indiv_City, 
-											 State=indiv_State, 
-											 ZIP=indiv_ZIP, 
-											 RecipCode=indiv_RecipCode, 
-											 Type=indiv_Type, 
-											 CmteID=indiv_CmteID, 
-											 OtherID=indiv_OtherID, 
-											 # Gender=indiv_Gender,
-											 # Microfilm=indiv_Microfilm, 
-											 Occupation=indiv_Occupation, 
-											 Employer=indiv_Employer, 
-											 Source=indiv_Source)
+					indiv = model.Individual(cycle=Cycle, 
+											 fec_trans_id=FECTransID, 
+											 contrib_id=ContribID, 
+											 contrib=Contrib, 
+											 recip_id=RecipID, 
+											 org_name=Orgname, 
+											 ult_org=UltOrg, 
+											 real_code=RealCode, 
+											 # date=Date, 
+											 amount=Amount, 
+											 # street=Street, 
+											 # city=City, 
+											 # state=State, 
+											 zip_code=ZIP, 
+											 recip_code=RecipCode, 
+											 type=Type, 
+											 cmte_id=CmteID, 
+											 other_id=OtherID, 
+											 # gender=Gender,
+											 # microfilm=Microfilm, 
+											 occupation=Occupation, 
+											 employer=Employer, 
+											 source=Source)
 					session.add(indiv)
 
 			else:
 				for row in reader:
-					indiv_Cycle, indiv_FECTransID, indiv_ContribID, indiv_Contrib, indiv_RecipID, indiv_Orgname, indiv_UltOrg, indiv_RealCode, indiv_Date, indiv_Amount, indiv_Street, indiv_City, indiv_State, indiv_ZIP, indiv_RecipCode, indiv_Type, indiv_CmteID, indiv_OtherID, indiv_Gender, indiv_FecOccEmp, indiv_Microfilm, indiv_Occupation, indiv_Employer, indiv_Source = row
+					Cycle, FECTransID, ContribID, Contrib, RecipID, Orgname, UltOrg, RealCode, Date, Amount, Street, City, State, ZIP, RecipCode, Type, CmteID, OtherID, Gender, FecOccEmp, Microfilm, Occupation, Employer, Source = row
 
 
-					indiv = model.Individual(Cycle=indiv_Cycle, 
-											 FECTransID=indiv_FECTransID, 
-											 ContribID=indiv_ContribID, 
-											 Contrib=indiv_Contrib, 
-											 RecipID=indiv_RecipID, 
-											 Orgname=indiv_Orgname, 
-											 UltOrg=indiv_UltOrg, 
-											 RealCode=indiv_RealCode, 
-											 # Date=indiv_Date, 
-											 Amount=indiv_Amount, 
-											 Street=indiv_Street, 
-											 City=indiv_City, 
-											 State=indiv_State, 
-											 ZIP=indiv_ZIP, 
-											 RecipCode=indiv_RecipCode, 
-											 Type=indiv_Type, 
-											 CmteID=indiv_CmteID, 
-											 OtherID=indiv_OtherID, 
-											 # Gender=indiv_Gender,
-											 # Microfilm=indiv_Microfilm, 
-											 Occupation=indiv_Occupation, 
-											 Employer=indiv_Employer, 
-											 Source=indiv_Source)
+					indiv = model.Individual(cycle=Cycle, 
+											 fec_trans_id=FECTransID, 
+											 contrib_id=ContribID, 
+											 contrib=Contrib, 
+											 recip_id=RecipID, 
+											 org_name=Orgname, 
+											 ult_org=UltOrg, 
+											 real_code=RealCode, 
+											 # date=Date, 
+											 amount=Amount, 
+											 # street=Street, 
+											 # city=City, 
+											 # state=State, 
+											 zip_code=ZIP, 
+											 recip_code=RecipCode, 
+											 type=Type, 
+											 cmte_id=CmteID, 
+											 other_id=OtherID, 
+											 # gender=Gender,
+											 # microfilm=Microfilm, 
+											 occupation=Occupation, 
+											 employer=Employer, 
+											 source=Source)
 					session.add(indiv)
 		session.commit()
 
@@ -161,20 +161,20 @@ def loadCampaignFin_PAC(session):
 			reader = csv.reader(f, delimiter = ',', quotechar = '|')
 			for row in reader:
 			# setting row info from file as an object to add to the database
-				PAC_Cycle, PAC_FECRecNo, PAC_PACID, PAC_CID, PAC_Amount, PAC_Date,PAC_RealCode, PAC_Type, PAC_DI, PAC_FECCandID = row
+				Cycle, FECRecNo, PACID, CID, Amount, Date,RealCode, Type, DI, FECCandID = row
 				
-				# PAC_Date = datetime.datetime.strptime(PAC_Date, "%m/%d/%Y")
+				# Date = datetime.datetime.strptime(Date, "%m/%d/%Y")
 
-				PAC = model.PAC(Cycle=PAC_Cycle, 
-								FECRecNo=PAC_FECRecNo, 
-								PACID=PAC_PACID, 
-								CID=PAC_CID, 
-								Amount=PAC_Amount, 
-								# Date=PAC_Date, 
-								RealCode=PAC_RealCode, 
-								Type=PAC_Type, 
-								DI=PAC_DI, 
-								FECCandID=PAC_FECCandID)
+				PAC = model.PAC(cycle=Cycle, 
+								fec_rec_no=FECRecNo, 
+								pac_id=PACID, 
+								cid=CID, 
+								amount=Amount, 
+								# date=Date, 
+								real_code=RealCode, 
+								type=Type, 
+								di=DI, 
+								fec_cand_id=FECCandID)
 				session.add(PAC)
 	session.commit()
 
@@ -191,34 +191,36 @@ def loadCampaignFin_PAC_other(session):
 			for row in reader:
 
 			# setting row info from file as an object to add to the database
-				PAC_other_Cycle, PAC_other_FECRecNo, PAC_other_Filerid, PAC_DonorCmte, PAC_other_ContribLendTrans, PAC_other_City, PAC_other_State, PAC_other_ZIP, PAC_other_FECOccEmp, PAC_other_Primcode, PAC_other_Date, PAC_other_Amount, PAC_other_RecipID, PAC_other_Party, PAC_other_Otherid, PAC_other_RecipCode, PAC_other_RecipPrimcode, PAC_other_Amend, PAC_other_Report, PAC_other_PG, PAC_other_Microfilm, PAC_other_Type, PAC_other_RealCode, PAC_other_Source = row
+				Cycle, FECRecNo, Filerid, DonorCmte, ContribLendTrans, City, State, ZIP, FECOccEmp, Primcode, Date, Amount, RecipID, Party, Otherid, RecipCode, RecipPrimcode, Amend, Report, PG, Microfilm, Type, RealCode, Source = row
 				
-				# PAC_other_Date = datetime.datetime.strptime(PAC_other_Date, "%m/%d/%Y")
+				# Date = datetime.datetime.strptime(Date, "%m/%d/%Y")
 
-				PAC_other_amount = float(PAC_other_amount)
-				PAC_other = model.PAC_other(Cycle=PAC_other_Cycle, 
-											FECRecNo=PAC_other_FECRecNo, 
-											Filerid=PAC_other_Filerid, 
-											# ContribLendTrans=PAC_other_ContribLendTrans,
-											City=PAC_other_City, 
-											State=PAC_other_State, 
-											ZIP=PAC_other_ZIP, 
-											FECOccEmp=PAC_other_FECOccEmp,
-											PrimCode=PAC_other_Primcode, 
-											# Date=PAC_other_Date, 
-											Amount=PAC_other_Amount, 
-											RecipID=PAC_other_RecipID, 
-											Party=PAC_other_Party, 
-											Otherid=PAC_other_Otherid, 
-											RecipCode=PAC_other_RecipCode,
-											RecipPrimCode=PAC_other_RecipPrimcode,
-											# Amend=PAC_other_Amend, 
-											# Report=PAC_other_Report, 
-											# PG=PAC_other_PG, 
-											# Microfilm=PAC_other_Microfilm, 
-											# Type=PAC_other_Type, 
-											RealCode=PAC_other_RealCode)
-											# Source=PAC_other_Source)
+				Amount = float(Amount)
+
+				PAC_other = model.PAC_other(cycle=Cycle, 
+											fec_rec_no=FECRecNo, 
+											filer_id=Filerid,
+											donor_cmte=DonorCmte,
+											contrib_lend_trans=ContribLendTrans,
+											# city=City, 
+											# state=State, 
+											# zip_code=ZIP, 
+											fec_occ_emp=FECOccEmp,
+											prim_code=Primcode, 
+											# Date=Date, 
+											amount=Amount, 
+											recip_id=RecipID, 
+											party=Party, 
+											other_id=Otherid, 
+											recip_code=RecipCode,
+											recip_prim_code=RecipPrimcode,
+											# amend=Amend, 
+											# report=Report, 
+											# pg=PG, 
+											# microfilm=Microfilm, 
+											# type=Type, 
+											real_code=RealCode)
+											# source=Source)
 				session.add(PAC_other)
 	session.commit()
 # to load a json file and dump it to a dictionary, use json.load()
@@ -329,7 +331,7 @@ def load_votes(session):
 				for legislator in legislator_ids:
 					if vote_id[0] == 'h':
 						LegislatorBillVote = model.HouseVote(vote_id=vote_id,
-										  				thomas_id=legislator,
+										  				lis_id=legislator,
 														bill_id=vote_bill_id,
 														vote_value=vote_type)
 						session.add(LegislatorBillVote)
@@ -431,11 +433,11 @@ def load_legislator_legacy(session):
 
 
 def main(session):
-	load_CampaignFin_cands(session)
-	load_CampaignFin_cmtes(session)
+	# load_CampaignFin_cands(session)
+	# load_CampaignFin_cmtes(session)
 	# loadCampaignFin_indiv(session)
-	loadCampaignFin_PAC(session)
-	loadCampaignFin_PAC_other(session)
+	# loadCampaignFin_PAC(session)
+	# loadCampaignFin_PAC_other(session)
 	# load_bills(session)
 	# load_votes(session)
 	# load_legislators(session)

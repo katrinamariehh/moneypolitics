@@ -26,114 +26,118 @@ class Candidate(Base):
     __tablename__ = "candidates"
 
     id = Column(Integer, primary_key = True)
-    Cycle = Column(String(4))
-    FECCandID = Column(String(9))
-    CID = Column(String(9))
-    FirstLastP = Column(String(50))
-    Party = Column(String(1))
-    # DistIdRunFor = Column(String(4))
-    # DistIDCurr = Column(String(4))
-    # CurrCand = Column(String(1))
-    # CycleCand = Column(String(1))
-    CRPICO = Column(String(1))
-    RecipCode = Column(String(2))
-    # NoPacs = Column(String(1))
+    cycle = Column(String(4))
+    fec_cand_id = Column(String(9))
+    cid = Column(String(9))
+    first_last_p = Column(String(50))
+    party = Column(String(1))
+    # dist_id_run_for = Column(String(4))
+    # dist_id_curr = Column(String(4))
+    # curr_cand = Column(String(1))
+    # cycle_cand = Column(String(1))
+    crpico = Column(String(1))
+    recip_code = Column(String(2))
+    # nopacs = Column(String(1))
 
 class Committee(Base):
 	# creating a committee object to be added to the database
 	__tablename__ = "committees"
 
 	id = Column(Integer, primary_key = True)
-	Cycle = Column(String(4))
-	CmteID = Column(String(9))
-	PACShort = Column(String(50))
-	Affiliate = Column(String(50), nullable = True)
-	# Ultorg = Column(String(50))
-	RecipID =  Column(String(9))
-	RecipCode = Column(String(2))
-	FECCandID = Column(String(9))
-	Party = Column(String(1))
-	PrimCode = Column(String(5))
-	Source = Column(String)
-	# Sensitive = Column(String(1))
-	# Foreign = Column(Integer) # how do I do a 'bit' field? i think it's something I have to import
-	Active = Column(Integer(1))
+	cycle = Column(String(4))
+	cmte_id = Column(String(9))
+	pac_short = Column(String(50))
+	affiliate = Column(String(50), nullable = True)
+	# ult_org = Column(String(50))
+	recip_id =  Column(String(9))
+	recip_code = Column(String(2))
+	fec_cand_id = Column(String(9))
+	party = Column(String(1))
+	prim_code = Column(String(5))
+	source = Column(String)
+	# sensitive = Column(String(1))
+	# foreign = Column(Integer) # how do I do a 'bit' field? i think it's something I have to import
+	active = Column(Integer(1))
 
 class Individual(Base):
 	# creating an individual object to be added to the database
 	__tablename__ = "individuals"
     
 	id = Column(Integer, primary_key = True)
-	Cycle = Column(String(4))
-	FECTransID = Column(String(19)) # 7 chars before 2012
-	ContribID = Column(String(12))
-	Contrib = Column(String(50)) # this field was 34 chars before 2012
-	RecipID = Column(String(9))
-	Orgname = Column(String(50)) # 40
-	UltOrg = Column(String(50)) # 40
-	RealCode = Column(String(5))
-	# Date = Column(DateTime) 
-	Amount = Column(Integer) 
-	# Street = Column(String(40))
-	# City = Column(String(30)) # 18
-	# State = Column(String(2))
-	ZIP = Column(String(5))
-	RecipCode = Column(String(2))
-	Type = Column(String(3))
-	CmteID = Column(String(9))
-	OtherID = Column(String(9))
-	# Gender = Column(String(1))
-	# FecOccEmp = Column(String(35)) 	# before 2012 only
-	# Microfilm  = Column(String(11))
-	Occupation = Column(String(38)) # called Occ_EF
-	Employer = Column(String(38))# called Emp_EF
-	Source = Column(String(5))
+	cycle = Column(String(4))
+	fec_trans_id = Column(String(19)) # 7 chars before 2012
+	contrib_id = Column(String(12))
+	contrib = Column(String(50)) # this field was 34 chars before 2012
+	recip_id = Column(String(9))
+	org_name = Column(String(50)) # 40
+	ult_org = Column(String(50)) # 40
+	real_code = Column(String(5))
+	# date = Column(DateTime) 
+	amount = Column(Integer) 
+	# street = Column(String(40))
+	# city = Column(String(30)) # 18
+	# state = Column(String(2))
+	zip_code = Column(String(5))
+	recip_code = Column(String(2))
+	type = Column(String(3))
+	cmte_id = Column(String(9))
+	other_id = Column(String(9))
+	# gender = Column(String(1))
+	# fec_occ_emp = Column(String(35)) 	# before 2012 only
+	# microfilm  = Column(String(11))
+	occupation = Column(String(38)) # called Occ_EF
+	employer = Column(String(38))# called Emp_EF
+	source = Column(String(5))
 
 class PAC(Base):
 	__tablename__ = "pacs"
 	# creating a PAC object to be added to the database
 	
 	id = Column(Integer, primary_key = True)
-	Cycle = Column(String(4))
-	FECRecNo = Column(String(19)) # 7 chars before 2012
-	PACID = Column(String(9))
-	CID = Column(String(9))
-	Amount = Column(Integer) # previoulsy an integer
-	# Date = Column(String) # DATES!
-	RealCode = Column(String(5))
-	Type = Column(String(3))
-	DI = Column(String(1))
-	FECCandID = Column(String(9))
+	cycle = Column(String(4))
+	fec_rec_no = Column(String(19)) # 7 chars before 2012
+	pac_id = Column(String(9))
+	# cid = Column(String(9), ForeignKey('candidates.cid'))
+	cid = Column(String(9))
+	amount = Column(Integer) # previoulsy an integer
+	# date = Column(String) # DATES!
+	real_code = Column(String(5))
+	type = Column(String(3))
+	di = Column(String(1))
+	fec_cand_id = Column(String(9))
+
+	# candidate = relationship('candidate', backref=backref('candidates', order_by=id))
 
 class PAC_other(Base):
 	__tablename__ = "pacother"
 	# creating a PAC-other object to be added to the database
 
 	id = Column(Integer, primary_key = True)
-	Cycle = Column(String(4))
-	FECRecNo = Column(String(19)) # 7 chars before 2012
-	Filerid = Column(String(9))
-	DonorCmte = Column(String(50)) # 40
-	ContribLendTrans = Column(String(50)) # 40
-	City = Column(String(30)) # 40
-	State = Column(String(2))
-	ZIP = Column(String(5))
-	FECOccEmp = Column(String(38)) # 35
-	PrimCode = Column(String(5))
-	# Date = Column(DateTime)
-	Amount = Column(Integer) # previously Number(Double)
-	RecipID = Column(String(9))
-	Party = Column(String(1))
-	Otherid = Column(String(9))
-	RecipCode = Column(String(2))
-	RecipPrimCode = Column(String(5))
-	# Amend = Column(String(1))
-	# Report = Column(String(3))
-	# PG = Column(String(1))
-	# Microfilm = Column(String(11))
-	# Type = Column(String(3))
-	RealCode = Column(String(5))
-	# Source = Column(String(5))
+	cycle = Column(String(4))
+	fec_rec_no = Column(String(19)) # 7 chars before 2012
+	filer_id = Column(String(9))
+	donor_cmte = Column(String(50)) # 40
+	contrib_lend_trans = Column(String(50)) # 40
+	# city = Column(String(30)) # 40
+	# state = Column(String(2))
+	# zip_code = Column(String(5))
+	fec_occ_emp = Column(String(38)) # 35
+	prim_code = Column(String(5))
+	# date = Column(DateTime)
+	amount = Column(Integer) # previously Number(Double)
+	recip_id = Column(String(9))
+	party = Column(String(1))
+	other_id = Column(String(9))
+	recip_code = Column(String(2))
+	recip_prim_code = Column(String(5))
+	# amend = Column(String(1))
+	# report = Column(String(3))
+	# pg = Column(String(1))
+	# microfilm = Column(String(11))
+	# type = Column(String(3))
+	real_code = Column(String(5))
+	# source = Column(String(5))
+
 
 class Legislator(Base):
 	# from legislators-current.csv or legislators-historic.csv
@@ -172,19 +176,7 @@ class Legislator(Base):
 	# washington_post_id = Column(String)
 	# icpsr_id = Column(String)
 	# wikipedia_id = Column(String)
-
-class LegislatorLegacy(Base):
-	# creating an object for each member's past service periods
-	__tablename__ = "legislator_legacy"
-
-	id = Column(Integer, primary_key = True)
-	govtrack_id = Column(Integer)
-	chamber = Column(String)
-	startdate = Column(DateTime)
-	enddate = Column(DateTime)
-	party = Column(String)
-	state = Column(String(2))
-	district = Column(Integer)
+	senate_votes = relationship('SenateVote')
 
 class Bill(Base):
 	# creating an object in the Bill table
@@ -205,7 +197,6 @@ class Sponsor(Base):
 	id = Column(Integer, primary_key = True)
 	bill_id = Column(String)
 	thomas_id = Column(String)
-
 
 
 class Subjects(Base):
@@ -231,9 +222,11 @@ class SenateVote(Base):
 
 	id = Column(Integer, primary_key = True)
 	vote_id = Column(String)
-	thomas_id = Column(String)
+	lis_id = Column(String, ForeignKey('legislator.lis_id'))
 	bill_id = Column(String)
 	vote_value = Column(String) #Column(ENUM('Aye', 'No', 'Yea', 'Nay', 'Present', 'Not Voting'))
+
+	legislator = relationship("Legislator", backref=backref('legislator', order_by=id))
 
 class Vote(Base):
 	__tablename__ = "votes"
@@ -244,6 +237,20 @@ class Vote(Base):
 	date = Column(DateTime)
 	vote_category = Column(String)
 	vote_result = Column(String)
+
+
+class LegislatorLegacy(Base):
+	# creating an object for each member's past service periods
+	__tablename__ = "legislator_legacy"
+
+	id = Column(Integer, primary_key = True)
+	govtrack_id = Column(Integer)
+	chamber = Column(String)
+	startdate = Column(DateTime)
+	enddate = Column(DateTime)
+	party = Column(String)
+	state = Column(String(2))
+	district = Column(Integer)
 
 
 def main():
