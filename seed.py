@@ -6,6 +6,7 @@ import json
 import os
 import path_feed
 from bs4 import BeautifulSoup
+import yaml
 
 # TODO put in some kind of controller for the process--if each table load is going to be time-consuming, I want to be able to control the process of I need to drop and rebuild tables individually
 
@@ -90,67 +91,84 @@ def loadCampaignFin_indiv(session):
 
 				for row in reader:
 					counter += 1
-					if counter < 1000:
+
+
 				# setting row info from file as an object to add to the database
-						Cycle, FECTransID, ContribID, Contrib, RecipID, Orgname, UltOrg, RealCode, Date, Amount, Street, City, State, ZIP, RecipCode, Type, CmteID, OtherID, Gender, Microfilm, Occupation, Employer, Source = row
+					Cycle, FECTransID, ContribID, Contrib, RecipID, Orgname, UltOrg, RealCode, Date, Amount, Street, City, State, ZIP, RecipCode, Type, CmteID, OtherID, Gender, Microfilm, Occupation, Employer, Source = row
 
+					# Orgname = Orgname.decode('utf-8')
+					# UltOrg = UltOrg.decode('utf-8')
 
-						indiv = model.Individual(cycle=Cycle, 
-												 fec_trans_id=FECTransID, 
-												 contrib_id=ContribID, 
-												 contrib=Contrib, 
-												 recip_id=RecipID, 
-												 org_name=Orgname, 
-												 ult_org=UltOrg, 
-												 real_code=RealCode, 
-												 # date=Date, 
-												 amount=Amount, 
-												 # street=Street, 
-												 # city=City, 
-												 # state=State, 
-												 zip_code=ZIP, 
-												 recip_code=RecipCode, 
-												 type=Type, 
-												 cmte_id=CmteID, 
-												 other_id=OtherID, 
-												 # gender=Gender,
-												 # microfilm=Microfilm, 
-												 occupation=Occupation, 
-												 employer=Employer, 
-												 source=Source)
-						session.add(indiv)
+					indiv = model.Individual(cycle=Cycle, 
+											 fec_trans_id=FECTransID, 
+											 contrib_id=ContribID, 
+											 contrib=Contrib, 
+											 recip_id=RecipID, 
+											 org_name=Orgname, 
+											 ult_org=UltOrg, 
+											 real_code=RealCode, 
+											 # date=Date, 
+											 amount=Amount, 
+											 # street=Street, 
+											 # city=City, 
+											 # state=State, 
+											 zip_code=ZIP, 
+											 recip_code=RecipCode, 
+											 type=Type, 
+											 cmte_id=CmteID, 
+											 other_id=OtherID, 
+											 # gender=Gender,
+											 # microfilm=Microfilm, 
+											 occupation=Occupation, 
+											 employer=Employer, 
+											 source=Source)
+					session.add(indiv)
+					if counter % 500 == 0:
+						session.commit()
+						print "I've committed %s" % counter
 
 			else:
 				for row in reader:
 					counter += 1
-					if counter < 1000:
-						Cycle, FECTransID, ContribID, Contrib, RecipID, Orgname, UltOrg, RealCode, Date, Amount, Street, City, State, ZIP, RecipCode, Type, CmteID, OtherID, Gender, FecOccEmp, Microfilm, Occupation, Employer, Source = row
 
 
-						indiv = model.Individual(cycle=Cycle, 
-												 fec_trans_id=FECTransID, 
-												 contrib_id=ContribID, 
-												 contrib=Contrib, 
-												 recip_id=RecipID, 
-												 org_name=Orgname, 
-												 ult_org=UltOrg, 
-												 real_code=RealCode, 
-												 # date=Date, 
-												 amount=Amount, 
-												 # street=Street, 
-												 # city=City, 
-												 # state=State, 
-												 zip_code=ZIP, 
-												 recip_code=RecipCode, 
-												 type=Type, 
-												 cmte_id=CmteID, 
-												 other_id=OtherID, 
-												 # gender=Gender,
-												 # microfilm=Microfilm, 
-												 occupation=Occupation, 
-												 employer=Employer, 
-												 source=Source)
-						session.add(indiv)
+					Cycle, FECTransID, ContribID, Contrib, RecipID, Orgname, UltOrg, RealCode, Date, Amount, Street, City, State, ZIP, RecipCode, Type, CmteID, OtherID, Gender, FecOccEmp, Microfilm, Occupation, Employer, Source = row
+
+					try:
+						Orgname = Orgname.encode('utf-8')
+						UltOrg = UltOrg.encode('utf-8')
+					except UnicodeDecodeError:
+						print row
+
+					indiv = model.Individual(cycle=Cycle, 
+											 fec_trans_id=FECTransID, 
+											 contrib_id=ContribID, 
+											 contrib=Contrib, 
+											 recip_id=RecipID, 
+											 org_name=Orgname, 
+											 # ult_org=UltOrg, 
+											 real_code=RealCode, 
+											 # date=Date, 
+											 amount=Amount, 
+											 # street=Street, 
+											 # city=City, 
+											 # state=State, 
+											 zip_code=ZIP, 
+											 recip_code=RecipCode, 
+											 type=Type, 
+											 cmte_id=CmteID, 
+											 other_id=OtherID, 
+											 # gender=Gender,
+											 # microfilm=Microfilm, 
+											 occupation=Occupation, 
+											 employer=Employer, 
+											 source=Source)
+					session.add(indiv)
+					if counter % 500 == 0:
+						session.commit()
+						print "I've committed %s" % counter
+
+
 		session.commit()
 
 def loadCampaignFin_PAC(session):
@@ -351,36 +369,41 @@ def load_votes(session):
 def load_legislators(session):
 	# TODO UNICODE will need to cast some name-related fields to unicode
 	# i.e. lastname = unicode(lastname)
-	file_paths = ['data/people_data/legislators-current.csv', 'data/people_data/legislators-historic.csv']
-	# file_paths = ['data/people_data/legislators-historic.csv'] #TEST
+	# file_paths = ['data/people_data/legislators-current.csv', 'data/people_data/legislators-historic.csv']
+	file_paths = ['data/people_data/legislators-historical.yaml', 'data/people_data/legislators-current.yaml'] #TEST
+	print "reading"
 	for path in file_paths:
-		
-		with open(path) as f:
-			# open the legislators-current and legislators-historic files to read in id and reference info
+		l = open(path)
+		l_list = yaml.load(l)
 
-			# skip the first line in the file (contains the headers)
-			f.readline()
+		counter = 0
 
-			reader = csv.reader(f, delimiter = ',')
-			
-			for row in reader:
-				# assign field values for each row
-				last_name,first_name,birthday,gender,position_type,state,party,url,address,phone,contact_form,rss_url,twitter,facebook,facebook_id,youtube,youtube_id,bioguide_id,thomas_id,opensecrets_id,lis_id,cspan_id,govtrack_id,votesmart_id,ballotpedia_id,washington_post_id,icpsr_id,wikipedia_id = row
-				
-
-				if birthday !='':
-					birthday = datetime.datetime.strptime(birthday, "%Y-%m-%d") # this should totally work but it doesn't; currently have it as a string in the database instead of a datetime object
+		for legislator in l_list:
+			counter += 1
+			last_name = legislator['name'].get('last')
+			first_name = legislator['name'].get('first')
+			official_full = legislator['name'].get('official_full')
+			if legislator.get('bio'):
+				gender = legislator['bio'].get('gender')
+				if legislator['bio'].get('birthday'):
+					birthday = datetime.datetime.strptime(legislator['bio'].get('birthday'), "%Y-%m-%d")
 				else:
 					birthday = None
-				
-				# assign the row values to class attributes in the model
+			else:
+				gender = None
+				birthday = None
+			
+			bioguide_id = legislator['id'].get('bioguide')
+			thomas_id = legislator['id'].get('thomas')
+			opensecrets_id = legislator['id'].get('opensecrets')
+			lis_id = legislator['id'].get('lis')
+			govtrack_id = legislator['id'].get('govtrack')
+			if thomas_id: 
 				Legislator = model.Legislator(last_name=last_name,
 											  first_name=first_name,
+											  official_full=official_full,
 											  birthday=birthday,
 											  gender=gender,
-											  position_type=position_type,
-											  state=state,
-											  party=party,
 											  bioguide_id=bioguide_id,
 											  thomas_id=thomas_id,
 											  opensecrets_id=opensecrets_id,
@@ -388,50 +411,120 @@ def load_legislators(session):
 											  govtrack_id=govtrack_id)
 				session.add(Legislator)
 
-	session.commit()
+			terms = legislator['terms']
+			for term in terms:
+				term_type = term.get('type')
+				start = datetime.datetime.strptime(term.get('start'), "%Y-%m-%d")
+				end = datetime.datetime.strptime(term.get('end'), "%Y-%m-%d")
+				state = term.get('state')
+				district = term.get('district')
+				party = term.get('party')
+				senate_class = term.get('class')
+				state_rank = term.get('state_rank')
+
+				if start > datetime.datetime(1955, 12, 13):
+
+					LegislatorLegacy = model.LegislatorLegacy(govtrack_id=govtrack_id,
+															  term_type=term_type,
+															  start=start,
+															  end=end,
+															  state=state,
+															  district=district,
+															  party=party,
+															  senate_class=senate_class,
+															  state_rank=state_rank)
+					session.add(LegislatorLegacy)
+
+			if counter % 50 == 0:
+				session.commit()
+
+
+
+
+
+
+
+	# for path in file_paths:
+		
+	# 	with open(path) as f:
+	# 		# open the legislators-current and legislators-historic files to read in id and reference info
+
+	# 		# skip the first line in the file (contains the headers)
+	# 		f.readline()
+
+	# 		reader = csv.reader(f, delimiter = ',')
+			
+	# 		for row in reader:
+	# 			# assign field values for each row
+	# 			last_name,first_name,birthday,gender,position_type,state,party,url,address,phone,contact_form,rss_url,twitter,facebook,facebook_id,youtube,youtube_id,bioguide_id,thomas_id,opensecrets_id,lis_id,cspan_id,govtrack_id,votesmart_id,ballotpedia_id,washington_post_id,icpsr_id,wikipedia_id = row
+				
+
+	# 			if birthday !='':
+	# 				birthday = datetime.datetime.strptime(birthday, "%Y-%m-%d") # this should totally work but it doesn't; currently have it as a string in the database instead of a datetime object
+	# 			else:
+	# 				birthday = None
+				
+	# 			if thomas_id and opensecrets_id:
+	# 			# assign the row values to class attributes in the model
+	# 			# if birthday < datetime.datetime(1915,01,01)
+	# 				Legislator = model.Legislator(last_name=last_name,
+	# 											  first_name=first_name,
+	# 											  birthday=birthday,
+	# 											  gender=gender,
+	# 											  position_type=position_type,
+	# 											  state=state,
+	# 											  party=party,
+	# 											  bioguide_id=bioguide_id,
+	# 											  thomas_id=thomas_id,
+	# 											  opensecrets_id=opensecrets_id,
+	# 											  lis_id=lis_id,
+	# 											  govtrack_id=govtrack_id)
+	# 				session.add(Legislator)
+
+	# session.commit()
 
 # TODO closing the files after I read them?
 
 
-def load_legislator_legacy(session):
-	# open the file and cast it to a Beautiful soup object (it's xml)
-	r = open('data/people_data/people_legacy.txt')
-	soup = BeautifulSoup(r)
+# def load_legislator_legacy(session):
+# 	# open the file and cast it to a Beautiful soup object (it's xml)
+# 	r = open('data/people_data/people_legacy.txt')
+# 	soup = BeautifulSoup(r)
 
-	# locate all of the people in the file
-	people = soup.findAll('person')
-	people_dict = {}
+# 	# locate all of the people in the file
+# 	people = soup.findAll('person')
+# 	people_dict = {}
 
-	# for each person in the file, add their roles to the database as LegislatorLegacy objects
-	for person in people:
-		govtrack_id = person.attrs.get('id')
-		people_dict[str(id)] = {}
+# 	# for each person in the file, add their roles to the database as LegislatorLegacy objects
+# 	for person in people:
+# 		govtrack_id = person.attrs.get('id')
+# 		people_dict[str(id)] = {}
 
-		# locate all of the roles for each person
-		roles = person.findAll('role')
+# 		# locate all of the roles for each person
+# 		roles = person.findAll('role')
 		
-		# parse the attributes of each role
-		for role in roles:
-			startdate = datetime.datetime.strptime(role.attrs.get('startdate'), "%Y-%m-%d")
-			enddate = datetime.datetime.strptime(role.attrs.get('enddate'), "%Y-%m-%d")
-			# add information only for startdates after earliest startdate of longest serving Congressman (John Dingell)
-			if startdate > datetime.datetime(1955, 12, 13):
-				# assign names to each data point
-				chamber = role.attrs.get('type')
-				party = role.attrs.get('party')
-				state = role.attrs.get('state')
-				district = role.attrs.get('district')
-				# create object in database
-				LegislatorLegacy = model.LegislatorLegacy(govtrack_id=govtrack_id,
-													chamber=chamber,
-													startdate=startdate,
-													enddate=enddate,
-													party=party,
-													state=state,
-													district=district)
-				session.add(LegislatorLegacy)
+# 		# parse the attributes of each role
+# 		for role in roles:
+# 			startdate = datetime.datetime.strptime(role.attrs.get('startdate'), "%Y-%m-%d")
+# 			enddate = datetime.datetime.strptime(role.attrs.get('enddate'), "%Y-%m-%d")
+# 			# add information only for startdates after earliest startdate of longest serving Congressman (John Dingell)
+# 			if startdate > datetime.datetime(1955, 12, 13):
+# 				# assign names to each data point
+# 				chamber = role.attrs.get('type')
+# 				party = role.attrs.get('party')
+# 				state = role.attrs.get('state')
+# 				district = role.attrs.get('district')
+# 				# create object in database
+# 				LegislatorLegacy = model.LegislatorLegacy(govtrack_id=govtrack_id,
+# 													chamber=chamber,
+# 													startdate=startdate,
+# 													enddate=enddate,
+# 													party=party,
+# 													state=state,
+# 													district=district)
+# 				session.add(LegislatorLegacy)
 
-	session.commit()
+# 	session.commit()
 
 
 
@@ -446,8 +539,8 @@ def main(session):
 	# loadCampaignFin_PAC_other(session)
 	# load_bills(session)
 	# load_votes(session)
-	# load_legislators(session)
-	load_legislator_legacy(session)
+	load_legislators(session)
+	# load_legislator_legacy(session)
 
 
 if __name__ == "__main__":

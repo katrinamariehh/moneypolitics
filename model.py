@@ -70,7 +70,7 @@ class Individual(Base):
 	contrib = Column(String(50)) # this field was 34 chars before 2012
 	recip_id = Column(String(9))
 	org_name = Column(String(50)) # 40
-	ult_org = Column(String(50)) # 40
+	# ult_org = Column(String(50)) # 40
 	real_code = Column(String(5))
 	# date = Column(DateTime) 
 	amount = Column(Integer) 
@@ -150,33 +150,15 @@ class Legislator(Base):
 	id = Column(Integer, primary_key = True)
 	last_name = Column(String)
 	first_name = Column(String)
+	official_full = Column(String)
 	birthday = Column(DateTime(), nullable = True)
 	gender = Column(String(1))
-	position_type = Column(String(3))
-	state = Column(String(2))
-	party = Column(String)
-	# url = Column(String)
-	# address = Column(String)
-	# phone = Column(String)
-	# contact_form = Column(String)
-	# rss_url = Column(String)
-	# twitter = Column(String)
-	# facebook = Column(String)
-	# facebook_id = Column(String)
-	# youtube = Column(String)
-	# youtube_id = Column(String)
 	bioguide_id = Column(String)
 	thomas_id = Column(String)
 	opensecrets_id = Column(String)
 	lis_id = Column(String)
-	# cspan_id = Column(String)
 	govtrack_id = Column(String)
-	# votesmart_id = Column(String)
-	# ballotpedia_id = Column(String)
-	# washington_post_id = Column(String)
-	# icpsr_id = Column(String)
-	# wikipedia_id = Column(String)
-	# senate_votes = relationship('SenateVote')
+	
 
 class Bill(Base):
 	# creating an object in the Bill table
@@ -213,16 +195,20 @@ class HouseVote(Base):
 
 	id = Column(Integer, primary_key = True)
 	vote_id = Column(String)
-	thomas_id = Column(String)
+	thomas_id = Column(String) #ForeignKey('legislator.thomas_id'))
 	bill_id = Column(String)
 	vote_value = Column(String) #Column(ENUM('Aye', 'No', 'Yea', 'Nay', 'Present', 'Not Voting'))
+
+	# legislator = relationship("Legislator",  
+	# 	primaryjoin='and_(legislator_bill_house_vote.thomas_id==legislator.thomas_id)',
+	# 	backref=backref('legislator_bill_house_vote'))
 
 class SenateVote(Base):
 	__tablename__ = "legislator_bill_senate_vote"
 
 	id = Column(Integer, primary_key = True)
 	vote_id = Column(String)
-	lis_id = Column(String) #(String, ForeignKey('legislator.lis_id'))
+	lis_id = Column(String)#(String, ForeignKey('legislator.lis_id'))
 	bill_id = Column(String)
 	vote_value = Column(String) #Column(ENUM('Aye', 'No', 'Yea', 'Nay', 'Present', 'Not Voting'))
 
@@ -245,12 +231,14 @@ class LegislatorLegacy(Base):
 
 	id = Column(Integer, primary_key = True)
 	govtrack_id = Column(Integer)
-	chamber = Column(String)
-	startdate = Column(DateTime)
-	enddate = Column(DateTime)
+	term_type = Column(String)
+	start = Column(DateTime)
+	end = Column(DateTime)
 	party = Column(String)
 	state = Column(String(2))
 	district = Column(Integer)
+	senate_class = Column(String)
+	state_rank = Column(String)
 
 
 def main():
