@@ -89,11 +89,13 @@ def parse_congress_list(list):
 
 def main():
 
-	CampaignFin_list = create_finance_list('data/CampaignFin')
-	CampaignFin_paths = parse_finance_list(CampaignFin_list)
+	f_list = create_finance_list('data/CampaignFin')
+	fpaths = parse_finance_list(f_list)
 
-	congress_list = create_congress_list('data/congress')
-	congress_paths = parse_congress_list(congress_list)
+	c_list = create_congress_list('data/congress')
+	cpaths = parse_congress_list(c_list)
+
+
 
 if __name__ == "__main__":
 	main()
