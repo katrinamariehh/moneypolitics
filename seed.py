@@ -675,6 +675,12 @@ def load_legislators(session):
 
 
 def main(session):
+	f_list = create_finance_list('data/CampaignFin')
+	fpaths = parse_finance_list(f_list)
+
+	c_list = create_congress_list('data/congress')
+	cpaths = parse_congress_list(c_list)
+	
 	load_CampaignFin_cands(session)
 	# load_CampaignFin_cmtes(session)
 	# loadCampaignFin_indiv(session)
