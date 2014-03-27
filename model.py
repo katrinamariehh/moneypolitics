@@ -12,8 +12,8 @@ import os
 print os.environ.get("DATABASE_URL")
 engine = create_engine(os.environ.get("DATABASE_URL"))
 session = scoped_session(sessionmaker(bind=engine,
-                                      autocommit = False,
-                                      autoflush = False))
+                                      autocommit=False,
+                                      autoflush=False))
 
 Base = declarative_base()
 Base.query = session.query_property()
@@ -31,13 +31,13 @@ class Candidate(Base):
     cid = Column(String(9))
     first_last_p = Column(String(50))
     party = Column(String(1))
-    # dist_id_run_for = Column(String(4))
-    # dist_id_curr = Column(String(4))
-    # curr_cand = Column(String(1))
-    # cycle_cand = Column(String(1))
+    dist_id_run_for = Column(String(4))
+    dist_id_curr = Column(String(4))
+    curr_cand = Column(String(1))
+    cycle_cand = Column(String(1))
     crpico = Column(String(1))
     recip_code = Column(String(2))
-    # nopacs = Column(String(1))
+    nopacs = Column(String(1))
 
 class Committee(Base):
 	# creating a committee object to be added to the database
@@ -69,6 +69,7 @@ class Individual(Base):
 	contrib_id = Column(String(12))
 	contrib = Column(String(50)) # this field was 34 chars before 2012
 	recip_id = Column(String(9))
+	recip_link_to = Column(String)
 	org_name = Column(String(50)) # 40
 	# ult_org = Column(String(50)) # 40
 	real_code = Column(String(5))
@@ -140,8 +141,8 @@ class PAC_other(Base):
 
 
 class Legislator(Base):
-	# from legislators-current.csv or legislators-historic.csv
-	__tablename__ = "legislator"
+	# from legislators-current.yaml and legislators-historical.yaml
+	__tablename__ = "legislators"
 
 	# creating a member object to be added to the database
 
@@ -162,7 +163,7 @@ class Legislator(Base):
 
 class Bill(Base):
 	# creating an object in the Bill table
-	__tablename__ = "bill"
+	__tablename__ = "bills"
 
 	id = Column(Integer, primary_key = True)
 	bill_id = Column(String)
@@ -174,7 +175,7 @@ class Bill(Base):
 
 class Sponsor(Base):
 	# creating an object sponsor table - creates a relationship between Legislators and Bills
-	__tablename__ = "legislator_bill_sponsor"
+	__tablename__ = "legislator_bill_sponsors"
 
 	id = Column(Integer, primary_key = True)
 	bill_id = Column(String)
@@ -191,30 +192,27 @@ class Subjects(Base):
 
 
 class HouseVote(Base):
-	__tablename__ = "legislator_bill_house_vote"
+	# creating a table to hold each house member's vote by bill
+	__tablename__ = "legislator_bill_house_votes"
 
 	id = Column(Integer, primary_key = True)
 	vote_id = Column(String)
-	thomas_id = Column(String) #ForeignKey('legislator.thomas_id'))
+	bioguide_id = Column(String) 
 	bill_id = Column(String)
-	vote_value = Column(String) #Column(ENUM('Aye', 'No', 'Yea', 'Nay', 'Present', 'Not Voting'))
-
-	# legislator = relationship("Legislator",  
-	# 	primaryjoin='and_(legislator_bill_house_vote.thomas_id==legislator.thomas_id)',
-	# 	backref=backref('legislator_bill_house_vote'))
+	vote_value = Column(String) 
 
 class SenateVote(Base):
-	__tablename__ = "legislator_bill_senate_vote"
+	# creating a table to hold each senator's vote by bill
+	__tablename__ = "legislator_bill_senate_votes"
 
 	id = Column(Integer, primary_key = True)
 	vote_id = Column(String)
-	lis_id = Column(String)#(String, ForeignKey('legislator.lis_id'))
+	lis_id = Column(String)
 	bill_id = Column(String)
-	vote_value = Column(String) #Column(ENUM('Aye', 'No', 'Yea', 'Nay', 'Present', 'Not Voting'))
-
-	# legislator = relationship("Legislator", backref=backref('legislator', order_by=id))
+	vote_value = Column(String) 
 
 class Vote(Base):
+	# creating a table 
 	__tablename__ = "votes"
 
 	id = Column(Integer, primary_key = True)
