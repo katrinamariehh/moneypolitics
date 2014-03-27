@@ -26,7 +26,7 @@ class Candidate(Base):
     __tablename__ = "candidates"
 
     id = Column(Integer, primary_key = True)
-    cycle = Column(String(4))
+    cycle = Column(Integer(4))
     fec_cand_id = Column(String(9))
     cid = Column(String(9))
     first_last_p = Column(String(50))
@@ -44,7 +44,7 @@ class Committee(Base):
 	__tablename__ = "committees"
 
 	id = Column(Integer, primary_key = True)
-	cycle = Column(String(4))
+	cycle = Column(Integer(4))
 	cmte_id = Column(String(9))
 	pac_short = Column(String(50))
 	affiliate = Column(String(50), nullable = True)
@@ -56,7 +56,7 @@ class Committee(Base):
 	prim_code = Column(String(5))
 	source = Column(String)
 	# sensitive = Column(String(1))
-	# foreign = Column(Integer) # how do I do a 'bit' field? i think it's something I have to import
+	# foreign = Column(Integer)
 	active = Column(Integer(1))
 
 class Individual(Base):
@@ -64,7 +64,7 @@ class Individual(Base):
 	__tablename__ = "individuals"
     
 	id = Column(Integer, primary_key = True)
-	cycle = Column(String(4))
+	cycle = Column(Integer(4))
 	fec_trans_id = Column(String(19)) # 7 chars before 2012
 	contrib_id = Column(String(12))
 	contrib = Column(String(50)) # this field was 34 chars before 2012
@@ -80,7 +80,7 @@ class Individual(Base):
 	# state = Column(String(2))
 	zip_code = Column(String(5))
 	recip_code = Column(String(2))
-	type = Column(String(3))
+	transaction_type = Column(String(3))
 	cmte_id = Column(String(9))
 	other_id = Column(String(9))
 	# gender = Column(String(1))
@@ -95,15 +95,14 @@ class PAC(Base):
 	# creating a PAC object to be added to the database
 	
 	id = Column(Integer, primary_key = True)
-	cycle = Column(String(4))
+	cycle = Column(Integer(4))
 	fec_rec_no = Column(String(19)) # 7 chars before 2012
 	pac_id = Column(String(9))
-	# cid = Column(String(9), ForeignKey('candidates.cid'))
 	cid = Column(String(9))
 	amount = Column(Integer) # previoulsy an integer
-	# date = Column(String) # DATES!
+	date = Column(DateTime, nullable = True) # DATES!
 	real_code = Column(String(5))
-	type = Column(String(3))
+	transaction_type = Column(String(3))
 	di = Column(String(1))
 	fec_cand_id = Column(String(9))
 
@@ -114,17 +113,17 @@ class PAC_other(Base):
 	# creating a PAC-other object to be added to the database
 
 	id = Column(Integer, primary_key = True)
-	cycle = Column(String(4))
+	cycle = Column(Integer(4))
 	fec_rec_no = Column(String(19)) # 7 chars before 2012
 	filer_id = Column(String(9))
 	donor_cmte = Column(String(50)) # 40
-	contrib_lend_trans = Column(String(50)) # 40
+	# contrib_lend_trans = Column(String(50)) # 40
 	# city = Column(String(30)) # 40
 	# state = Column(String(2))
 	# zip_code = Column(String(5))
 	fec_occ_emp = Column(String(38)) # 35
 	prim_code = Column(String(5))
-	# date = Column(DateTime)
+	date = Column(DateTime, nullable = True)
 	amount = Column(Integer) # previously Number(Double)
 	recip_id = Column(String(9))
 	party = Column(String(1))
