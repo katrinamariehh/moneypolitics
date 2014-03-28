@@ -154,7 +154,7 @@ class Legislator(Base):
 	birthday = Column(DateTime(), nullable = True)
 	gender = Column(String(1))
 	bioguide_id = Column(String)
-	thomas_id = Column(String)
+	thomas_id = Column(Integer)
 	opensecrets_id = Column(String)
 	lis_id = Column(String)
 	govtrack_id = Column(String)
@@ -174,11 +174,11 @@ class Bill(Base):
 
 class Sponsor(Base):
 	# creating an object sponsor table - creates a relationship between Legislators and Bills
-	__tablename__ = "legislator_bill_sponsors"
+	__tablename__ = "bill_sponsors"
 
 	id = Column(Integer, primary_key = True)
 	bill_id = Column(String)
-	thomas_id = Column(String)
+	thomas_id = Column(Integer)
 
 
 class Subjects(Base):
@@ -190,25 +190,27 @@ class Subjects(Base):
 	bill_subject = Column(String)
 
 
-class HouseVote(Base):
+class LegislatorBillVote(Base):
 	# creating a table to hold each house member's vote by bill
-	__tablename__ = "legislator_bill_house_votes"
+	__tablename__ = "legislator_bill_votes"
+	# __tablename__ = "legislator_bill_house_votes"
 
 	id = Column(Integer, primary_key = True)
 	vote_id = Column(String)
-	bioguide_id = Column(String) 
+	reference_id = Column(String) # indicates whether to join legislators on bioguide_id or lis_id
+	legislator_id = Column(String)  # either bioguide_id or lis_id
 	bill_id = Column(String)
 	vote_value = Column(String) 
 
-class SenateVote(Base):
-	# creating a table to hold each senator's vote by bill
-	__tablename__ = "legislator_bill_senate_votes"
+# class SenateVote(Base):
+# 	# creating a table to hold each senator's vote by bill
+# 	__tablename__ = "legislator_bill_senate_votes"
 
-	id = Column(Integer, primary_key = True)
-	vote_id = Column(String)
-	lis_id = Column(String)
-	bill_id = Column(String)
-	vote_value = Column(String) 
+# 	id = Column(Integer, primary_key = True)
+# 	vote_id = Column(String)
+# 	lis_id = Column(String)
+# 	bill_id = Column(String)
+# 	vote_value = Column(String) 
 
 class Vote(Base):
 	# creating a table 
@@ -236,6 +238,17 @@ class LegislatorLegacy(Base):
 	district = Column(Integer)
 	senate_class = Column(String)
 	state_rank = Column(String)
+
+class CRP_ID(Base):
+    __tablename__ = "crp_ids"
+
+    id = Column(Integer, primary_key = True)
+    catcode = Column(String(5))
+    catname = Column(String)
+    catorder = Column(String(3))
+    industry = Column(String)
+    sector = Column(String)
+    sector_long = Column(String)
 
 
 def main():

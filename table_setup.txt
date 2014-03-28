@@ -119,7 +119,7 @@ legislator_legacy
 	bill_subject
 	bill_sponsor 		CONNECT TO LEGISLATOR ON LEGISLATOR.THOMAS_ID
 
-"legislator_bill_sponsor"
+"bill_sponsors"
 
 	id, primary_key
 	bill_id 			CONNECT TO BILL ON BILL.BILL_ID
@@ -131,24 +131,16 @@ legislator_legacy
 	bill_id 			CONNECT TO BILL ON BILL.BILL_ID
 	bill_subject
 
-"legislator_bill_house_vote"
+"legislator_bill_vote"
 
 	id, primary_key
 	vote_id 			CONNECT TO VOTE ON VOTES.VOTE_ID
-	thomas_id 			CONNECT TO LEGISLATOR ON LEGISLATOR.THOMAS_ID
+	reference_id 		
+	legislator_id
 	bill_id 			CONNECT TO BILL ON BILL.BILL_ID
 	vote_value
 
-"legislator_bill_senate_vote"
-
-	id, primary_key
-	vote_id 			CONNECT TO VOTES ON VOTE.VOTE_ID
-	lis_id 				CONNECT TO LEGISLATOR ON LEGISLATOR.LIS_ID
-	bill_id 			CONNECT TO BILL ON BILL.BILL_ID
-	vote_value
-
-
-= "votes"
+votes"
 
 	id, primary_key
 	vote_id
@@ -168,3 +160,14 @@ legislator_legacy
 	party
 	state
 	district
+
+"crp_ids"
+
+	id, primary_key
+	catcode
+	catname
+	catorder
+	industry
+	sector
+	sector_long
+	
