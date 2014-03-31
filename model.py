@@ -108,8 +108,6 @@ class PAC(Base):
 	di = Column(String(1))
 	fec_cand_id = Column(String(9))
 
-	# candidate = relationship('candidate', backref=backref('candidates', order_by=id))
-
 class PAC_other(Base):
 	__tablename__ = "pacother"
 	# creating a PAC-other object to be added to the database
@@ -175,7 +173,8 @@ class Bill(Base):
 	bill_sponsor = Column(String)
 
 class Sponsor(Base):
-	# creating an object sponsor table - creates a relationship between Legislators and Bills
+	# creating an object sponsor table - creates a relationship 
+	# between Legislators and Bills
 	__tablename__ = "bill_sponsors"
 
 	id = Column(Integer, primary_key = True)
@@ -184,7 +183,8 @@ class Sponsor(Base):
 
 
 class Subjects(Base):
-	# creating a record in the Subjects table to track the subjects of various bills, will have many entries for the same bill
+	# creating a record in the Subjects table to track the subjects 
+	# of various bills, will have many entries for the same bill
 	__tablename__ = "bill_subjects"
 
 	id = Column(Integer, primary_key = True)
@@ -199,7 +199,8 @@ class LegislatorBillVote(Base):
 
 	id = Column(Integer, primary_key = True)
 	vote_id = Column(String)
-	reference_id = Column(String) # indicates whether to join legislators on bioguide_id or lis_id
+	reference_id = Column(String) # indicates whether to join 
+	# legislators on bioguide_id or lis_id
 	legislator_id = Column(String)  # either bioguide_id or lis_id
 	bill_id = Column(String)
 	vote_value = Column(String)
@@ -275,22 +276,32 @@ class Legislators113(Base):
 	state = Column(String)
 	party = Column(String)
 
+class Legislators113Districts(Base):
+	__tablename__='legislators113districts'
+	id = Column(Integer, primary_key = True)
+	opensecrets_id = Column(String)
+	district = Column(String)
+
 
 ## functions
 def get_all_current():
-	query = """SELECT * FROM legislators113"""
+	query = """SELECT * 
+			   FROM current_legislators 
+			   ORDER BY term_type, \
+			   district"""
 
 	return session.execute(query)
 
 
-def get_top_sectors(opensecrets_id):
+def get_sectors(opensecrets_id):
 	sectors = session.execute(
 				text("""SELECT sum(d.amount) as total, c.sector
-				FROM donations_2012 as d, crp_ids as c
-				WHERE d.real_code = c.catcode
-				AND d.recip_id = :opensecrets_id
-				GROUP BY c.sector"""),
-				{'opensecrets_id':opensecrets_id})
+						FROM donations_113 as d, crp_ids as c
+						WHERE d.real_code = c.catcode
+						AND d.recip_id = :opensecrets_id
+						GROUP BY c.sector
+						ORDER BY c.sector"""),
+					{'opensecrets_id':opensecrets_id})
 	print "SECTORS", sectors
 	return sectors
 

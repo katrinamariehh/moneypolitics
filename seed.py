@@ -668,6 +668,25 @@ def load_current(session):
 
 	session.commit()
 
+def load_districts(session):
+
+	with open('data/people_data/CRP_IDs_districts.csv') as f:
+		reader = csv.reader(f, delimiter=',', quotechar='"')
+		f.readline()
+
+		for row in reader:
+			try:
+				Blank, CID, Name, Party, Office, FECCandID = row
+			except ValueError:
+				print row
+				break
+
+			District = model.Legislators113Districts(opensecrets_id=CID,
+													 district=Office
+				)
+			session.add(District)
+	session.commit()
+
 
 
 
@@ -691,7 +710,8 @@ def main(session):
 	# load_legislators(session)
 	# load_crp_ids(session)
 	# load_legislator_legacy(session)
-	load_current(session)
+	# load_current(session)
+	load_districts(session)
 
 
 if __name__ == "__main__":
