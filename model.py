@@ -2,6 +2,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship, backref
+from sqlalchemy.sql import text
 from operator import itemgetter
 import os
 
@@ -9,7 +10,7 @@ import os
 # create engine
 
 # engine = create_engine("sqlite:///moneypolitics.db", echo=False)
-print os.environ.get("DATABASE_URL")
+
 engine = create_engine(os.environ.get("DATABASE_URL"))
 session = scoped_session(sessionmaker(bind=engine,
                                       autocommit=False,
@@ -17,6 +18,7 @@ session = scoped_session(sessionmaker(bind=engine,
 
 Base = declarative_base()
 Base.query = session.query_property()
+
 
 #class declarations
 
@@ -157,7 +159,7 @@ class Legislator(Base):
 	thomas_id = Column(Integer)
 	opensecrets_id = Column(String)
 	lis_id = Column(String)
-	govtrack_id = Column(String)
+	govtrack_id = Column(Integer)
 	
 
 class Bill(Base):
@@ -200,17 +202,26 @@ class LegislatorBillVote(Base):
 	reference_id = Column(String) # indicates whether to join legislators on bioguide_id or lis_id
 	legislator_id = Column(String)  # either bioguide_id or lis_id
 	bill_id = Column(String)
+	vote_value = Column(String)
+
+class HouseVote(Base):
+	__tablename__ = "legislator_bill_house_votes"
+
+	id = Column(Integer, primary_key = True)
+	vote_id = Column(String)
+	bioguide_id = Column(String)
+	bill_id = Column(String)
+	vote_value = Column(String)
+
+class SenateVote(Base):
+	# creating a table to hold each senator's vote by bill
+	__tablename__ = "legislator_bill_senate_votes"
+
+	id = Column(Integer, primary_key = True)
+	vote_id = Column(String)
+	lis_id = Column(String)
+	bill_id = Column(String)
 	vote_value = Column(String) 
-
-# class SenateVote(Base):
-# 	# creating a table to hold each senator's vote by bill
-# 	__tablename__ = "legislator_bill_senate_votes"
-
-# 	id = Column(Integer, primary_key = True)
-# 	vote_id = Column(String)
-# 	lis_id = Column(String)
-# 	bill_id = Column(String)
-# 	vote_value = Column(String) 
 
 class Vote(Base):
 	# creating a table 
@@ -249,6 +260,43 @@ class CRP_ID(Base):
     industry = Column(String)
     sector = Column(String)
     sector_long = Column(String)
+
+class Legislators113(Base):
+	__tablename__ = "legislators113"
+
+	id = Column(Integer, primary_key = True)
+	govtrack_id = Column(Integer)
+	opensecrets_id = Column(String)
+	thomas_id = Column(Integer)
+	bioguide_id = Column(String)
+	last_name = Column(String)
+	first_name = Column(String)
+	term_type = Column(String)
+	state = Column(String)
+	party = Column(String)
+
+
+## functions
+def get_all_current():
+	query = """SELECT * FROM legislators113"""
+
+	
+	return session.execute(query)
+
+
+def get_top_sectors(opensecrets_id):
+	sectors = session.execute(
+				text("""SELECT sum(d.amount), c.sector
+			   FROM donations_2012 as d, crp_ids as c
+			   WHERE d.real_code = c.catcode
+			   AND d.recip_id = :opensecrets_id""",
+			   {'opensecrets_id:opensecrets_id'})
+
+	return sectors
+
+def get_subject_votes(legislator):
+	pass
+
 
 
 def main():

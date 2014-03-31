@@ -465,7 +465,8 @@ def load_bills(session):
 def load_votes(session):
 	# votes are essentially a way to connect legislators to bills
 
-	# read each file included in the list created by path_feed into the database
+	# read each file included in the list created by path_feed into the 
+	# database
 	# test_list = ['data/congress/108/votes/2004/h177/data.json', 'data/congress/112/votes/2011/s153/data.json', 'data/congress/112/votes/2011/h183/data.json', 'data/congress/110/votes/2007/h1118/data.json', 'data/congress/110/votes/2007/h774/data.json', 'data/congress/110/votes/2008/h34/data.json', 'data/congress/107/votes/2001/h335/data.json', 'data/congress/109/votes/2006/h328/data.json', 'data/congress/111/votes/2010/h392/data.json', 'data/congress/111/votes/2009/s209/data.json', 'data/congress/106/votes/1999/h319/data.json', 'data/congress/108/votes/2003/h173/data.json', 'data/congress/110/votes/2008/s52/data.json', 'data/congress/112/votes/2011/h344/data.json', 'data/congress/113/votes/2013/h66/data.json', 'data/congress/113/votes/2013/s178/data.json', 'data/congress/112/votes/2011/h783/data.json', 'data/congress/107/votes/2002/h87/data.json', 'data/congress/110/votes/2007/h778/data.json', 'data/congress/110/votes/2007/h336/data.json', 'data/congress/108/votes/2003/h497/data.json', 'data/congress/109/votes/2005/h513/data.json', 'data/congress/110/votes/2007/s113/data.json', 'data/congress/113/votes/2013/h53/data.json', 'data/congress/111/votes/2010/h326/data.json', 'data/congress/111/votes/2009/h498/data.json', 'data/congress/109/votes/2005/s36/data.json', 'data/congress/111/votes/2010/s191/data.json', 'data/congress/110/votes/2007/h735/data.json', 'data/congress/107/votes/2002/h20/data.json'] #TEST
 	# for vote in test_list: #TEST
 	counter = 0
@@ -496,12 +497,12 @@ def load_votes(session):
 			vote_result = vote_dict['result']
 
 			# creat Vote object
-			Vote = model.Vote(vote_id=vote_id,
-							  bill_id=vote_bill_id,
-							  date=vote_date,
-							  vote_category=vote_category,
-							  vote_result=vote_result)
-			session.add(Vote)
+			# Vote = model.Vote(vote_id=vote_id,
+			# 				  bill_id=vote_bill_id,
+			# 				  date=vote_date,
+			# 				  vote_category=vote_category,
+			# 				  vote_result=vote_result)
+			# session.add(Vote)
 
 			# creating HouseVote and SenateVote objects (connecting Legislatros with the value of their vote--House votes reference the GovTrack id, Senate votes reference the LIS ID)
 
@@ -522,28 +523,28 @@ def load_votes(session):
 				# add object attributes to HouseVote or SenateVote table
 				for legislator in legislator_ids:
 
-					if vote_id[0] == 'h':
-						reference_id='bioguide_id'
-					elif vote_id[0] == 's':
-						reference_id='lis_id'
-
-					LegislatorBillVote = model.LegislatorBillVote(vote_id=vote_id,
-																  bill_id=vote_bill_id,
-																  vote_value=vote_type,
-																  reference_id=reference_id,
-																  legislator_id=legislator)
-							
 					# if vote_id[0] == 'h':
-					# 	LegislatorBillVote = model.HouseVote(vote_id=vote_id,
-					# 					  				bioguide_id=legislator,
-					# 									bill_id=vote_bill_id,
-					# 									vote_value=vote_type)
-					# 	session.add(LegislatorBillVote)
-					# if vote_id[0] == 's':
-					# 	LegislatorBillVote = model.SenateVote(vote_id=vote_id,
-					# 					  				lis_id=legislator,
-					# 									bill_id=vote_bill_id,
-					# 									vote_value=vote_type)
+					# 	reference_id='bioguide_id'
+					# elif vote_id[0] == 's':
+					# 	reference_id='lis_id'
+
+					# LegislatorBillVote = model.LegislatorBillVote(vote_id=vote_id,
+					# 											  bill_id=vote_bill_id,
+					# 											  vote_value=vote_type,
+					# 											  reference_id=reference_id,
+					# 											  legislator_id=legislator)
+							
+					if vote_id[0] == 'h':
+						LegislatorBillVote = model.HouseVote(vote_id=vote_id,
+										  				bioguide_id=legislator,
+														bill_id=vote_bill_id,
+														vote_value=vote_type)
+						session.add(LegislatorBillVote)
+					if vote_id[0] == 's':
+						LegislatorBillVote = model.SenateVote(vote_id=vote_id,
+										  				lis_id=legislator,
+														bill_id=vote_bill_id,
+														vote_value=vote_type)
 					session.add(LegislatorBillVote)
 			if counter % 500:
 				session.commit()
@@ -553,7 +554,6 @@ def load_votes(session):
 def load_legislators(session):
 	# TODO UNICODE will need to cast some name-related fields to unicode
 	# i.e. lastname = unicode(lastname)
-	# file_paths = ['data/people_data/legislators-current.csv', 'data/people_data/legislators-historic.csv']
 	file_paths = ['data/people_data/legislators-historical.yaml', 'data/people_data/legislators-current.yaml'] #TEST
 	print "reading"
 	for path in file_paths:
@@ -624,8 +624,8 @@ def load_legislators(session):
 
 
 def load_crp_ids(session):
-    path = 'data/CampaignFin/CRP_IDs.csv'
-    with open(path) as f:
+
+    with open('data/CampaignFin/CRP_IDs.csv') as f:
         reader = csv.reader(f, delimiter=',')
         f.readline()
 
@@ -639,93 +639,35 @@ def load_crp_ids(session):
                                   sector=Sector,
                                   sector_long=Sector_Long)
             session.add(CRP_ID)
-        f.close()
+
     session.commit()
 
+def load_current(session):
 
+	with open('data/people_data/legislators-current.csv') as f:
+		reader = csv.reader(f, delimiter=',')
+		f.readline()
 
+		for row in reader:
+			last_name, first_name, birthday, gender, term_type, state, party, \
+			url, address, phone, contact_form, rss_url, twitter, facebook, \
+			facebook_id, youtube, youtube_id, bioguide_id, thomas_id, \
+			opensecrets_id, lis_id, cspan_id, govtrack_id, votesmart_id, \
+			ballotpedia_id, washington_post_id, icspr_id, wikipedia_id = row
 
-	# for path in file_paths:
-		
-	# 	with open(path) as f:
-	# 		# open the legislators-current and legislators-historic files to read in id and reference info
+			Current = model.Legislators113(govtrack_id=govtrack_id,
+										   opensecrets_id=opensecrets_id,
+										   thomas_id=thomas_id,
+										   bioguide_id=bioguide_id,
+										   last_name=last_name,
+										   first_name=first_name,
+										   term_type=term_type,
+										   state=state,
+										   party=party)
+			session.add(Current)
 
-	# 		# skip the first line in the file (contains the headers)
-	# 		f.readline()
+	session.commit()
 
-	# 		reader = csv.reader(f, delimiter = ',')
-			
-	# 		for row in reader:
-	# 			# assign field values for each row
-	# 			last_name,first_name,birthday,gender,position_type,state,party,url,address,phone,contact_form,rss_url,twitter,facebook,facebook_id,youtube,youtube_id,bioguide_id,thomas_id,opensecrets_id,lis_id,cspan_id,govtrack_id,votesmart_id,ballotpedia_id,washington_post_id,icpsr_id,wikipedia_id = row
-				
-
-	# 			if birthday !='':
-	# 				birthday = datetime.datetime.strptime(birthday, "%Y-%m-%d") # this should totally work but it doesn't; currently have it as a string in the database instead of a datetime object
-	# 			else:
-	# 				birthday = None
-				
-	# 			if thomas_id and opensecrets_id:
-	# 			# assign the row values to class attributes in the model
-	# 			# if birthday < datetime.datetime(1915,01,01)
-	# 				Legislator = model.Legislator(last_name=last_name,
-	# 											  first_name=first_name,
-	# 											  birthday=birthday,
-	# 											  gender=gender,
-	# 											  position_type=position_type,
-	# 											  state=state,
-	# 											  party=party,
-	# 											  bioguide_id=bioguide_id,
-	# 											  thomas_id=thomas_id,
-	# 											  opensecrets_id=opensecrets_id,
-	# 											  lis_id=lis_id,
-	# 											  govtrack_id=govtrack_id)
-	# 				session.add(Legislator)
-
-	# session.commit()
-
-# TODO closing the files after I read them?
-
-
-# def load_legislator_legacy(session):
-# 	# open the file and cast it to a Beautiful soup object (it's xml)
-# 	r = open('data/people_data/people_legacy.txt')
-# 	soup = BeautifulSoup(r)
-
-# 	# locate all of the people in the file
-# 	people = soup.findAll('person')
-# 	people_dict = {}
-
-# 	# for each person in the file, add their roles to the database as LegislatorLegacy objects
-# 	for person in people:
-# 		govtrack_id = person.attrs.get('id')
-# 		people_dict[str(id)] = {}
-
-# 		# locate all of the roles for each person
-# 		roles = person.findAll('role')
-		
-# 		# parse the attributes of each role
-# 		for role in roles:
-# 			startdate = datetime.datetime.strptime(role.attrs.get('startdate'), "%Y-%m-%d")
-# 			enddate = datetime.datetime.strptime(role.attrs.get('enddate'), "%Y-%m-%d")
-# 			# add information only for startdates after earliest startdate of longest serving Congressman (John Dingell)
-# 			if startdate > datetime.datetime(1955, 12, 13):
-# 				# assign names to each data point
-# 				chamber = role.attrs.get('type')
-# 				party = role.attrs.get('party')
-# 				state = role.attrs.get('state')
-# 				district = role.attrs.get('district')
-# 				# create object in database
-# 				LegislatorLegacy = model.LegislatorLegacy(govtrack_id=govtrack_id,
-# 													chamber=chamber,
-# 													startdate=startdate,
-# 													enddate=enddate,
-# 													party=party,
-# 													state=state,
-# 													district=district)
-# 				session.add(LegislatorLegacy)
-
-# 	session.commit()
 
 
 
@@ -747,8 +689,9 @@ def main(session):
 	# load_bills(session)
 	# load_votes(session)
 	# load_legislators(session)
-	load_crp_ids(session)
+	# load_crp_ids(session)
 	# load_legislator_legacy(session)
+	load_current(session)
 
 
 if __name__ == "__main__":

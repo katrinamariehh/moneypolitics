@@ -131,16 +131,23 @@ legislator_legacy
 	bill_id 			CONNECT TO BILL ON BILL.BILL_ID
 	bill_subject
 
-"legislator_bill_vote"
+"legislator_bill_senate_vote"
 
 	id, primary_key
 	vote_id 			CONNECT TO VOTE ON VOTES.VOTE_ID
-	reference_id 		
-	legislator_id
+	lis_id
 	bill_id 			CONNECT TO BILL ON BILL.BILL_ID
 	vote_value
 
-votes"
+"legislator_bill_house_vote"
+
+	id, primary_key
+	vote_id
+	bioguide_id
+	bill_id
+	vote_value
+
+"votes"
 
 	id, primary_key
 	vote_id
