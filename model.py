@@ -280,19 +280,20 @@ class Legislators113(Base):
 def get_all_current():
 	query = """SELECT * FROM legislators113"""
 
-	
 	return session.execute(query)
 
 
 def get_top_sectors(opensecrets_id):
 	sectors = session.execute(
-				text("""SELECT sum(d.amount), c.sector
-			   FROM donations_2012 as d, crp_ids as c
-			   WHERE d.real_code = c.catcode
-			   AND d.recip_id = :opensecrets_id""",
-			   {'opensecrets_id:opensecrets_id'})
-
+				text("""SELECT sum(d.amount) as total, c.sector
+				FROM donations_2012 as d, crp_ids as c
+				WHERE d.real_code = c.catcode
+				AND d.recip_id = :opensecrets_id
+				GROUP BY c.sector"""),
+				{'opensecrets_id':opensecrets_id})
+	print "SECTORS", sectors
 	return sectors
+
 
 def get_subject_votes(legislator):
 	pass
