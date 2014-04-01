@@ -1,0 +1,17 @@
+{% extends 'base.html' %}    
+{% block body %}
+<h2>Legislator Donations by Sector</h2>
+<table>
+    <tr>
+        <th>Sector</th>
+        <th>Amount</th>
+    </tr>
+
+{% for sector in sectors %}
+    <tr>
+        <td><a href="member/">{{ sector['sector'] }}</a></td>
+        <td>{{ sector['total'] }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

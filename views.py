@@ -5,9 +5,14 @@ from flask import Flask, render_template, redirect, request, g, session, url_for
 # import config
 # import forms
 import model
+import json
 
 app = Flask(__name__)
 # app.config.from_object(config)
+
+@app.route("/test")
+def test():
+    return render_template('bubble.html')
 
 @app.route("/")
 def index():
@@ -20,6 +25,18 @@ def view_sector_breakdown(opensecrets_id):
     # display sector contribution breakdown
     sectors = model.get_sectors(opensecrets_id)
     return render_template('legislator.html', sectors=sectors)
+    # sectors = model.make_json(opensecrets_id)
+    # json_dump = json.dumps(sectors)
+    # return render_template("bubble.html", json_dump=json_dump)
+
+@app.route("/member/<opensecrets_id>/contributions/json") #need to pick id to use
+def view_sector_breakdown(opensecrets_id):
+    # display sector contribution breakdown
+    # sectors = model.get_sectors(opensecrets_id)
+    # return render_template('legislator.html', sectors=sectors)
+    sectors = model.make_json(opensecrets_id)
+    json_dump = json.dumps(sectors)
+    return json_dump
 
 @app.route("/member/<member_id>/votes")
 def view_vote_breakdown(member_id):

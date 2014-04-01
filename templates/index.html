@@ -1,0 +1,20 @@
+{% extends 'base.html' %}    
+{% block body %}
+<h2>Current Legislators</h2>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Serves in:</th>
+        <th>Party</th>
+        <th>District</th>
+    </tr>
+{% for legislator in legislator_list %}
+    <tr>
+        <td><a href="member/{{ legislator ['opensecrets_id'] }}/contributions">{{ legislator['first_name'] }} {{ legislator['last_name'] }}</a></td>
+        <td>{% if legislator['term_type'] == 'sen' %}Senate{% elif legislator['term_type'] == 'rep' %}House{% endif %}</td>
+        <td>{{ legislator['party'] }}</td>
+        <th>{{ legislator['district'] }}</th>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

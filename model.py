@@ -302,8 +302,28 @@ def get_sectors(opensecrets_id):
 						GROUP BY c.sector
 						ORDER BY c.sector"""),
 					{'opensecrets_id':opensecrets_id})
-	print "SECTORS", sectors
+	# sector_dict = {}
+	# for sector in sectors:
+	# 	key = sector['sector']
+	# 	value = sector['total']
+	# 	sector_dict[key] = value
+	# print sector_dict
 	return sectors
+
+def make_json(opensecrets_id):
+	sectors = session.execute(
+				text("""SELECT sum(d.amount) as size, c.sector as name
+						FROM donations_113 as d, crp_ids as c
+						WHERE d.real_code = c.catcode
+						AND d.recip_id = :opensecrets_id
+						GROUP BY c.sector
+						ORDER BY c.sector"""),
+					{'opensecrets_id':opensecrets_id})
+	sector_list = []
+	for sector in sectors:
+		sector_list.append({'name': sector['name'], 'size': sector['size']})
+	print sector_list
+	return sector_list
 
 
 def get_subject_votes(legislator):
