@@ -3,11 +3,12 @@
 <style>
 
 text {
-  font: 10px sans-serif;
+  font: 12px sans-serif;
 }
 
 </style>
 <body>
+  <!-- <svg width='960' height='960' class='bubble' -->
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 
@@ -18,7 +19,7 @@ var diameter = 960,
 var bubble = d3.layout.pack()
     .sort(null)
     .size([diameter, diameter])
-    .padding(1.5);
+    .padding(10);
 
 var svg = d3.select("body").append("svg")
     .attr("width", diameter)
@@ -29,44 +30,58 @@ d3.xhr("/member/N00035380/contributions/json", function(error, root) {
     data = {'name': 'senator', 'children': JSON.parse(root.response)}
     console.log(data)
 
-console.log(data)
-
-
-
 
 bubble.value(function(d){
   return d.size;
 });
-bubble.padding(10)
+
 
 
   var node = svg.selectAll(".node")
       .data(bubble.nodes(data))
       .enter()
-      // .attr("cy", 100)
-      // .attr("cx", 100)
+
       .append("g")
       .attr("class", "node")
-
+  nodeAttribute(node)
       
     
+  // node.append("title")
+  //     .text(function(d) { return d.name + ": " + format(d.value); });
+
+  // node.append("circle")
+  //     .attr("r", function(d) { console.log((d.size)*.13); return d.r || Math.sqrt(d.size); })
+  //     .style("fill", function(d) { if (d.name != 'senator'){ return "#0F5903";} })
+  //     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  // node.append("text")
+  //     .attr("dy", "6em")
+  //     .style("text-anchor", "middle")
+  //     .text(function(d) { return d.name });
+  //     console.log(node)
+});
+
+function nodeAttribute(node) {
 
   node.append("title")
       .text(function(d) { return d.name + ": " + format(d.value); });
 
   node.append("circle")
-      .attr("r", function(d) { console.log((d.size)/10); return d.r || Math.sqrt(d.size); })
-      .style("fill", function(d) { if (d.name != 'senator'){ return color(d.color);} })
-      // .attr("y", function(d) { return float(d.size)/10})
-      // .attr("x", function(d) { return float(d.size)/10})
+      .attr("r", function(d) { console.log((d.size)*.10); return d.r || Math.sqrt(d.size); })
+      .style("fill", function(d) { if (d.name != 'senator'){ return "#0F5903";} })
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
   node.append("text")
-      .attr("dy", ".3em")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
       .style("text-anchor", "middle")
+      .style("fill", function(d) { if (d.name != 'senator') { return "#FFFFFF";}})
+      .style("font-size", function(d) 
+        { if (d.r < 70) 
+          {return 12 + 'px"'}
+        else { return (d.r)/4 + "px";}} )
       .text(function(d) { return d.name });
       console.log(node)
-});
+}
 
 // Returns a flattened hierarchy containing all leaf nodes under the root.
 function classes(root) {

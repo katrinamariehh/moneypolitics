@@ -324,8 +324,7 @@ def make_json(opensecrets_id):
 		# come up with hex values for each category
 		color_value = int(sector['size'])/10
 		sector_list.append({'name': sector['name'], 'size': sector['size'],\
-		 'color:': (color_value, color_value, color_value)})
-	print sector_list
+		 'color:': 'rgb(50, 229, 23'})
 	return sector_list
 
 
