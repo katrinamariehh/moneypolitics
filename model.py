@@ -317,14 +317,23 @@ def make_json(opensecrets_id):
 						WHERE d.real_code = c.catcode
 						AND d.recip_id = :opensecrets_id
 						GROUP BY c.sector
-						ORDER BY size"""),
+						ORDER BY size DESC"""),
 					{'opensecrets_id':opensecrets_id})
 	sector_list = []
+	sector_total = 0
 	for sector in sectors:
 		# come up with hex values for each category
+		sector_total += float(sector['size'])
 		color_value = int(sector['size'])/10
 		sector_list.append({'name': sector['name'], 'size': sector['size'],\
-		 'color:': 'rgb(50, 229, 23'})
+		 # 'color:': 'rgb('+str(sector['size']*.001)+','+str(sector['size']*.001)+','+str(sector['size']*.001)+')'})
+		# 'color': 'rgb(20,89,' + str(sector['size']/sector_total) + ')'
+		})
+	offset = (175^2)/(float(sector_list[0]['size'])/float(sector_total))
+	print offset
+	for sector in sector_list:
+		print [float(sector['size']), float(sector_total), (float(sector['size'])/float(sector_total))]
+		sector['color'] = 'rgb(' +  str(int(float(sector['size'])/float(sector_total)))+ ',89,' + str(int((float(sector['size'])/float(sector_total))*offset)) + ')'
 	return sector_list
 
 

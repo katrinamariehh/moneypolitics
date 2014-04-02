@@ -19,14 +19,14 @@ var diameter = 960,
 var bubble = d3.layout.pack()
     .sort(null)
     .size([diameter, diameter])
-    .padding(10);
+    .padding(15);
 
 var svg = d3.select("body").append("svg")
     .attr("width", diameter)
     .attr("height", diameter)
     .attr("class", "bubble");
 
-d3.xhr("/member/N00035380/contributions/json", function(error, root) {
+d3.xhr("/member/N00024992/contributions/json", function(error, root) {
     data = {'name': 'senator', 'children': JSON.parse(root.response)}
     console.log(data)
 
@@ -67,20 +67,29 @@ function nodeAttribute(node) {
       .text(function(d) { return d.name + ": " + format(d.value); });
 
   node.append("circle")
-      .attr("r", function(d) { console.log((d.size)*.10); return d.r || Math.sqrt(d.size); })
-      .style("fill", function(d) { if (d.name != 'senator'){ return "#0F5903";} })
+      .attr("r", function(d) { 
+        return d.r
+        // Math.sqrt(d.size); 
+      })
+      .style("fill", function(d) 
+        { if (d.name != 'senator')
+          { return d.color;} 
+        else { return "transparent"}
+      })
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
+
   node.append("text")
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .attr("transform", function(d) { console.log(d); return "translate(" + d.x + "," + d.y + ")"; })
       .style("text-anchor", "middle")
-      .style("fill", function(d) { if (d.name != 'senator') { return "#FFFFFF";}})
+      .style("fill", function(d) { if (d.name != 'senator') { return "#999";}})
       .style("font-size", function(d) 
         { if (d.r < 70) 
-          {return 12 + 'px"'}
-        else { return (d.r)/4 + "px";}} )
+          { return '.9em';}
+        else { return (d.r)/80 + "em";}} )
       .text(function(d) { return d.name });
       console.log(node)
+
 }
 
 // Returns a flattened hierarchy containing all leaf nodes under the root.
