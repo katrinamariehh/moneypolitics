@@ -29,7 +29,8 @@ def view_sector_breakdown(opensecrets_id):
     # json_dump = json.dumps(sectors)
     # return render_template("bubble.html", json_dump=json_dump)
 
-@app.route("/member/<opensecrets_id>/contributions/json") #need to pick id to use
+@app.route("/member/<opensecrets_id>/contributions/json") #need to pick id to 
+# use
 def view_sector_breakdown(opensecrets_id):
     # display sector contribution breakdown
     # sectors = model.get_sectors(opensecrets_id)

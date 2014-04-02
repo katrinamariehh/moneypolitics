@@ -317,11 +317,14 @@ def make_json(opensecrets_id):
 						WHERE d.real_code = c.catcode
 						AND d.recip_id = :opensecrets_id
 						GROUP BY c.sector
-						ORDER BY c.sector"""),
+						ORDER BY size"""),
 					{'opensecrets_id':opensecrets_id})
 	sector_list = []
 	for sector in sectors:
-		sector_list.append({'name': sector['name'], 'size': sector['size']})
+		# come up with hex values for each category
+		color_value = int(sector['size'])/10
+		sector_list.append({'name': sector['name'], 'size': sector['size'],\
+		 'color:': (color_value, color_value, color_value)})
 	print sector_list
 	return sector_list
 
