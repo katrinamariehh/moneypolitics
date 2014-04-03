@@ -10,7 +10,7 @@ import json
 app = Flask(__name__)
 # app.config.from_object(config)
 
-@app.route("/test/<opensecrets_id>")
+@app.route("/member/<opensecrets_id>/chart")
 def make_bubbles(opensecrets_id):
     json_dump = json.dumps(model.make_json(opensecrets_id))
     return render_template('bubble.html', opensecrets_id=opensecrets_id)
@@ -25,7 +25,8 @@ def index():
 def table_sector_breakdown(opensecrets_id):
     # display sector contribution breakdown
     sectors = model.get_sectors(opensecrets_id)
-    return render_template('legislator.html', sectors=sectors)
+    return render_template('legislator.html', sectors=sectors, \
+        opensecrets_id=opensecrets_id)
 
 @app.route("/member/<opensecrets_id>/contributions/json")
 def view_sector_breakdown(opensecrets_id):

@@ -25,8 +25,8 @@ var svg = d3.select("body").append("svg")
     .attr("width", diameter)
     .attr("height", diameter)
     .attr("class", "bubble");
-d3.xhr("/member/N00024992/contributions/json", function(error, root) {
-    data = {'name': 'senator', 'children': JSON.parse(root.response)}
+d3.xhr('/member/' + '{{ opensecrets_id }}' + '/contributions/json', function(error, root) {
+    data = {'name': '', 'children': JSON.parse(root.response)}
     console.log(data)
 
 
@@ -57,7 +57,7 @@ function nodeAttribute(node) {
         // Math.sqrt(d.size); 
       })
       .style("fill", function(d) 
-        { if (d.name != 'senator')
+        { if (d.name != '')
           { return d.color;} 
         else { return "transparent"}
       })
@@ -67,7 +67,7 @@ function nodeAttribute(node) {
   node.append("text")
       .attr("transform", function(d) { console.log(d); return "translate(" + d.x + "," + d.y + ")"; })
       .style("text-anchor", "middle")
-      .style("fill", function(d) { if (d.name != 'senator') { return "#000";}})
+      .style("fill", function(d) { if (d.name != '') { return "#000";}})
       .style("font-size", function(d) 
         { if (d.r < 70) 
           { return '.9em';}
