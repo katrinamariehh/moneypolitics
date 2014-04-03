@@ -33,7 +33,7 @@ def view_sector_breakdown(opensecrets_id):
     # display sector contribution breakdown
     # sectors = model.get_sectors(opensecrets_id)
     # return render_template('legislator.html', sectors=sectors)
-    sectors = model.make_json(opensecrets_id)
+    sectors = model.make_json2(opensecrets_id)
     json_dump = json.dumps(sectors)
     return json_dump
 
