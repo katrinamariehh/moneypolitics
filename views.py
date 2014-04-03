@@ -10,9 +10,10 @@ import json
 app = Flask(__name__)
 # app.config.from_object(config)
 
-@app.route("/test")
-def test():
-    return render_template('bubble.html')
+@app.route("/test/<opensecrets_id>")
+def make_bubbles(opensecrets_id):
+    json_dump = json.dumps(model.make_json(opensecrets_id))
+    return render_template('bubble.html', opensecrets_id=opensecrets_id)
 
 @app.route("/")
 def index():
@@ -21,16 +22,12 @@ def index():
     return render_template('index.html', legislator_list=legislator_list)
 
 @app.route("/member/<opensecrets_id>/contributions") #need to pick id to use
-def view_sector_breakdown(opensecrets_id):
+def table_sector_breakdown(opensecrets_id):
     # display sector contribution breakdown
     sectors = model.get_sectors(opensecrets_id)
     return render_template('legislator.html', sectors=sectors)
-    # sectors = model.make_json(opensecrets_id)
-    # json_dump = json.dumps(sectors)
-    # return render_template("bubble.html", json_dump=json_dump)
 
-@app.route("/member/<opensecrets_id>/contributions/json") #need to pick id to 
-# use
+@app.route("/member/<opensecrets_id>/contributions/json")
 def view_sector_breakdown(opensecrets_id):
     # display sector contribution breakdown
     # sectors = model.get_sectors(opensecrets_id)

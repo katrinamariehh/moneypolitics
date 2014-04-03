@@ -1,6 +1,8 @@
 {% extends 'base.html' %}    
 {% block body %}
 <h2>Legislator Donations by Sector</h2>
+<h3><a href='chart'>
+	see chart</a></h3>
 <table>
     <tr>
         <th>Sector</th>
@@ -9,8 +11,8 @@
 
 {% for sector in sectors %}
     <tr>
-        <td><a href="member/">{{ sector['sector'] }}</a></td>
-        <td>{{ sector['total'] }}</td>
+        <td><a href=>{{ sector['name'] }}</a></td>
+        <td>{{ sector['size'] }}</td>
     </tr>
 {% endfor %}
 </table>

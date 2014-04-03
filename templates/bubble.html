@@ -25,7 +25,6 @@ var svg = d3.select("body").append("svg")
     .attr("width", diameter)
     .attr("height", diameter)
     .attr("class", "bubble");
-
 d3.xhr("/member/N00024992/contributions/json", function(error, root) {
     data = {'name': 'senator', 'children': JSON.parse(root.response)}
     console.log(data)
@@ -45,20 +44,6 @@ bubble.value(function(d){
       .attr("class", "node")
   nodeAttribute(node)
       
-    
-  // node.append("title")
-  //     .text(function(d) { return d.name + ": " + format(d.value); });
-
-  // node.append("circle")
-  //     .attr("r", function(d) { console.log((d.size)*.13); return d.r || Math.sqrt(d.size); })
-  //     .style("fill", function(d) { if (d.name != 'senator'){ return "#0F5903";} })
-  //     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-
-  // node.append("text")
-  //     .attr("dy", "6em")
-  //     .style("text-anchor", "middle")
-  //     .text(function(d) { return d.name });
-  //     console.log(node)
 });
 
 function nodeAttribute(node) {
@@ -82,7 +67,7 @@ function nodeAttribute(node) {
   node.append("text")
       .attr("transform", function(d) { console.log(d); return "translate(" + d.x + "," + d.y + ")"; })
       .style("text-anchor", "middle")
-      .style("fill", function(d) { if (d.name != 'senator') { return "#999";}})
+      .style("fill", function(d) { if (d.name != 'senator') { return "#000";}})
       .style("font-size", function(d) 
         { if (d.r < 70) 
           { return '.9em';}

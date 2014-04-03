@@ -22,7 +22,7 @@ Base.query = session.query_property()
 
 #class declarations
 
-# data from OpenSecrets
+
 class Candidate(Base):
     # creating a candidate object to be added to the database
     __tablename__ = "candidates"
@@ -295,19 +295,13 @@ def get_all_current():
 
 def get_sectors(opensecrets_id):
 	sectors = session.execute(
-				text("""SELECT sum(d.amount) as total, c.sector
+				text("""SELECT sum(d.amount) as size, c.sector as name
 						FROM donations_113 as d, crp_ids as c
 						WHERE d.real_code = c.catcode
 						AND d.recip_id = :opensecrets_id
 						GROUP BY c.sector
-						ORDER BY c.sector"""),
+						ORDER BY size DESC"""),
 					{'opensecrets_id':opensecrets_id})
-	# sector_dict = {}
-	# for sector in sectors:
-	# 	key = sector['sector']
-	# 	value = sector['total']
-	# 	sector_dict[key] = value
-	# print sector_dict
 	return sectors
 
 def make_json(opensecrets_id):
@@ -325,15 +319,14 @@ def make_json(opensecrets_id):
 		# come up with hex values for each category
 		sector_total += float(sector['size'])
 		color_value = int(sector['size'])/10
-		sector_list.append({'name': sector['name'], 'size': sector['size'],\
-		 # 'color:': 'rgb('+str(sector['size']*.001)+','+str(sector['size']*.001)+','+str(sector['size']*.001)+')'})
-		# 'color': 'rgb(20,89,' + str(sector['size']/sector_total) + ')'
-		})
-	offset = (175^2)/(float(sector_list[0]['size'])/float(sector_total))
-	print offset
+		sector_list.append({'name': sector['name'], 'size': sector['size']})
+	offset = (200^2)/(float(sector_list[0]['size'])/float(sector_total))
 	for sector in sector_list:
-		print [float(sector['size']), float(sector_total), (float(sector['size'])/float(sector_total))]
-		sector['color'] = 'rgb(' +  str(int(float(sector['size'])/float(sector_total)))+ ',89,' + str(int((float(sector['size'])/float(sector_total))*offset)) + ')'
+		print [float(sector['size']), float(sector_total), \
+			(float(sector['size'])/float(sector_total))]
+		sector['color'] = 'rgb(' +  str(int(float(sector['size'])/\
+			float(sector_total)))+ ',89,' + str(int((float(sector['size'])/\
+			float(sector_total))*offset)) + ')'
 	return sector_list
 
 
