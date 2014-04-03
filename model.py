@@ -3,6 +3,7 @@ from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship, backref
 from sqlalchemy.sql import text
+from sqlalchemy import func
 from operator import itemgetter
 import os
 
@@ -333,6 +334,53 @@ def make_json(opensecrets_id):
 def get_subject_votes(legislator):
 	pass
 
+
+def get_all_amounts(opensecrets_id):
+	def sum_all_amounts(contributor_list, key, amount_dict, key_dict):
+		for c in contributor_list:
+			name = key_dict[c[key]]
+			if not amount_dict.get(name):
+				amount_dict[name] = 0
+			amount_dict[name] += c['sum_amount']
+
+	pacs = session.execute(
+		text('''select sum(amount) as sum_amount, real_code
+				from pacs p
+				where cid = :opensecrets_id
+				and (cycle = 2012 or cycle=2014)
+				group by real_code'''),
+			{'opensecrets_id': opensecrets_id})
+	pacothers = session.execute(
+		text('''select sum(amount) as sum_amount, prim_code
+				from pacother
+				where recip_id = :opensecrets_id
+				and (cycle = 2012 or cycle=2014)
+				group by prim_code'''),
+			{'opensecrets_id': opensecrets_id})
+	individuals = session.execute(
+		text('''select sum(amount) as sum_amount, real_code
+				from individuals
+				where recip_id = :opensecrets_id
+				and (cycle = 2012 or cycle=2014)
+				group by real_code'''),
+			{'opensecrets_id': opensecrets_id})
+	sectors = session.execute(
+			text('''select catcode as code, sector as name
+					from crp_ids''')
+	)
+
+	sector_dict = dict([(s['code'], s['name']) for s in sectors])
+
+	pacs = list(pacs)
+	pacothers = list(pacothers)
+	individuals = list(individuals)
+
+	amount_dict = {}
+	sum_all_amounts(individuals, 'real_code', amount_dict, sector_dict)
+	sum_all_amounts(pacs, 'real_code', amount_dict, sector_dict)
+	sum_all_amounts(pacothers, 'prim_code', amount_dict, sector_dict)
+
+	return amount_dict
 
 
 def main():
