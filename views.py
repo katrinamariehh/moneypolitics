@@ -21,18 +21,18 @@ def index():
     legislator_list = model.get_all_current()
     return render_template('index.html', legislator_list=legislator_list)
 
-@app.route("/member/<opensecrets_id>/contributions") #need to pick id to use
+@app.route("/member/<opensecrets_id>/contributions")
 def table_sector_breakdown(opensecrets_id):
     # display sector contribution breakdown
+    sector_total_dict = model.get_all_amounts(opensecrets_id)
     sectors = model.get_sectors(opensecrets_id)
     return render_template('legislator.html', sectors=sectors, \
-        opensecrets_id=opensecrets_id)
+        opensecrets_id=opensecrets_id, sector_total_dict=sector_total_dict)
 
 @app.route("/member/<opensecrets_id>/contributions/json")
+# an api request used by bubble.html to generate properly-formatted json
+# for data from model.get_all_amounts
 def view_sector_breakdown(opensecrets_id):
-    # display sector contribution breakdown
-    # sectors = model.get_sectors(opensecrets_id)
-    # return render_template('legislator.html', sectors=sectors)
     sectors = model.make_json2(opensecrets_id)
     json_dump = json.dumps(sectors)
     return json_dump
