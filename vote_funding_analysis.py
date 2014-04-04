@@ -22,12 +22,12 @@ def house_funding(vote_id, cycle1, cycle2, catcode_start):
 				WHERE v.vote_id = :vote_id'''),
 			{'vote_id': vote_id})
 	
-	voter_funding_dict = {'Yea': {}, 
-						  'Nay': {},
-						  'Aye': {},
-						  'No': {},
-						  'Present': {},
-						  'Not Voting': {}}
+	voter_funding_dict = {'Yea': [], 
+						  'Nay': [],
+						  'Aye': [],
+						  'No': [],
+						  'Present': [],
+						  'Not Voting': []}
 
 	for opensecrets_id in voters:
 		pacs = session.execute(
@@ -81,10 +81,16 @@ def house_funding(vote_id, cycle1, cycle2, catcode_start):
 		for individual in individuals:
 			total += individual[0]
 
+		# voter_funding_dict[opensecrets_id[1]][opensecrets_id[0]] = total
 
-		voter_funding_dict[opensecrets_id[1]][opensecrets_id[0]] = total
+		voter_dict = {}
+		voter_dict['name'] = opensecrets_id[0]
+		voter_dict['size'] = total
 
-		keys = voter_funding_dict.keys()
+		voter_funding_dict[opensecrets_id[1]].append(voter_dict)
+
+
+	keys = voter_funding_dict.keys()
 	for key in keys:
 		if voter_funding_dict[key] == {}:
 			voter_funding_dict.pop(key)
@@ -173,7 +179,7 @@ def senate_funding(vote_id, cycle1, cycle2, cycle3, catcode_start):
 		if voter_funding_dict[key] == {}:
 			voter_funding_dict.pop(key)
 
-	
+
 	return voter_funding_dict
 
 d = {'house_funding': house_funding,

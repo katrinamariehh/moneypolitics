@@ -6,6 +6,7 @@ from flask import Flask, render_template, redirect, request, g, session, url_for
 # import forms
 import model
 import json
+import vote_funding_analysis
 
 app = Flask(__name__)
 # app.config.from_object(config)
@@ -44,9 +45,10 @@ def view_vote_breakdown(member_id):
 
 @app.route('/test/json')
 def create_json_test():
-    d = model.house_funding('h681-110.2008', 2006, 2008, 'F%')
-    json = json.dumps(d)
-    return json
+    d = vote_funding_analysis.house_funding('h681-110.2008', 2006, 2008, 'F%')
+    yea = d['Yea']
+    j = json.dumps(yea)
+    return j
 
 @app.route('/test')
 def render():
