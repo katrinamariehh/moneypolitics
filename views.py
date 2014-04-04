@@ -44,17 +44,22 @@ def view_vote_breakdown(member_id):
     return render_template('template_name')
 
 @app.route('/test/json')
-def create_json_test():
+def create_json_test1():
     d = vote_funding_analysis.house_funding('h681-110.2008', 2006, 2008, 'F%')
+    print d
     yea = d['Yea']
-    j = json.dumps(yea)
+    nay = d['Nay']
+
+
+    data = [{'name':'', 'children': yea}, {'name': '', 'children': nay}]
+    data = json.dumps(data)
 
 
     # need to add names in here somewhere and a color
-    return j
+    return data
 
 @app.route('/test/json2')
-def create_json_test():
+def create_json_test2():
     # d = vote_funding_analysis.house_funding('h681-110.2008', 2006, 2008, 'F%')
     # yea = d['Yea']
     # # j = json.dumps(yea)
@@ -85,19 +90,19 @@ def create_json_test():
                     }
                     ]
     
-    j = json.dumps(list_of_dicts)
+    data = json.dumps(list_of_dicts)
 
 
     # need to add names in here somewhere and a color
-    return j
-    # return list_of_dicts
+    return data
+    return list_of_dicts
 
 @app.route('/test')
-def render():
+def render2():
     return render_template('bubbles2.html')
 
 @app.route('/test2')
-def render():
+def render3():
     return render_template('bubbles3.html')
 
 
