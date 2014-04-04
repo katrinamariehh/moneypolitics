@@ -422,7 +422,7 @@ def make_json2(opensecrets_id):
 		# color_value = int(sector_dict[sector])/10
 		sector_list.append({'name': sector, 'size': sector_dict[sector]})
 	# come up with hex values for each category
-	offset = (200^2)/(float(sector_list[0]['size'])/float(sector_total))
+	offset = (10)/(float(sector_list[0]['size'])/float(sector_total))
 	for sector in sector_list:
 		# print [float(sector['size']), float(sector_total), \
 		# 	(float(sector['size'])/float(sector_total))]

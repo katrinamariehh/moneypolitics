@@ -7,6 +7,7 @@ text {
 }
 
 </style>
+<h1>Contributions by Sector to Tim Murphy (R-PA) 2012 & 2014</h1>
 <body>
   <!-- <svg width='960' height='960' class='bubble' -->
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -19,7 +20,7 @@ var diameter = 960,
 var bubble = d3.layout.pack()
     .sort(null)
     .size([diameter, diameter])
-    .padding(15);
+    .padding(10);
 
 var svg = d3.select("body").append("svg")
     .attr("width", diameter)
@@ -93,3 +94,4 @@ function classes(root) {
 d3.select(self.frameElement).style("height", diameter + "px");
 
 </script>
+<title>Contributions by sector</title>

@@ -48,68 +48,57 @@ def create_json_test():
     d = vote_funding_analysis.house_funding('h681-110.2008', 2006, 2008, 'F%')
     yea = d['Yea']
     j = json.dumps(yea)
+
+
+    # need to add names in here somewhere and a color
     return j
+
+@app.route('/test/json2')
+def create_json_test():
+    # d = vote_funding_analysis.house_funding('h681-110.2008', 2006, 2008, 'F%')
+    # yea = d['Yea']
+    # # j = json.dumps(yea)
+    # nay = d['Nay']
+
+    # list_of_dicts = [{'name': 'Yea', 'size': yea}, {'name': 'Nay', 'size': nay}
+
+    # list_of_dicts = [{"color": "rgb(0,89,50)", "name": "Agribusiness", "size": 40550}, {"color": "rgb(0,89,28)", "name": "Defense", "size": 23500}, {"color": "rgb(0,89,121)", "name": "Transportation", "size": 98550}, {"color": "rgb(0,89,1)", "name": "Non-contribution", "size": 1500}, {"color": "rgb(0,89,216)", "name": "Lawyers & Lobbyists", "size": 175355}, {"color": "rgb(0,89,357)", "name": "Finance/Insur/RealEst", "size": 289825}, {"color": "rgb(0,89,423)", "name": "Misc Business", "size": 343171}, {"color": "rgb(0,89,113)", "name": "Communic/Electronics", "size": 91950}, {"color": "rgb(0,89,573)", "name": "Energy/Nat Resource", "size": 465383}, {"color": "rgb(0,89,472)", "name": "Ideology/Single-Issue", "size": 383561}, {"color": "rgb(0,89,104)", "name": "Other", "size": 84708}, {"color": "rgb(0,89,582)", "name": "Health", "size": 472433}, {"color": "rgb(0,89,265)", "name": "Construction", "size": 215148}, {"color": "rgb(0,89,480)", "name": "Unknown", "size": 389783}, {"color": "rgb(0,89,181)", "name": "Labor", "size": 147085}]
+
+    list_of_dicts = [
+                    {
+                     "name": "", 
+                      "children": [
+                        {"name": "One", "size": 1000},
+                        {"name": "Two", "size": 2000},
+                        {"name": "Three", "size": 3000},
+                        {"name": "Four", "size": 4000}
+                      ]
+                    },
+                     {
+                      "name": "", 
+                       "children": [
+                        {"name": "One", "size": 1000},
+                        {"name": "Two", "size": 2000},
+                        {"name": "Three", 'size': 3000},
+                        {'name': 'Four', 'size': 4000}
+                      ]
+                    }
+                    ]
+    
+    j = json.dumps(list_of_dicts)
+
+
+    # need to add names in here somewhere and a color
+    return j
+    # return list_of_dicts
 
 @app.route('/test')
 def render():
     return render_template('bubbles2.html')
 
-
-# this is all the stuff that was just there
-
-# @app.route("/")
-# def index():
-#     posts = Post.query.all()
-#     return render_template("index.html", posts=posts)
-
-# @app.route("/post/<int:id>")
-# def view_post(id):
-#     post = Post.query.get(id)
-#     return render_template("post.html", post=post)
-
-# @app.route("/post/new")
-# @login_required
-# def new_post():
-#     return render_template("new_post.html")
-
-# @app.route("/post/new", methods=["POST"])
-# @login_required
-# def create_post():
-#     form = forms.NewPostForm(request.form)
-#     if not form.validate():
-#         flash("Error, all fields are required")
-#         return render_template("new_post.html")
-
-#     post = Post(title=form.title.data, body=form.body.data)
-#     current_user.posts.append(post) 
-    
-#     model.session.commit()
-#     model.session.refresh(post)
-
-#     return redirect(url_for("view_post", id=post.id))
-
-# @app.route("/login")
-# def login():
-#     return render_template("login.html")
-
-# @app.route("/login", methods=["POST"])
-# def authenticate():
-#     form = forms.LoginForm(request.form)
-#     if not form.validate():
-#         flash("Incorrect username or password") 
-#         return render_template("login.html")
-
-#     email = form.email.data
-#     password = form.password.data
-
-#     user = User.query.filter_by(email=email).first()
-
-#     if not user or not user.authenticate(password):
-#         flash("Incorrect username or password") 
-#         return render_template("login.html")
-
-#     login_user(user)
-#     return redirect(request.args.get("next", url_for("index")))
+@app.route('/test2')
+def render():
+    return render_template('bubbles3.html')
 
 
 if __name__ == "__main__":
