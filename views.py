@@ -42,6 +42,15 @@ def view_vote_breakdown(member_id):
     # display votes by subject of bill
     return render_template('template_name')
 
+@app.route('/test/json')
+def create_json_test():
+    d = model.house_funding('h681-110.2008', 2006, 2008, 'F%')
+    json = json.dumps(d)
+    return json
+
+@app.route('/test')
+def render():
+    return render_template('bubbles2.html')
 
 
 # this is all the stuff that was just there
