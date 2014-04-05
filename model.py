@@ -25,25 +25,31 @@ Base.query = session.query_property()
 
 
 class Candidate(Base):
-    # creating a candidate object to be added to the database
-    __tablename__ = "candidates"
+	"""Create a candidate object to take in data from the FEC 
+	Candidates file (data/CampainFin/CampaignFinYY/candsYY.txt) 
+	and add it to the database on the candidates table.
+	"""
+	__tablename__ = "candidates"
 
-    id = Column(Integer, primary_key = True)
-    cycle = Column(Integer(4))
-    fec_cand_id = Column(String(9))
-    cid = Column(String(9))
-    first_last_p = Column(String(50))
-    party = Column(String(1))
-    dist_id_run_for = Column(String(4))
-    dist_id_curr = Column(String(4))
-    curr_cand = Column(String(1))
-    cycle_cand = Column(String(1))
-    crpico = Column(String(1))
-    recip_code = Column(String(2))
-    nopacs = Column(String(1))
+	id = Column(Integer, primary_key = True)
+	cycle = Column(Integer(4))
+	fec_cand_id = Column(String(9))
+	cid = Column(String(9))
+	first_last_p = Column(String(50))
+	party = Column(String(1))
+	dist_id_run_for = Column(String(4))
+	dist_id_curr = Column(String(4))
+	curr_cand = Column(String(1))
+	cycle_cand = Column(String(1))
+	crpico = Column(String(1))
+	recip_code = Column(String(2))
+	nopacs = Column(String(1))
 
 class Committee(Base):
-	# creating a committee object to be added to the database
+	"""Create a committee object to take in data from the FEC 
+	Committees file (data/CampaignFin/CampaignFinYY/cmtesYY.txt)
+	and add it to the database on the committees table.
+	"""
 	__tablename__ = "committees"
 
 	id = Column(Integer, primary_key = True)
@@ -51,19 +57,19 @@ class Committee(Base):
 	cmte_id = Column(String(9))
 	pac_short = Column(String(50))
 	affiliate = Column(String(50), nullable = True)
-	# ult_org = Column(String(50))
 	recip_id =  Column(String(9))
 	recip_code = Column(String(2))
 	fec_cand_id = Column(String(9))
 	party = Column(String(1))
 	prim_code = Column(String(5))
 	source = Column(String)
-	# sensitive = Column(String(1))
-	# foreign = Column(Integer)
 	active = Column(Integer(1))
 
 class Individual(Base):
-	# creating an individual object to be added to the database
+	"""Create an individual object to take in data from the FEC
+	Committees file (data/CampaignFin/CampaignFinYY/indivsYY.txt)
+	and add it to the database on the individuals table.
+	"""
 	__tablename__ = "individuals"
     
 	id = Column(Integer, primary_key = True)
@@ -74,29 +80,24 @@ class Individual(Base):
 	recip_id = Column(String(9))
 	recip_link_to = Column(String)
 	org_name = Column(String(50)) # 40
-	# ult_org = Column(String(50)) # 40
 	real_code = Column(String(5))
-	# date = Column(DateTime) 
 	amount = Column(Integer) 
-	# street = Column(String(40))
-	# city = Column(String(30)) # 18
-	# state = Column(String(2))
 	zip_code = Column(String(5))
 	recip_code = Column(String(2))
 	transaction_type = Column(String(3))
 	cmte_id = Column(String(9))
 	other_id = Column(String(9))
-	# gender = Column(String(1))
-	# fec_occ_emp = Column(String(35)) 	# before 2012 only
-	# microfilm  = Column(String(11))
 	occupation = Column(String(38)) # called Occ_EF
 	employer = Column(String(38))# called Emp_EF
 	source = Column(String(5))
 
 class PAC(Base):
+	"""Create a PAC object to take in data from the FEC Committees
+	file (data/CampaignFin/CampaignFinYY/pacsYY.txt) and add it to
+	the database on the pacs table.
+	"""
 	__tablename__ = "pacs"
-	# creating a PAC object to be added to the database
-	
+
 	id = Column(Integer, primary_key = True)
 	cycle = Column(Integer(4))
 	fec_rec_no = Column(String(19)) # 7 chars before 2012
@@ -110,8 +111,11 @@ class PAC(Base):
 	fec_cand_id = Column(String(9))
 
 class PAC_other(Base):
+	"""Create a PAC-Other object to take in data from the FEC 
+	Committees file (data/CampaignFin/CampaignFinYY/pac_otherYY.txt)
+	and add it to the database on the pacother table.
+	"""
 	__tablename__ = "pacother"
-	# creating a PAC-other object to be added to the database
 
 	id = Column(Integer, primary_key = True)
 	cycle = Column(Integer(4))
@@ -141,12 +145,17 @@ class PAC_other(Base):
 
 
 class Legislator(Base):
-	# from legislators-current.yaml and legislators-historical.yaml
+	"""Create a legislator object to take in data from the legslator
+	.yaml files
+	(data/peole_data/legislators-current.yaml and legislators-historical.yaml) 
+	and add it to the database on the legislators table.  
+
+	Will be used primarily connect data points with different ID types 
+	(i.e. connecting CampaignFin data that uses the govtrack_id with 
+	voting data that uses either the bioguide_id or the lis_id).
+	"""
 	__tablename__ = "legislators"
 
-	# creating a member object to be added to the database
-
-	# I probably need to give these all lengths?
 	
 	id = Column(Integer, primary_key = True)
 	last_name = Column(String)
@@ -162,7 +171,10 @@ class Legislator(Base):
 	
 
 class Bill(Base):
-	# creating an object in the Bill table
+	"""Create a bill object to take in data from the bill .json files
+	(data/congress/[congress]/bills/[bill type]/[bill id]/data.json) 
+	and add it to the database on the bills table. 
+	"""
 	__tablename__ = "bills"
 
 	id = Column(Integer, primary_key = True)
@@ -174,8 +186,13 @@ class Bill(Base):
 	bill_sponsor = Column(String)
 
 class Sponsor(Base):
-	# creating an object sponsor table - creates a relationship 
-	# between Legislators and Bills
+	"""Create a sponsor object to take in data from the bill .json files
+	(data/congress/[congress]/bills/[bill type]/[bill id]/data.json) and
+	add it to the database on the sponsors table. 
+
+	Will be used primarily to connect legislators to bills they have
+	sponsored.
+	"""
 	__tablename__ = "bill_sponsors"
 
 	id = Column(Integer, primary_key = True)
@@ -184,8 +201,12 @@ class Sponsor(Base):
 
 
 class Subjects(Base):
-	# creating a record in the Subjects table to track the subjects 
-	# of various bills, will have many entries for the same bill
+	"""Create a subject object to take in data from the bill .json files
+	(data/congress/[congress]/bills/[bill type]/[bill id]/data.json) and
+	add it to the database on the subjects table. 
+
+	Will be used to connect bills to relevent funding sources.
+	"""
 	__tablename__ = "bill_subjects"
 
 	id = Column(Integer, primary_key = True)
@@ -194,9 +215,17 @@ class Subjects(Base):
 
 
 class LegislatorBillVote(Base):
-	# creating a table to hold each house member's vote by bill
+	"""Create a LegislatorBillVote object to take in data from the vote 
+	.json files (data/congress/[congress]/vote/[year]/[vote_id]/data.json) 
+	and add it to the database on the legislator_bill_votes table. 
+
+	Used to connect legislators to bills.
+
+	Ultimately deprecated to split voting info into house votes and senate
+	votes because they reference different ids on the legislator table.
+	"""
 	__tablename__ = "legislator_bill_votes"
-	# __tablename__ = "legislator_bill_house_votes"
+
 
 	id = Column(Integer, primary_key = True)
 	vote_id = Column(String)
@@ -207,6 +236,14 @@ class LegislatorBillVote(Base):
 	vote_value = Column(String)
 
 class HouseVote(Base):
+	"""Create a HouseVote object to take in data from the vote .json 
+	files (data/congress/[congress]/vote/[year]/[vote_id]/data.json) 
+	and add it to the database on the legislator_bill__house_votes 
+	table. 
+
+	Used to connect the value of a legislator's vote (Yea, Nay, Aye, 
+	No, Present, Not Voting, etc) to a particular bill.
+	"""
 	__tablename__ = "legislator_bill_house_votes"
 
 	id = Column(Integer, primary_key = True)
@@ -216,7 +253,14 @@ class HouseVote(Base):
 	vote_value = Column(String)
 
 class SenateVote(Base):
-	# creating a table to hold each senator's vote by bill
+	"""Create a SenateVote object to take in data from the vote .json 
+	files (data/congress/[congress]/vote/[year]/[vote_id]/data.json) 
+	and add it to the database on the legislator_bill__senate_votes 
+	table. 
+
+	Used to connect value of a legislator's vote (Yea, Nay, Aye, No, 
+	Present, Not Voting, etc) to a particular bill.
+	"""
 	__tablename__ = "legislator_bill_senate_votes"
 
 	id = Column(Integer, primary_key = True)
@@ -226,7 +270,12 @@ class SenateVote(Base):
 	vote_value = Column(String) 
 
 class Vote(Base):
-	# creating a table 
+	"""Create a Vote object to take in data from the vote .json files 
+	(data/congress/[congress]/vote/[year]/[vote_id]/data.json) 
+	and add it to the database on the votes table. 
+
+	Will be used for information (category, result) for particular votes.
+	"""
 	__tablename__ = "votes"
 
 	id = Column(Integer, primary_key = True)
@@ -238,7 +287,12 @@ class Vote(Base):
 
 
 class LegislatorLegacy(Base):
-	# creating an object for each member's past service periods
+	"""Create a LegislatorLegacy object to take in data from the vote 
+	.json files (data/congress/[congress]/vote/[year]/[vote_id]/data.json) 
+	and add it to the database on the votes table. 
+
+	Used for information (category, result) for particular votes.
+	"""
 	__tablename__ = "legislator_legacy"
 
 	id = Column(Integer, primary_key = True)
@@ -253,17 +307,30 @@ class LegislatorLegacy(Base):
 	state_rank = Column(String)
 
 class CRP_ID(Base):
-    __tablename__ = "crp_ids"
+	"""Create a CRP_ID object to take in data from the CRP_IDs.csv file
+	(data/CampaignFin/CRP_IDs.csv) and add it to the crp_ids table.
 
-    id = Column(Integer, primary_key = True)
-    catcode = Column(String(5))
-    catname = Column(String)
-    catorder = Column(String(3))
-    industry = Column(String)
-    sector = Column(String)
-    sector_long = Column(String)
+	Used for translating real_codes and prim_codes on Campaign Finance
+	tables (candidates, committees, individuals, pacs, pacothers) into 
+	sectors.
+	"""
+	__tablename__ = "crp_ids"
+
+	id = Column(Integer, primary_key = True)
+	catcode = Column(String(5))
+	catname = Column(String)
+	catorder = Column(String(3))
+	industry = Column(String)
+	sector = Column(String)
+	sector_long = Column(String)
 
 class Legislators113(Base):
+	"""Create a Legslators113 object to take in data from 
+	legislators-current (data/people_data/legislators-current.csv)
+	and add it to the legislators113 table.
+
+	Used to generate current list of legislators.
+	"""
 	__tablename__ = "legislators113"
 
 	id = Column(Integer, primary_key = True)
@@ -278,6 +345,14 @@ class Legislators113(Base):
 	party = Column(String)
 
 class Legislators113Districts(Base):
+	"""Create Legislators113Districts object to take in data from the
+	CRP_IDs_districts file (data/people_data/CRP_IDs_districts.csv) and
+	add it to the legislators113districts table.
+
+	Used in conjunction with the legislators113 table to generate the
+	current_legislators table.
+	"""
+
 	__tablename__='legislators113districts'
 	id = Column(Integer, primary_key = True)
 	opensecrets_id = Column(String)
@@ -290,7 +365,8 @@ def get_all_current():
 	"""Generates a list of all current legislators including chamber,
 	party, and disctrict (senators are given districts in the format
 	state 2-character abbreviation followed by S1 or S2 depending on
-	whether they are the junior or senior senator).
+	whether they are the junior or senior senator).  Uses the
+	current_legislators view.
 	"""
 	query = """SELECT * 
 			   FROM current_legislators 
@@ -301,6 +377,8 @@ def get_all_current():
 
 
 def get_sectors(opensecrets_id):
+	
+	
 	sectors = session.execute(
 				text("""SELECT sum(d.amount) as size, c.sector as name
 						FROM donations_113 as d, crp_ids as c

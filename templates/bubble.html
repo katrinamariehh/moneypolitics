@@ -1,3 +1,5 @@
+{% extends 'base.html' %}    
+{% block body %}
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
@@ -7,10 +9,10 @@ text {
 }
 
 </style>
-<h1>Contributions by Sector to Tim Murphy (R-PA) 2012 & 2014</h1>
+<h1>Contributions by Sector to </h1>
 <body>
   <!-- <svg width='960' height='960' class='bubble' -->
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="/static/js/d3/d3.v3.js"></script>
 <script>
 
 var diameter = 960,
@@ -95,3 +97,4 @@ d3.select(self.frameElement).style("height", diameter + "px");
 
 </script>
 <title>Contributions by sector</title>
+{% endblock %}
