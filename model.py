@@ -377,8 +377,11 @@ def get_all_current():
 
 
 def get_sectors(opensecrets_id):
-	
-	
+	"""Generates a current legislator's funding by sector for the 2012
+	and 2014 campaign cycles using the donations_113 view in the
+	database.  Only references donations made by individuals.
+	"""
+
 	sectors = session.execute(
 				text("""SELECT sum(d.amount) as size, c.sector as name
 						FROM donations_113 as d, crp_ids as c
@@ -390,6 +393,8 @@ def get_sectors(opensecrets_id):
 	return sectors
 
 def make_json(opensecrets_id):
+	"""
+	"""
 	sectors = session.execute(
 				text("""SELECT sum(d.amount) as size, c.sector as name
 						FROM donations_113 as d, crp_ids as c
@@ -423,7 +428,7 @@ def get_all_amounts(opensecrets_id):
 	"""For a particular member of congress specified by their opensecrets_id, 
 	return a dictionary with sectors as keys and total donation amount as 
 	corresponding values by calling the relevent query for PACs, PACother, 
-	and Individuals and then merging them together in s a single dictionary.
+	and Individuals and then merge them together in a single dictionary.
 	"""
 	# function to take data from queries to create contribution dictionary
 	def sum_all_amounts(contributor_list, key, amount_dict, key_dict):
