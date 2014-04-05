@@ -346,14 +346,8 @@ def get_all_amounts(opensecrets_id):
 	return a dictionary with sectors as keys and total donation amount as 
 	corresponding values by calling the relevent query for PACs, PACother, 
 	and Individuals and then merging them together in s a single dictionary.
-
-	Encountered a KeyError on the sum_all_amounts function and discovered
-	that some of the data on the contributions tables (pacs, pacother, 
-	individuals) have the prim_code/real_code improperly formatted with
-	initial character in lowercase rather than uppercase.  Will use a 
-	congressman who works and will come back to this problem later and
-	attempt to clean up the data.
 	"""
+	# function to take data from queries to create contribution dictionary
 	def sum_all_amounts(contributor_list, key, amount_dict, key_dict):
 		for c in contributor_list:
 			name = key_dict[c[key]]
@@ -390,8 +384,11 @@ def get_all_amounts(opensecrets_id):
 	sector_dict = dict([(s['code'], s['name']) for s in sectors])
 
 	pacs = list(pacs)
+	print ['pacs',pacs]
 	pacothers = list(pacothers)
+	print ['pacothers', pacothers]
 	individuals = list(individuals)
+	print ['individuals',individuals]
 
 	amount_dict = {}
 
