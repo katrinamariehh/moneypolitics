@@ -372,8 +372,16 @@ def get_all_current():
 			   FROM current_legislators 
 			   ORDER BY term_type, \
 			   district"""
+	
+	senators = []
+	representatives = []
+	for legislator in session.execute(query):
+		if legislator['term_type'] == 'sen':
+			senators.append(legislator)
+		elif legislator['term_type'] == 'rep':
+			representatives.append(legislator)
 
-	return session.execute(query)
+	return (session.execute(query), senators, representatives)
 
 
 def get_sectors(opensecrets_id):
@@ -480,8 +488,11 @@ def get_all_amounts(opensecrets_id):
 	sector_dict = dict([(s['code'], s['name']) for s in sectors])
 
 	pacs = list(pacs)
+	print pacs
 	pacothers = list(pacothers)
+	print pacothers
 	individuals = list(individuals)
+	print individuals
 
 	amount_dict = {}
 

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}    
 {% block body %}
 <h2>Current Legislators</h2>
-<table>
+<!-- <table>
     <tr>
         <th>Name</th>
         <th>Serves in:</th>
@@ -14,6 +14,36 @@
         <td>{% if legislator['term_type'] == 'sen' %}Senate{% elif legislator['term_type'] == 'rep' %}House{% endif %}</td>
         <td>{{ legislator['party'] }}</td>
         <th>{{ legislator['district'] }}</th>
+    </tr>
+{% endfor %}
+</table> -->
+<h3>Senators</h3>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Party</th>
+        <th>District</th>
+    </tr>
+{% for senator in senators %}
+    <tr>
+        <td><a href="member/{{ senator ['opensecrets_id'] }}/contributions">{{ senator['first_name'] }} {{ senator['last_name'] }}</a></td>
+        <td>{{ senator['party'] }}</td>
+        <th>{{ senator['district'] }}</th>
+    </tr>
+{% endfor %}
+</table>
+<h3>Representatives</h3>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Party</th>
+        <th>District</th>
+    </tr>
+{% for representative in representatives %}
+    <tr>
+        <td><a href="member/{{ representative ['opensecrets_id'] }}/contributions">{{ representative['first_name'] }} {{ representative['last_name'] }}</a></td>
+        <td>{{ representative['party'] }}</td>
+        <th>{{ representative['district'] }}</th>
     </tr>
 {% endfor %}
 </table>

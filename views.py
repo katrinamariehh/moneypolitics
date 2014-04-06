@@ -13,8 +13,12 @@ app = Flask(__name__)
 @app.route("/")
 # Displays a list of all current members of congress.
 def index():
-    legislator_list = model.get_all_current()
-    return render_template('index.html', legislator_list=legislator_list)
+    data = model.get_all_current()
+    legislator_list = data[0]
+    senators = data[1]
+    representatives = data[2]
+    return render_template('index.html', legislator_list=legislator_list,\
+        senators=senators, representatives=representatives)
 
 @app.route("/member/<opensecrets_id>/contributions")
 def table_sector_breakdown(opensecrets_id):
