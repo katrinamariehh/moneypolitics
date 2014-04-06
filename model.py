@@ -392,7 +392,23 @@ def get_sectors(opensecrets_id):
 					{'opensecrets_id':opensecrets_id})
 	return sectors
 
-def make_json(opensecrets_id):
+def get_legislator_name(opensecrets_id):
+	legislator_query = session.execute(
+						text('''SELECT first_name, last_name, party, district
+								FROM current_legislators
+								WHERE opensecrets_id =:opensecrets_id'''),
+						{'opensecrets_id':opensecrets_id})
+	legislator_data = []
+	for i in legislator_query:
+		legislator_data.append(i)
+	legislator_first = legislator_data[0][0]
+	legislator_last = legislator_data[0][1]
+	party = legislator_data[0][2][0]
+	district = legislator_data[0][3]
+	first_last_p = legislator_first + ' ' + legislator_last + ' (' + party + ')'
+	return [first_last_p, district]
+
+def get_all_sector_totals(opensecrets_id):
 	"""
 	"""
 	sectors = session.execute(
@@ -419,9 +435,6 @@ def make_json(opensecrets_id):
 			float(sector_total))*offset)) + ')'
 	return sector_list
 
-
-def get_subject_votes(legislator):
-	pass
 
 
 def get_all_amounts(opensecrets_id):
@@ -467,11 +480,8 @@ def get_all_amounts(opensecrets_id):
 	sector_dict = dict([(s['code'], s['name']) for s in sectors])
 
 	pacs = list(pacs)
-	print ['pacs',pacs]
 	pacothers = list(pacothers)
-	print ['pacothers', pacothers]
 	individuals = list(individuals)
-	print ['individuals',individuals]
 
 	amount_dict = {}
 
@@ -510,8 +520,6 @@ def make_json2(opensecrets_id):
 			float(sector_total)))+ ',89,' + str(int((float(sector['size'])/\
 			float(sector_total))*offset)) + ')'
 	return sector_list
-
-
 
 
 def main():
