@@ -10,6 +10,12 @@ I sourced my Campaign Finance data from [OpenSecrets.org](http://www.opensecrets
 
 I wrote scripts to parse my data (written in python to parse csv, json, xml and yaml) and used SQLAlchemy to fill my PostgreSQL database.  To make the data meaningful and accesible, I built an app on top of it to allow some exploration of the information available as well as some pre-determined points of interest to display.
 
+Technology Used
+----------------------
+- scripts for building and seeding the database are written in Python using SQLAlchemy with PostgreSQL serving as the database engine
+- visualizations use the [d3js.org](d3js.org) library (JavaScript)
+- the webapp uses the Flask framework and is made to look prettier with Bootstrap
+
 Limitations
 ----------------------
 Becaue the dataset is quite large, this repository contains all of the files needed to recreate the project exclusive of the actual data needed to seed the database.  The [rsync_commands.py](https://github.com/katrinamariehh/moneypolitics/blob/master/rsync_commands.py) file contains a script for generating rsync requests for bill and vote data from GovTrack.us, all Campaign Finance records can be downloaded from on OpenSecrets.org, and additional files from GovTrack (legislators-current.yaml, legislators-historical.yaml, legislators-current.csv) can be found [here](https://www.govtrack.us/data/congress-legislators/).  The CRP IDs file (used for interpreting the Campaign Finance coding) can be downloaded from OpenSecrets [here](http://www.opensecrets.org/resources/create/api_doc.php).
