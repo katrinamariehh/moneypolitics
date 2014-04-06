@@ -83,6 +83,7 @@ def house_funding(vote_id, cycle1, cycle2, catcode_start):
 
 		# voter_funding_dict[opensecrets_id[1]][opensecrets_id[0]] = total
 
+
 		voter_dict = {}
 		voter_dict['name'] = opensecrets_id[0]
 		voter_dict['size'] = total
