@@ -184,16 +184,3 @@ def senate_funding(vote_id, cycle1, cycle2, cycle3, catcode_start):
 
 d = {'house_funding': house_funding,
 	 'senate_funding': senate_funding}
-
-# def main():
-# 	file = open(filename + '.txt', 'rw')
-# 	f(args) > filename
-
-
-# if __name__ == "__main__":
-# 	script, filename, function = argv[:3]
-# 	args = argv[3:]
-# 	args = ','.join(args)
-# 	print args
-# 	f = d[function]
-	# main()	
