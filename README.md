@@ -23,6 +23,7 @@ Becaue the dataset is quite large, this repository contains all of the files nee
 Useability
 ----------------------
 In it's current state, users can access 2012 and 2014 donation information for all current legislators as well as a table or visualized as a bubble chart.  Additionally, visualizations for selected bills (The Patient Protection and Affordable Care Act (2010) and the Troubled Asset Relief Program (2008)) show votes for and against each bill with the size of each legislator's bubble representative of contributions received from relevent sectors (Health in the case of PPACA, Finance in the case of TARP).
+[screenshots]
 
 Future Plans
 ----------------------
