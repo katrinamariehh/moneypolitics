@@ -125,10 +125,6 @@ class PAC_other(Base):
 	fec_rec_no = Column(String(19)) # 7 chars before 2012
 	filer_id = Column(String(9))
 	donor_cmte = Column(String(50)) # 40
-	# contrib_lend_trans = Column(String(50)) # 40
-	# city = Column(String(30)) # 40
-	# state = Column(String(2))
-	# zip_code = Column(String(5))
 	fec_occ_emp = Column(String(38)) # 35
 	prim_code = Column(String(5))
 	date = Column(DateTime, nullable = True)
@@ -138,13 +134,8 @@ class PAC_other(Base):
 	other_id = Column(String(9))
 	recip_code = Column(String(2))
 	recip_prim_code = Column(String(5))
-	# amend = Column(String(1))
-	# report = Column(String(3))
-	# pg = Column(String(1))
-	# microfilm = Column(String(11))
 	transaction_type = Column(String(3))
 	real_code = Column(String(5))
-	# source = Column(String(5))
 
 
 class Legislator(Base):
@@ -521,15 +512,10 @@ def make_json2(opensecrets_id):
 	# and the amount as a value associated with the key 'size'
 	for sector in sector_keys:
 		sector_total += float(sector_dict[sector])
-		# color_value = int(sector_dict[sector])/10
 		sector_list.append({'name': sector, 'size': sector_dict[sector]})
-	# come up with hex values for each category
-	# offset = (10)/(float(sector_list[0]['size'])/float(sector_total))
 	for sector in sector_list:
 		sector['color'] = '#FFE11A'
-		# sector['color'] = 'rgb(' +  str(int(float(sector['size'])/\
-		# 	float(sector_total)))+ ',89,' + str(int((float(sector['size'])/\
-		# 	float(sector_total))*offset)) + ')'
+
 	return sector_list
 
 
