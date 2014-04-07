@@ -1,22 +1,18 @@
 {% extends 'base.html' %}    
 {% block body %}
 <h2>{{ legislator }} {{ district }}</h2>
-<h3>Donations by Sector</h3>
-<a href='/member/{{ opensecrets_id }}/chart' type="button" class="btn btn-warning" >See Chart</a>
-<table>
+<h3>Donations by Sector: 2012 and 2014</h3>
+<a href='/member/{{ opensecrets_id }}/chart' type="button" class="btn btn-warning" style="align-content: center; margin-bottom: 5px" >See Chart</a>
+<table class="table table-condensed" style="width: 300px">
     <tr>
         <th>Sector</th>
-        <th>Amount</th>
+        <th style="text-align: right">Amount</th>
     </tr>
 
 {% for key in sector_keys %}
     <tr>
-        <td>
-        	<!-- <a href=> -->
-        	{{ key }}
-        	<!-- </a> -->
-    	</td>
-        <td>{{ sector_total_dict.get(key) }}</td>
+        <td>{{ key }}</td>
+        <td style="text-align: right">{{ sector_total_dict.get(key) }}</td>
     </tr>
 {% endfor %}
 </table>

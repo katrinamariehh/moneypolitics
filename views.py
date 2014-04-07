@@ -62,17 +62,22 @@ def view_sector_breakdown(opensecrets_id):
 @app.route('/TARP/json')
 # An api request used by 
 def create_json_tarp():
-    d = vote_funding_analysis.house_funding('h681-110.2008', 2006, 2008, 'F%')
+    # d = vote_funding_analysis.house_funding('h681-110.2008', 2006, 2008, 'F%')
 
-    yea = d['Yea']
-    nay = d['Nay']
+    # yea = d['Yea']
+    # nay = d['Nay']
 
 
-    data = [{'name':'Yea', 'children': yea, 'color': '#1F8A70'},\
-    {'name': 'Nay', 'children': nay, 'color': '#BEDB39'}]
-    data = json.dumps(data)
+    # data = [{'name':'Yea', 'children': yea, 'color': '#1F8A70'},\
+    # {'name': 'Nay', 'children': nay, 'color': '#BEDB39'}]
+    # data = json.dumps(data)
 
-    return data
+    # return data
+    json_data = open('tarp.json')
+    data = json.load(json_data)
+    data2 = json.dumps(data)
+    return data2
+
 
 @app.route('/TARP')
 def render2():
@@ -80,16 +85,20 @@ def render2():
 
 @app.route('/PPACA/json')
 def create_json_ppaca():
-    d = vote_funding_analysis.house_funding('h165-111.2010', 2008, 2010, 'H%')
+    # d = vote_funding_analysis.house_funding('h165-111.2010', 2008, 2010, 'H%')
 
-    aye = d['Aye']
-    no = d['No']
+    # aye = d['Aye']
+    # no = d['No']
 
-    ppaca_votes = [{'name': 'Aye', 'children': aye, 'color': '#1F8A70'},\
-    {'name': 'No', 'children': no, 'color': '#BEDB39'}]
-    ppaca_votes = json.dumps(ppaca_votes)
+    # ppaca_votes = [{'name': 'Aye', 'children': aye, 'color': '#1F8A70', 'opacity': '100'},\
+    # {'name': 'No', 'children': no, 'color': '#BEDB39', 'opacity': '100'}]
+    # ppaca_votes = json.dumps(ppaca_votes)
 
-    return ppaca_votes
+    # return ppaca_votes
+    json_data = open('ppaca.json')
+    data = json.load(json_data)
+    data2 = json.dumps(data)
+    return data2
 
 @app.route('/PPACA')
 def render3():
