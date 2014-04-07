@@ -26,11 +26,14 @@ In it's current state as a locally-hosted webapp, users can select from a list o
 ![screencap0](https://raw.githubusercontent.com/katrinamariehh/moneypolitics/master/screenshots/index.png)
 to access 2012 and 2014 donation information by sector as a table   
 ![screencap1](https://raw.githubusercontent.com/katrinamariehh/moneypolitics/master/screenshots/pelosi.png)
+
 or visualized as a bubble chart.
 ![screencap2](https://raw.githubusercontent.com/katrinamariehh/moneypolitics/master/screenshots/murphy.png)
 Additionally, visualizations for selected bills (The Patient Protection and Affordable Care Act (2010) and the Troubled Asset Relief Program (2008)) show votes for and against each bill in the House of Representatives with the size of each legislator's bubble representative of contributions received from relevent sectors (Health in the case of PPACA, Finance in the case of TARP).
+
 Bubble visualization for the Patient Protection and Affordable Care Act
 ![screencap3](https://raw.githubusercontent.com/katrinamariehh/moneypolitics/master/screenshots/ppaca.png)
+
 Bubble visualization for the Troubled Asset Relief Program
 ![screencap4](https://raw.githubusercontent.com/katrinamariehh/moneypolitics/master/screenshots/tarp.png)
 
