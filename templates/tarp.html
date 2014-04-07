@@ -1,0 +1,103 @@
+{% extends 'base.html' %}    
+{% block body %}
+<!DOCTYPE html>
+<meta charset="utf-8">
+<div style="margin-bottom:-100;">
+  <h1>Paul Wellstone Mental Health and Addiction Equity Act of 2007</h1>
+    <h2>H.R. 1424-110</h2>
+      <h3>a.k.a. The Troubled Asset Relief Program</h3>
+</div>
+<style>
+
+text {
+  font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+</style>
+<body>
+  <!-- <svg width='960' height='960' class='bubble' -->
+<script src="/static/js/d3/d3.v3.js"></script>
+<script>
+
+var diameter = 960,
+    format = d3.format(",d"),
+    color = d3.scale.category20c();
+
+var bubble = d3.layout.pack()
+    .sort(null)
+    .size([diameter, diameter])
+    .padding(5);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", diameter)
+    .attr("height", diameter)
+    .attr("class", "bubble");
+d3.xhr('/TARP/json', function(error, root) {
+    data = {'name': '', 'children': JSON.parse(root.response), 'color': '#FFE11A'}
+    console.log(data)
+
+
+bubble.value(function(d){
+  return d.size;
+});
+
+
+
+  var node = svg.selectAll(".node")
+      .data(bubble.nodes(data))
+      .enter()
+
+      .append("g")
+      .attr("class", "node")
+  nodeAttribute(node)
+      
+});
+
+function nodeAttribute(node) {
+
+  node.append("title")
+      .text(function(d) { return d.name + ": " + format(d.value); });
+
+  node.append("circle")
+      .attr("r", function(d) { 
+        return d.r
+
+      })
+      .style("fill", function(d) 
+        { if (d.name != '')
+          { return d.color;} 
+        else { return "transparent"}
+      })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+
+  node.append("text")
+      .attr("transform", function(d) { console.log(d); return "translate(" + d.x + "," + (d.y-d.r-15) + ")"; })
+      .style("text-anchor", "middle")
+      .style("fill", function(d) { if (d.name == 'Yea' || d.name == 'Nay') { return "#000";}})
+      .style("opacity", function(d) {if (d.name != 'Yea' || d.name != 'Nay') { return "0";}})
+      .style("font-size", function(d) 
+        { if (d.r < 70) 
+          { return '.9em';}
+        else { return (d.r)/80 + "em";}} )
+      .text(function(d) { return d.name });
+
+}
+
+// Returns a flattened hierarchy containing all leaf nodes under the root.
+function classes(root) {
+  var classes = [];
+
+  function recurse(name, node) {
+    if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
+    else classes.push({packageName: name, className: node.name, value: node.size});
+  }
+
+  recurse(null, root);
+  return {children: classes};
+}
+
+d3.select(self.frameElement).style("height", diameter + "px");
+
+</script>
+{% endblock %}
