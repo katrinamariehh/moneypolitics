@@ -75,7 +75,12 @@ function nodeAttribute(node) {
       .attr("transform", function(d) { console.log(d); return "translate(" + (d.x) + "," + (d.y-d.r-15) + ")"; })
       .style("text-anchor", "middle")
       .style("fill", function(d) { if (d.name != '') { return "#000";}})
-      .style("opacity", function(d) { return d.opacity })
+      .style("visibility", function(d) {
+          if (d.name == 'Aye' || d.name == 'No') 
+            return "visible";
+          else 
+            return "hidden";
+        })
       .style("font-size", function(d) 
         { if (d.r < 70) 
           { return '.9em';}
