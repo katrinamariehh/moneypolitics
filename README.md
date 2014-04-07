@@ -37,9 +37,15 @@ Bubble visualization for the Patient Protection and Affordable Care Act
 Bubble visualization for the Troubled Asset Relief Program
 ![screencap4](https://raw.githubusercontent.com/katrinamariehh/moneypolitics/master/screenshots/tarp.png)
 
+Additional Features to Add
+----------------------
+- easier access for searching
+- active links between visualized data and addtional information (i.e. when looking at an individuals legislator's funding a link on the Health bubble to his/her votes on bills about Health)
+- links to more information about bills being referenced for greater context
+
 Future Plans
 ----------------------
 - recreating the database for greater functionality and speed, feeding relevent information into a graph database to produce additional visuals of the data
-- expanding the vote-funding visualization to include all bills available
-- pulling data across all legislators to determine if/how campagin funding can be used to predict voting patterns (i.e. a decision tree that shows that X amount of dollars will lead with some certainty to a particular voting pattern when the bill is in regards to a particular topic)
+- expanding the vote-funding visualization to include all available bills and votes
+- pulling data across all legislators to determine if/how campagin funding can be used to predict future voting patterns (i.e. a decision tree that shows that X amount of dollars will lead with some certainty to a particular voting pattern when the bill is in regards to a particular topic)
 - determining what other meaning can be pulled from the aggregated data using statistical anaylsis--k-means, pearson correlations, etc.
