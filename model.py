@@ -6,6 +6,7 @@ from sqlalchemy.sql import text
 from sqlalchemy import func
 from operator import itemgetter
 import os
+import locale
 
 
 # create engine
@@ -19,6 +20,8 @@ session = scoped_session(sessionmaker(bind=engine,
 
 Base = declarative_base()
 Base.query = session.query_property()
+
+
 
 
 ## class declarations
@@ -436,11 +439,12 @@ def get_all_sector_totals(opensecrets_id):
 		sector_list.append({'name': sector['name'], 'size': sector['size']})
 	offset = (200^2)/(float(sector_list[0]['size'])/float(sector_total))
 	for sector in sector_list:
-		# print [float(sector['size']), float(sector_total), \
-		# 	(float(sector['size'])/float(sector_total))]
-		sector['color'] = 'rgb(' +  str(int(float(sector['size'])/\
-			float(sector_total)))+ ',89,' + str(int((float(sector['size'])/\
-			float(sector_total))*offset)) + ')'
+		sector['color'] = '#FD7400'
+
+
+		# sector['color'] = 'rgb(' +  str(int(float(sector['size'])/\
+		# 	float(sector_total)))+ ',89,' + str(int((float(sector['size'])/\
+		# 	float(sector_total))*offset)) + ')'
 	return sector_list
 
 
@@ -488,11 +492,8 @@ def get_all_amounts(opensecrets_id):
 	sector_dict = dict([(s['code'], s['name']) for s in sectors])
 
 	pacs = list(pacs)
-	print pacs
 	pacothers = list(pacothers)
-	print pacothers
 	individuals = list(individuals)
-	print individuals
 
 	amount_dict = {}
 
@@ -523,13 +524,12 @@ def make_json2(opensecrets_id):
 		# color_value = int(sector_dict[sector])/10
 		sector_list.append({'name': sector, 'size': sector_dict[sector]})
 	# come up with hex values for each category
-	offset = (10)/(float(sector_list[0]['size'])/float(sector_total))
+	# offset = (10)/(float(sector_list[0]['size'])/float(sector_total))
 	for sector in sector_list:
-		# print [float(sector['size']), float(sector_total), \
-		# 	(float(sector['size'])/float(sector_total))]
-		sector['color'] = 'rgb(' +  str(int(float(sector['size'])/\
-			float(sector_total)))+ ',89,' + str(int((float(sector['size'])/\
-			float(sector_total))*offset)) + ')'
+		sector['color'] = '#FFE11A'
+		# sector['color'] = 'rgb(' +  str(int(float(sector['size'])/\
+		# 	float(sector_total)))+ ',89,' + str(int((float(sector['size'])/\
+		# 	float(sector_total))*offset)) + ')'
 	return sector_list
 
 

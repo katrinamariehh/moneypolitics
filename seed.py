@@ -4,7 +4,6 @@ import csv
 import datetime
 import json
 import os
-from path_feed import fpaths, cpaths
 from bs4 import BeautifulSoup
 import yaml
 
@@ -149,7 +148,7 @@ def load_CampaignFin_cands(session):
 	            					   nopacs=NoPacs)
 	        	session.add(cand)
 	        	if counter % 500 == 0:
-	        		session.commit
+	        		session.commit()
 	        		# print "I've committed %s candidates" % counter
 	        		# break
     session.commit()

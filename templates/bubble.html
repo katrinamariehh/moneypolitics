@@ -5,7 +5,7 @@
 <style>
 
 text {
-  font: 12px sans-serif;
+  font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 </style>
@@ -70,7 +70,7 @@ function nodeAttribute(node) {
   node.append("text")
       .attr("transform", function(d) { console.log(d); return "translate(" + d.x + "," + d.y + ")"; })
       .style("text-anchor", "middle")
-      .style("fill", function(d) { if (d.name != '') { return "#000";}})
+      .style("fill", function(d) { if (d.name != '') { return "#004358";}})
       .style("font-size", function(d) 
         { if (d.r < 70) 
           { return '.9em';}
