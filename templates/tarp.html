@@ -7,6 +7,7 @@
     <h2>H.R. 1424-110</h2>
       <h3>a.k.a. The Troubled Asset Relief Program</h3>
 </div>
+<div id="bubble_container"></div>
 <style>
 
 text {
@@ -19,7 +20,7 @@ text {
 <script src="/static/js/d3/d3.v3.js"></script>
 <script>
 
-var diameter = 960,
+var diameter = 800,
     format = d3.format(",d"),
     color = d3.scale.category20c();
 
@@ -28,13 +29,13 @@ var bubble = d3.layout.pack()
     .size([diameter, diameter])
     .padding(5);
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("div#bubble_container").append("svg")
     .attr("width", diameter)
     .attr("height", diameter)
     .attr("class", "bubble");
 d3.xhr('/TARP/json', function(error, root) {
     data = {'name': '', 'children': JSON.parse(root.response), 'color': '#FFE11A'}
-    console.log(data)
+
 
 
 bubble.value(function(d){
@@ -74,7 +75,7 @@ function nodeAttribute(node) {
   node.append("text")
       .attr("transform", function(d) { console.log(d); return "translate(" + d.x + "," + (d.y-d.r-15) + ")"; })
       .style("text-anchor", "middle")
-      .style("fill", function(d) { if (d.name == 'Yea' || d.name == 'Nay') { return "#000";}})
+      .style("fill", function(d) { if (d.name === 'Yea' || d.name === 'Nay') { return console.log(d.name);}})
       .style("opacity", function(d) { return d.opacity })
       .style("font-size", function(d) 
         { if (d.r < 70) 
@@ -100,4 +101,5 @@ function classes(root) {
 d3.select(self.frameElement).style("height", diameter + "px");
 
 </script>
+
 {% endblock %}

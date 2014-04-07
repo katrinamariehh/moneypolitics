@@ -7,6 +7,7 @@
     <h2>H.R. 3590-111</h2>
       <h3>a.k.a Obamacare</h3>
 </div>
+<div id="bubble_container"></div>
 <style>
 
 text {
@@ -19,7 +20,7 @@ text {
 <script src="/static/js/d3/d3.v3.js"></script>
 <script>
 
-var diameter = 960,
+var diameter = 800,
     format = d3.format(",d"),
     color = d3.scale.category20c();
 
@@ -28,13 +29,12 @@ var bubble = d3.layout.pack()
     .size([diameter, diameter])
     .padding(5);
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("div#bubble_container").append("svg")
     .attr("width", diameter)
     .attr("height", diameter)
     .attr("class", "bubble");
 d3.xhr('/PPACA/json', function(error, root) {
     data = {'name': '', 'children': JSON.parse(root.response)}
-    console.log(data)
 
 
 bubble.value(function(d){
@@ -68,11 +68,11 @@ function nodeAttribute(node) {
           { return d.color;} 
         else { return "transparent"}
       })
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+      .attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; });
 
 
   node.append("text")
-      .attr("transform", function(d) { console.log(d); return "translate(" + d.x + "," + (d.y-d.r-15) + ")"; })
+      .attr("transform", function(d) { console.log(d); return "translate(" + (d.x) + "," + (d.y-d.r-15) + ")"; })
       .style("text-anchor", "middle")
       .style("fill", function(d) { if (d.name != '') { return "#000";}})
       .style("opacity", function(d) { return d.opacity })
