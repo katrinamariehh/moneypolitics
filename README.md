@@ -12,9 +12,9 @@ I wrote scripts to parse my data (written in Python to parse csv, json, xml, and
 
 Technology Used
 ----------------------
-- scripts for building and seeding the database are written in Python using SQLAlchemy with PostgreSQL serving as the database engine
+- scripts for building and seeding the database are written in Python using SQLAlchemy as asn ORM with PostgreSQL serving as the database engine
 - visualizations use the [d3js.org](d3js.org) library (JavaScript)
-- the webapp uses the Flask framework and is made to look prettier with Bootstrap
+- the webapp on top of the database uses Flask and Jinja for functionality and Bootstrap for design
 
 Limitations
 ----------------------
