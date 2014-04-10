@@ -4,15 +4,15 @@ Creating a database with information about Campaign Funding and records of bills
 
 Overview
 ----------------------
-I am interested in and passionate about the ways in which technology can be used for the greater social good (see [here](http://usatoday30.usatoday.com/tech/news/story/2012-07-20/pothole-app/56367586/1) for inspiration) and particularly about information that is and is not explicitly provided by the US government.  Having used databases in the past without truly understanding them, I wanted to explore the process of building and filling a database and decided to take Campaign Finance data and information about bills and votes to see what kind of relationships exist under the surface.  By bringing related but generally self-contained information together, I learned not only about what goes into building a database but also what goes into making the information contained in a database accessible and meaningful.
+I am interested in the ways in which information can be made more meaningful and accesible and particularly about how technology can be used for that end.  Having used databases in the past without truly understanding them, I wanted to explore the process of building and filling a database, and then taking that database and pulling some kind of meaning out of the information. With a casual interest both in politics and in the way that information about the political process is dissenimated, I decided to take Campaign Finance data and information about bills and votes and put them in a database together to see what kind of relationships exist between funding and votes that are not immediately apparent but which might give a better picture of what actually takes place in the legislative process.
 
-I sourced my Campaign Finance data from [OpenSecrets.org](http://www.opensecrets.org/) and the information on bills and votes from [GovTrack.us](https://www.govtrack.us/).  Knowing that the scope of what I wanted to accomplish might be out of the range of four weeks of work but that this is something I want to keep working on, I included financing data going back to 1994 and bill/vote data going back to 1999 to give myself the room to explore what might ultimatley be gleaned from having a larger base of information.  
+I sourced my Campaign Finance data from [OpenSecrets.org](http://www.opensecrets.org/) and the information on bills and votes from [GovTrack.us](https://www.govtrack.us/).  Knowing that the scope of what I wanted to accomplish might be out of the range of four weeks of work but that this is something I want to keep working on, I included financing data going back to 1994 and bill/vote data going back to 1999 to give myself the room to explore a larger base of information.  
 
-I wrote scripts to parse my data (written in Python to parse csv, json, xml, and yaml files) and used SQLAlchemy to fill my PostgreSQL database.  To make the data meaningful and accesible, I built an app on top of it to allow some exploration of the information available as well as some pre-determined points of interest to display.
+I wrote scripts to parse my data (written in Python to parse csv, json, xml, and yaml files) and used SQLAlchemy to fill my PostgreSQL database.  To make the data meaningful and accesible, I built an app on top of it to allow exploration of some of the available information as well as some pre-determined points of interest to display.
 
 Technology Used
 ----------------------
-- scripts for building and seeding the database are written in Python using SQLAlchemy as asn ORM with PostgreSQL serving as the database engine
+- scripts for building and seeding the database are written in Python using SQLAlchemy as an ORM with PostgreSQL serving as the database engine
 - visualizations use the [d3js.org](d3js.org) library (JavaScript)
 - the webapp on top of the database uses Flask and Jinja for functionality and Bootstrap for design
 
@@ -37,15 +37,12 @@ Bubble visualization for the Patient Protection and Affordable Care Act
 Bubble visualization for the Troubled Asset Relief Program
 ![screencap4](https://raw.githubusercontent.com/katrinamariehh/moneypolitics/master/screenshots/tarp.png)
 
-Additional Features to Add
+Additional Features and Future Plans
 ----------------------
-- easier access for searching
+- easier access for searching for a particular member of congress
 - active links between visualized data and addtional information (i.e. when looking at an individuals legislator's funding a link on the Health bubble to his/her votes on bills about Health)
 - links to more information about bills being referenced for greater context
-
-Future Plans
-----------------------
-- recreating the database for greater functionality and speed, feeding relevent information into a graph database to produce additional visuals of the data
+- recreating/restructuring the database for greater functionality and speed, feeding relevent information into a graph database to produce additional visualizations of the data
 - expanding the vote-funding visualization to include all available bills and votes
 - pulling data across all legislators to determine if/how campagin funding can be used to predict future voting patterns (i.e. a decision tree that shows that X amount of dollars will lead with some certainty to a particular voting pattern when the bill is in regards to a particular topic)
 - determining what other meaning can be pulled from the aggregated data using statistical anaylsis--k-means, pearson correlations, etc.
