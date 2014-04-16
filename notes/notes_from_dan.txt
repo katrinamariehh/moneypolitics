@@ -1,0 +1,464 @@
+Notes from Dan:
+  - consider indexing on any column that you're going to use as a foreign key from other tables-->can I assert indices without reloading my data?
+  - don't listen to your instructors, have legislator_bioguide_id reference bioguide_id, legislator_thomas_id reference thomas_id
+  - take notes on the performance impact of using indices vs. not indexing
+  - consider (partially) normalizing your data. one thing to keep an eye on is null fields -- e.g. i think you can't have null foreign keys (not sure...)
+
+  - search for schema migration in sqlalchemy to fix not having indexes in exiting tables; changing the shape of the existing data without destroying it
+  - views--making another that is stored as underlying tables--we totally did this, I just have to remember how
+
+
+
+3/29 9:30 am reloading legislator_bill_votes with separation between house votes and senate votes to avoid null fields and ability to create direct connections between tables
+need to figure out how to index tables without reloading--connections (mostly) indicated on table_setup.txt
+
+
+
+select l.first_name, l.last_name, sum(i.amount), v.vote_value
+from legislators as l, legislator_bill_house_votes as v, individuals as i
+where l.bioguide_id = v.bioguide_id
+and v.vote_id = 'h165-111.2010'
+and i.real_code like 'H%'
+group by l.last_name, l.first_name, i.amount, v.vote_value
+
+
+select legislators.first_name, legislators.last_name, sum(individuals.amount), legislator_bill_votes.vote_value 
+	from individuals 
+	inner join legislators on individuals.recip_id = opensecrets_id 
+	inner join legislator_bill_votes on bioguide_id = legislator_bill_votes.reference_id 
+	where vote_id = 'h165-111.2010' group by legislators.first_name, legislators.last_name, vote_value;
+
+select
+  l.first_name, l.last_name, v.vote_value
+from
+  legislators as l, legislator_bill_votes as v
+where
+  l.bioguide_id = v.legislator_id
+group by
+  l.first_name, l.last_name, v.vote_value
+limit 10;
+
+	inner join legislators on individuals.recip_id = opensecrets_id 
+	inner join legislator_bill_votes on bioguide_id = legislator_bill_votes.reference_id 
+	where vote_id = 'h165-111.2010' group by legislators.first_name, legislators.last_name, vote_value;
+
+the query below works to get a sum of H% donations to Tim Murphy in 2008
+select sum(i.amount), l.first_name, l.last_name 
+from legislators as l, donations_2008 as i 
+where l.opensecrets_id = 'N00024992' 
+and i. recip_id = 'N00024992' and i.real_code like 'H%' 
+
+THIS FUCKING WORKS but takes a long time, gives you sum of contributions to members who voted on PPACA
+select sum(i.amount), l.first_name, l.last_name 
+from legislators as l, donations_2008 as i 
+where l.opensecrets_id = i. recip_id 
+and i.real_code like 'H%'
+and l.bioguide_id in (select bioguide_id from legislator_bill_house_votes where vote_id = 'h165-111.2010')
+
+
+THIS ALSO FUCKING WORKS
+does the same as above but gives you their vote value
+select sum(i.amount), l.first_name, l.last_name, v.vote_value 
+from legislators as l, donations_2008 as i, legislator_bill_house_votes as v
+where l.opensecrets_id = i. recip_id 
+and i.real_code like 'H%' 
+and v.vote_id = 'h165-111.2010'
+group by l.first_name, l.last_name, vote_value;
+
+
+ALL THIS SHIT BELOW HERE WORKS, TOO
+
+amount and vote value on PPACA
+select sum(i.amount), v.vote_value 
+from legislators as l, donations_2008 as i, legislator_bill_house_votes as v
+where l.opensecrets_id = i. recip_id 
+and i.real_code like 'H%' 
+and v.vote_id = 'h165-111.2010'
+group by vote_value;
+
+
+bills in the 113th congress that involved passage/failure
+select b.bill_short_title, b.bill_subject, v.vote_result, v.vote_id, b.bill_id
+from bills_113 as b, votes_113 as v 
+where b.bill_id = v.bill_id 
+and v.vote_result in ('Passed', 'Bill Passed', 'Failed', 'Bill Defeated')
+order by b.bill_short_title;
+
+
+getting donations for a particular congressman
+select * from donations_2008 
+where recip_id = 
+(select cid from candidates 
+where dist_id_run_for = 'PA18' 
+and first_last_p like '%Murphy%' and cycle = 2008);
+
+
+getting amount and sector for 2008 contributions to Tim Murphy
+select d.amount, c.sector
+from donations_2008 as d, crp_ids as c
+where d.real_code = c.catcode
+and d.recip_id = (select cid from candidates where dist_id_run_for = 'PA18' and first_last_p like '%Murphy%' and cycle = 2008)
+
+
+getting amounts by sector of donations to Tim Murphy in 2008
+select sum(d.amount), c.sector
+from donations_2012 as d, crp_ids as c
+where d.real_code = c.catcode
+and d.recip_id = 'N00035380' group by c.sector;
+
+
+
+select sum(i.amount), l.first_name, l.last_name, h.party, h.district, v.vote_value
+from legislators as l, donations_2008 as i, legislator_bill_house_votes as v,
+house_legacy as h
+where l.opensecrets_id = i.recip_id
+and i.real_code like 'H%'
+and v.vote_id = 'h165-111.2010'
+and l.govtrack_id = h.govtrack_id
+group by l.last_name, l.first_name, vote_value;
+
+
+select l.last_name, l.first_name, h.party, h.state, h.district from legislators as l, house_legacy as h
+where l.govtrack_id = h.govtrack_id
+and h.end > '03/30/2014';
+
+select sum(i.amount), l.first_name, l.last_name, h.party, h.  district, h.state, v.vote_value
+from legislators as l, donations_2008 as i, legislator_bill_house_votes as v,
+house_legacy as h
+where l.opensecrets_id = i.recip_id
+and i.real_code like 'H%'
+and v.vote_id = 'h165-111.2010'
+and l.govtrack_id = h.govtrack_id
+group by l.last_name, l.first_name, vote_value, h.district, h.party, h.state  
+
+
+
+
+select count(bill_id), bill_subject
+from bills
+where bill_id in (select bill_id from votes where vote_category = 'passage')
+and bill_id like '%113'
+group by bill_subject
+order by bill_subject
+
+
+number of bills introduced on particular subjects
+select count(bill_id), bill_subject
+from bills
+where bill_id in (select bill_id from votes where vote_category = 'passage')
+and bill_id like '%113'
+group by bill_subject
+order by bill_subject
+
+
+earliest term in congress
+select * from legislator_legacy 
+where govtrack_id = 400285 
+and start = (select min(start) from legislator_legacy where govtrack_id = 400285);
+
+
+generates current legislators:
+select l.last_name, l.first_name, ll.party, ll.state, ll.district, ll.term_type
+from legislators as l, legislator_legacy as ll
+where l.govtrack_id = ll.govtrack_id
+and l.govtrack_id in (select govtrack_id from legislators113)
+and (ll.end > '03/31/2014' or ll.end is null)
+group by l.last_name, l.first_name, ll.party, ll.state, ll.district, ll.term_type;
+
+
+
+select h.*, b.bill_subject
+from legislator_bill_house_votes as h, bills as b, votes as v
+where h.bill_id = b.bill_id
+and v.date > '01/01/2013';
+
+
+join indivs to cmtes on indivs.cmteid = cmtes.cmtesid with indivs.recipcode note like p*
+
+pac       cid       real_code
+pacother  recip_id  prim_code
+indivs    recip_id  real_code
+
+select sum(p.amount), sum(po.amount), sum(i.amount)
+from pacs as p, pacother as po, individuals as i
+where p.cid = 'N00024992' and po.recip_id = 'N00024992' and i.recip_id = 'N00024992'
+and p.cycle = 2012 and po.cycle = 2012 and i.cycle = 2012
+
+
+SELECT (sum(p.amount) + sum(individuals.amount) + sum(pacother.amount)), p.real_code, individuals.real_code, pacother.prim_code
+FROM pacs as p 
+JOIN individuals on p.real_code = individuals.real_code
+JOIN pacother on individuals.real_code = pacother.prim_code
+WHERE p.cid = 'N00024992' 
+AND individuals.recip_id = 'N00024992'
+AND pacother.recip_id = 'N00024992'
+AND p.cycle = 2012 
+AND individuals.cycle = 2012
+AND pacother.cycle = 2012
+GROUP BY p.real_code, individuals.real_code, pacother.prim_code
+
+
+
+LEFT JOIN pacs to pacother:
+
+SELECT (sum(p.amount) + sum(pacother.amount)), p.real_code, pacother.prim_code
+FROM pacs as p
+FULL OUTER JOIN pacother ON p.real_code = pacother.prim_code
+WHERE p.cid = 'N00024992'
+AND pacother.recip_id = 'N00024992'
+AND p.cycle = 2012
+AND pacother.cycle = 2012
+GROUP BY p.real_code, pacother.prim_code
+
+
+
+sum of amounts by real_code/prim_code table:
+
+select sum(amount), real_code
+from pacs
+where cid = 'N00024992'
+and cycle = 2012
+group by real_code
+
+select sum(amount), prim_code
+from pacother
+where recip_id = 'N00024992'
+and cycle = 2012
+group by prim_code
+
+select sum(amount), real_code
+from individuals
+where recip_id = 'N00024992'
+and cycle = 2012
+group by real_code
+
+
+SELECT sum(p.amount + pacother.amount), p.real_code, pacother.prim_code
+FROM pacs as p
+LEFT OUTER JOIN pacother ON p.real_code = pacother.prim_code
+WHERE p.cid = 'N00024992'
+AND pacother.recip_id = 'N00024992'
+AND p.cycle = 2012
+AND pacother.cycle = 2012
+GROUP BY p.real_code, pacother.prim_code
+
+
+from the individuals table
+all contributions to recip_id "N000924992"
+summed by real_code
+
+from pacs table
+all contributions to cid = "N000942992"
+summed by real_code
+
+from the pacother table
+all contributions to recip_id = "N000942992"
+summed by prim_code
+
+SELECT sum(p.amount + p2.amount), p.real_code, p2.prim_code
+from pacs p, pacother p2
+where p.cid = 'N00024992'
+and p2.recip_id = 'N00024992'
+and p.cycle = 2012
+and p2.cycle=2012
+and p.real_code = p2.prim_code
+group by p.real_code, p2.prim_code
+
+p1 = Pacs.objects.filter(cid='N00024992', cycle=2012).aggregate(total_sum=SUM(amount))
+
+p2 = Pacother.objects.filter(recip_id='N00024992', cycle=2012).aggregate(total_sum=SUM(amount))
+
+for p in p1:
+  p.
+
+
+SELECT CASE WHEN p.real_code=p2.prim_code THEN sum(p.amount + p2.amount), p2.prim_code
+ELSE sum(p.amount) END, p.real_code 
+from pacs p, pacother p2
+where p.cid = 'N00024992'
+and p2.recip_id = 'N00024992'
+and p.cycle = 2012
+and p2.cycle=2012
+group by p.real_code, p2.prim_code;
+
+select b.bill_id, b.bill_title, v.vote_category, v.vote_result
+from bills b, votes v
+where bill_subject = 'Energy'
+and b.bill_id = v.bill_id 
+and v.vote_category = 'passage'
+and b.bill_id like '%113'
+
+
+SELECT bill_id, bill_title
+FROM bills
+WHERE bill_title like '%Keystone%';
+AND bill_id like '%113';
+
+
+TARP
+for each member who voted in votes h681-110.2008 and s213-110.2008
+the value of their vote (Aye, Nay, etc)
+and their total number of contributions whose industry = Finance
+for the cycles 2006 and 2008
+
+votes:
+SELECT bioguide_id, vote_value
+FROM legislator_bill_house_votes
+WHERE vote_id = 'h681-110.2008'
+
+funding:
+
+
+PPACA
+for each member who voted in votes h165-111.2010 and s396-111.2009
+the value of their vote (Aye, Nay, etc)
+and their total number of contributions whose industry = Health
+for the cycles 2008 and 2010
+
+
+
+
+getting open secrets_id for members who participated in this vote
+SELECT l.opensecrets_id
+FROM legislators l
+JOIN legislator_bill_house_votes v ON (v.bioguide_id = l.bioguide_id)
+WHERE v.vote_id = 'h681-110.2008';
+
+SELECT l.opensecrets_id FROM legislators l JOIN legislator_bill_house_votes v ON (v.bioguide_id = l.bioguide_id) WHERE v.vote_id = 'h681-110.2008';
+
+
+
+select sum(amount)
+from pacs
+where cid = 'N00024992'
+and real_code like 'F%'
+and (cycle = 2008 or cycle = 2006)
+
+
+
+
+
+SELECT sum(amount) AS sum_amount, real_code
+FROM individuals
+WHERE recip_id = 'N00024992'
+AND (cycle = 2006 or cycle=2008)
+AND real_code LIKE 'F%'
+GROUP BY real_code
+
+
+TARP - HR1424-110 
+  house vote: h681-110.2008, 2006, 2008
+  seante vote: s213-110.2008, 2004, 2006, 2008
+
+PPACA - HR3590-111
+  house vote: h165-111.2010, 2008, 2010
+  senate vote: s396-111.2009, 2006, 2008, 2010
+
+individuals: y4000, y0000, y2000
+y0000 on pacs
+
+
+individuals 
+  c2000: 401 
+  c2100: 50
+  c2300: 3
+  c2400: 13
+  c5000: 6
+  c5110: 119
+  c5120: 5
+  c5130: 26
+
+624 total
+
+individuals:
+  f1100: 5
+  f1400: 25
+  f1420: 253
+  f2100: 6
+  f2300: 293
+  f2700: 36
+  f3300: 24
+  f4000: 12
+  f4100: 11
+  f4500: 44
+  f5000: 49
+  f5500: 37
+  f2500: 15
+  f2600: 5
+
+  815 total
+
+
+
+UPDATE pacother
+SET prim_code = 'Y0000'
+WHERE prim_code = ''
+AND recip_id like 'N%'
+AND recip_code like '%W'
+AND cycle = 2012;
+
+data/CampaignFin/CRP_IDs.csv
+
+data/people_data/legislators-current.yaml
+data/people_data/legislators-historical.yaml
+data/people_data/legislators-current.csv
+
+data/people_data/CRP_IDs_districts.csv
+
+
+John Garamendi
+Jeff Denham
+Gary Miller
+Jared Polis
+Elizabeth Esty
+Steve Southerland
+Doug Collins
+Steve King
+Aaron Schock
+Susan Brooks
+George Holding
+Joseph Crowley
+Tom Read
+Daniel Maffei
+Bill Johnson
+John Boehner
+David Joyce
+Keith Rothfus
+Diane Black
+Kevin Brady
+Michael McCaul
+Randy Weber
+Joaquin Castro
+Roger Williams
+E. Rigell
+Marco Rubio
+Pat Roberts
+Mitch McConnell
+Susan Collins
+Claire McCaskill
+James Inhofe
+Patrick Toomey
+Tim Scott
+Lindsey Graham
+Lamar Alexander
+John Cornyn
+
+
+
+John McCain
+Carl Levin
+
+
+
+SELECT l.opensecrets_id, v.vote_value, l.first_name, l.last_name 
+FROM legislators l 
+JOIN legislator_bill_house_votes v 
+ON (v.bioguide_id = l.bioguide_id) 
+WHERE v.vote_id = 'h165-111.2010',
+
+
+
+
+
+
+

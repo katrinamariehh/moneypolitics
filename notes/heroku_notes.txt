@@ -1,0 +1,11 @@
+heroku create
+[creates your app]
+
+push your code to your app
+
+git push heroku master
+
+heroku login
+keroku keys:add
+heroku create
+git push heroku master

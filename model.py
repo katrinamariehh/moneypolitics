@@ -68,6 +68,19 @@ class Committee(Base):
 	source = Column(String)
 	active = Column(Integer(1))
 
+class Contribution(Base):
+    """Creating a new class to aggregate all contributions in a single
+    table for faster queries.
+    """
+	__tablename__ = "contributors"
+	
+	id = Column(integer, primary_key = True)
+	cycle = Column(Integer(4))
+    contrib_id = Column(String)
+    recip_id = Column(String(9))
+    amount = Column(Integer)
+    real_code = Column(String(5))
+
 class Individual(Base):
 	"""Create an individual object to take in data from the FEC
 	Committees file (data/CampaignFin/CampaignFinYY/indivsYY.txt)

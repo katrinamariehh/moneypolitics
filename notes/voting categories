@@ -1,0 +1,19 @@
+h1 category - quorum - Present, Not Voting
+h10 category - procedural - Aye, No, Not Voting
+h100 category - recommit - Yea, Nay, Not Voting
+h101 category - passage - Aye, No, Not Voting
+h102 category - procedural - Yea, Nay, Present, Not Voting
+
+passage, 
+passage-suspension, 
+amendment, 
+cloture, 
+nomination, 
+treaty, 
+recommit, 
+quorum, 
+leadership, 
+conviction, 
+veto-override, 
+procedural
+unknown

@@ -1,0 +1,16 @@
+CID - used in CampaignFin data, looks like N00032846
+FECCandID - used in CampaignFin data, looks like H0AK00097
+
+GovTrack.us
+person id - used in govtrack data, looks like 400001 (govtrack_id)
+pvsid - 26827
+osid - N00007665
+bioguideid - A000014
+icpsrid - 15245
+thomasid - 00002
+lis_id - S307
+cspan_id - 5051
+govtrack_id - 400050
+votesmart_id
+
+CID in Campaign Finance data connects with osid (OpenSecrets ID)

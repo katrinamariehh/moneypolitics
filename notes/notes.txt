@@ -1,0 +1,16 @@
+09:24:30 worker2.1 | started with pid 19833
+10:49:20 worker2.1 | postgres://localhost/moneypolitics
+10:49:20 worker2.1 | data/CampaignFin/CampaignFin06/indivs06.txtcomplete
+10:49:20 worker2.1 | Traceback (most recent call last):
+10:49:20 worker2.1 |   File "seed.py", line 730, in <module>
+10:49:20 worker2.1 |     main(model.session)
+10:49:20 worker2.1 |   File "seed.py", line 720, in main
+10:49:20 worker2.1 |     loadCampaignFin_indiv(session)
+10:49:20 worker2.1 |   File "seed.py", line 264, in loadCampaignFin_indiv
+10:49:20 worker2.1 |     Cycle, FECTransID, ContribID, Contrib, RecipID, Orgname, UltOrg, RealCode, Date, Amount, Street, City, State, ZIP, RecipCode, Type, CmteID, OtherID, Gender, FecOccEmp, Microfilm, Occupation, Employer, Source = row
+10:49:20 worker2.1 | ValueError: too many values to unpack
+10:49:20 worker2.1 | exited with code 1
+10:49:20 system    | sending SIGTERM to all processes
+SIGTERM received
+
+error somewhere between lines 2612500 and 2613000
