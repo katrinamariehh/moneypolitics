@@ -192,7 +192,13 @@ def load_CampaignFin_cmtes(session):
 
 			session.commit()
 
-
+def loadDonations(session):
+	"""Parse the csv files for PACs, Pac Other, and Individuals as
+	Contribution objects on the contributions table.
+	"""
+	# need to read each type of file separately?
+	# or take existing functions and reset them to be donation objects
+	# instead of as what they are now
 
 def loadCampaignFin_indiv(session):
 	"""Parsing the individuals csv files to add as Individual objects
@@ -332,13 +338,6 @@ def loadCampaignFin_indiv(session):
 
 
 		session.commit()
-
-def loadDonations(session):
-	"""Parse the csv files for PACs, Pac Other, and Individuals as
-	Contribution objects on the contributions table.
-	"""
-	# need to read each type of file separately?
-	# 
 
 def loadCampaignFin_PAC(session):
 	"""Parsing the pacs csv files to add as PAC objects
