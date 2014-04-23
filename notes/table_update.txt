@@ -1,0 +1,6 @@
+id
+cycle
+contrib_id[i]/pac_id[pacs]/filer_id[pacother])
+recip_id [i]/cid[pacs]/recip_id[pacother]
+amount
+real_code[i]/real_code[pacs]/prim_code or real_code[pacother]
